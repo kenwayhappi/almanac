@@ -6,14 +6,15 @@
 <div class="container py-4">
   <!-- Village Hero Banner -->
   @php
-    $vBanner = $village->village_image ? (Str::startsWith($village->village_image, ['http://', 'https://']) ? $village->village_image : Storage::url($village->village_image)) : asset('images/logofinal.png');
-    
+    use App\Helpers\CloudinaryHelper;
+    $vBanner = CloudinaryHelper::url($village->village_image) ?? asset('images/logofinal.png');
+
     if ($village->is_village) {
-        $cPhoto = $village->chief_image ? (Str::startsWith($village->chief_image, ['http://', 'https://']) ? $village->chief_image : Storage::url($village->chief_image)) : null;
+        $cPhoto = CloudinaryHelper::url($village->chief_image);
         $cName = $village->chef_village ?? $village->current_chief ?? 'Chef de Village';
     } else {
         $groupement = $village->villageGroup;
-        $cPhoto = ($groupement && $groupement->chef_image) ? (Str::startsWith($groupement->chef_image, ['http://', 'https://']) ? $groupement->chef_image : Storage::url($groupement->chef_image)) : null;
+        $cPhoto = ($groupement && $groupement->chef_image) ? CloudinaryHelper::url($groupement->chef_image) : null;
         $cName = ($groupement && $groupement->chef_groupement) ? $groupement->chef_groupement : 'Chef de Groupement';
     }
   @endphp
@@ -148,8 +149,18 @@
     <!-- 2. DÉCOUVRIR (Activités & Initiatives) -->
     <div class="tab-pane fade" id="content-decouvrir" role="tabpanel">
       <div class="custom-card p-4 p-md-5">
-        <h3 class="font-serif fw-bold mb-3"><i class="fas fa-compass text-success me-2"></i> Activités, Artisanats & Attraits</h3>
-        <p class="text-muted small mb-4">Découvrez les activités économiques, culturelles et touristiques du village {{ $village->name }}.</p>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+          <div>
+            <h3 class="font-serif fw-bold mb-1"><i class="fas fa-compass text-success me-2"></i> Activités, Artisanats & Attraits</h3>
+            <p class="text-muted small mb-0">Découvrez les activités économiques, culturelles et touristiques du village {{ $village->name }}.</p>
+          </div>
+          @if(!$village->activities->isEmpty())
+          <div class="input-group" style="max-width: 280px;">
+            <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+            <input type="text" id="searchActivite" class="form-control border-start-0 ps-0" placeholder="Rechercher une activité…" oninput="filterActivites()">
+          </div>
+          @endif
+        </div>
 
         @if($village->activities->isEmpty())
           <div class="text-center py-5">
@@ -158,11 +169,11 @@
             <p class="text-muted small">Les activités culturelles et économiques de ce village seront bientôt répertoriées.</p>
           </div>
         @else
-          <div class="row g-4">
+          <div class="row g-4" id="activitesGrid">
             @foreach($village->activities as $act)
-              @php $aImg = $act->image ? (Str::startsWith($act->image, ['http://', 'https://']) ? $act->image : Storage::url($act->image)) : null; @endphp
-              <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm custom-card overflow-hidden">
+              @php $aImg = CloudinaryHelper::url($act->image); @endphp
+              <div class="col-md-6 col-lg-4 activite-item" data-name="{{ strtolower($act->name) }}" data-type="{{ strtolower($act->type ?? '') }}">
+                <div class="card h-100 border-0 shadow-sm custom-card overflow-hidden" style="cursor:pointer;" onclick="openActiviteModal({{ $act->id }})">
                   @if($aImg)
                     <img src="{{ $aImg }}" alt="{{ $act->name }}" style="height: 180px; object-fit: cover;" class="w-100">
                   @else
@@ -175,9 +186,16 @@
                     <h5 class="fw-bold font-serif mb-2">{{ $act->name }}</h5>
                     <p class="text-muted small mb-0">{{ Str::limit($act->description ?? '-', 100) }}</p>
                   </div>
+                  <div class="card-footer bg-transparent border-top border-secondary border-opacity-10 py-2 px-4">
+                    <small class="text-success fw-semibold"><i class="fas fa-eye me-1"></i> Voir les détails</small>
+                  </div>
                 </div>
               </div>
             @endforeach
+          </div>
+          <div id="activitesEmpty" class="text-center py-5 d-none">
+            <i class="fas fa-search fs-1 text-muted opacity-50 mb-3"></i>
+            <p class="text-muted">Aucune activité ne correspond à votre recherche.</p>
           </div>
         @endif
       </div>
@@ -186,8 +204,28 @@
     <!-- 3. PERSONNALITÉS & ÉLITES -->
     <div class="tab-pane fade" id="content-personalities" role="tabpanel">
       <div class="custom-card p-4 p-md-5">
-        <h3 class="font-serif fw-bold mb-3"><i class="fas fa-user-tie text-warning me-2"></i> Notables & Figures Marquantes</h3>
-        <p class="text-muted small mb-4">Portraits des personnalités, élites et grands noms issus du village {{ $village->name }}.</p>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+          <div>
+            <h3 class="font-serif fw-bold mb-1"><i class="fas fa-user-tie text-warning me-2"></i> Notables & Figures Marquantes</h3>
+            <p class="text-muted small mb-0">Portraits des personnalités, élites et grands noms issus du village {{ $village->name }}.</p>
+          </div>
+          @if(!$village->personalities->isEmpty())
+          <div class="d-flex gap-2 flex-wrap">
+            <!-- Recherche -->
+            <div class="input-group" style="max-width: 220px;">
+              <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+              <input type="text" id="searchPersonnalite" class="form-control border-start-0 ps-0" placeholder="Rechercher…" oninput="filterPersonnalites()">
+            </div>
+            <!-- Filtre statut -->
+            <select id="filterStatut" class="form-select" style="max-width: 160px;" onchange="filterPersonnalites()">
+              <option value="">Tous les statuts</option>
+              @foreach($village->personalities->pluck('statut')->filter()->unique()->sort() as $statut)
+                <option value="{{ strtolower($statut) }}">{{ $statut }}</option>
+              @endforeach
+            </select>
+          </div>
+          @endif
+        </div>
 
         @if($village->personalities->isEmpty())
           <div class="text-center py-5">
@@ -196,12 +234,12 @@
             <p class="text-muted small">Le répertoire des notables et élites de ce village est en cours de constitution.</p>
           </div>
         @else
-          <div class="row g-4">
+          <div class="row g-4" id="personnalitesGrid">
             @foreach($village->personalities as $p)
-              @php $pImg = $p->image ? (Str::startsWith($p->image, ['http://', 'https://']) ? $p->image : Storage::url($p->image)) : null; @endphp
-              <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm custom-card text-center p-4">
-                  <div class="rounded-circle overflow-hidden mx-auto mb-3 shadow" style="width: 100px; height: 100px;">
+              @php $pImg = CloudinaryHelper::url($p->image); @endphp
+              <div class="col-md-6 col-lg-4 personnalite-item" data-name="{{ strtolower($p->name) }}" data-statut="{{ strtolower($p->statut ?? '') }}">
+                <div class="card h-100 border-0 shadow-sm custom-card text-center p-4" style="cursor:pointer; transition: transform .18s, box-shadow .18s;" onclick="openPersonnaliteModal({{ $p->id }})" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+                  <div class="rounded-circle overflow-hidden mx-auto mb-3 shadow" style="width: 100px; height: 100px; border: 3px solid var(--accent-green);">
                     @if($pImg)
                       <img src="{{ $pImg }}" alt="{{ $p->name }}" class="w-100 h-100" style="object-fit: cover;">
                     @else
@@ -211,14 +249,21 @@
                     @endif
                   </div>
                   <h5 class="fw-bold font-serif mb-1">{{ $p->name }}</h5>
-                  <span class="badge bg-warning bg-opacity-10 text-dark fw-bold mb-3 mx-auto px-3 py-1">{{ $p->statut ?? 'Notable' }}</span>
-                  <p class="text-muted small mb-2">{{ Str::limit($p->description ?? 'Figure marquante du village.', 110) }}</p>
+                  <span class="badge bg-warning bg-opacity-10 text-dark fw-bold mb-2 px-3 py-1">{{ $p->statut ?? 'Notable' }}</span>
+                  <p class="text-muted small mb-2">{{ Str::limit($p->description ?? 'Figure marquante du village.', 90) }}</p>
                   @if($p->contact)
                     <small class="text-success fw-semibold"><i class="fas fa-phone me-1"></i> {{ $p->contact }}</small>
                   @endif
+                  <div class="mt-3 pt-2 border-top border-secondary border-opacity-10">
+                    <small class="text-warning fw-semibold"><i class="fas fa-eye me-1"></i> Voir le profil complet</small>
+                  </div>
                 </div>
               </div>
             @endforeach
+          </div>
+          <div id="personnalitesEmpty" class="text-center py-5 d-none">
+            <i class="fas fa-search fs-1 text-muted opacity-50 mb-3"></i>
+            <p class="text-muted">Aucune personnalité ne correspond à votre recherche.</p>
           </div>
         @endif
       </div>
@@ -227,8 +272,18 @@
     <!-- 4. ARTISANS & PROS -->
     <div class="tab-pane fade" id="content-pros" role="tabpanel">
       <div class="custom-card p-4 p-md-5">
-        <h3 class="font-serif fw-bold mb-3"><i class="fas fa-briefcase text-info me-2"></i> Artisans & Professionnels Locaux</h3>
-        <p class="text-muted small mb-4">Répertoire des métiers, ateliers et services disponibles dans le village.</p>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+          <div>
+            <h3 class="font-serif fw-bold mb-1"><i class="fas fa-briefcase text-info me-2"></i> Artisans & Professionnels Locaux</h3>
+            <p class="text-muted small mb-0">Répertoire des métiers, ateliers et services disponibles dans le village.</p>
+          </div>
+          @if(!$village->professionals->isEmpty())
+          <div class="input-group" style="max-width: 260px;">
+            <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+            <input type="text" id="searchPro" class="form-control border-start-0 ps-0" placeholder="Nom ou profession…" oninput="filterPros()">
+          </div>
+          @endif
+        </div>
 
         @if($village->professionals->isEmpty())
           <div class="text-center py-5">
@@ -237,17 +292,17 @@
             <p class="text-muted small">Les artisans et professionnels du village seront prochainement ajoutés.</p>
           </div>
         @else
-          <div class="row g-4">
+          <div class="row g-4" id="prosGrid">
             @foreach($village->professionals as $pro)
-              @php $proImg = $pro->image ? (Str::startsWith($pro->image, ['http://', 'https://']) ? $pro->image : Storage::url($pro->image)) : null; @endphp
-              <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm custom-card p-4">
+              @php $proImg = CloudinaryHelper::url($pro->image); @endphp
+              <div class="col-md-6 col-lg-4 pro-item" data-name="{{ strtolower($pro->name) }}" data-profession="{{ strtolower($pro->profession ?? '') }}">
+                <div class="card h-100 border-0 shadow-sm custom-card p-4" style="cursor:pointer; transition: transform .18s, box-shadow .18s;" onclick="openProModal({{ $pro->id }})" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
                   <div class="d-flex align-items-center gap-3 mb-3">
-                    <div class="rounded-3 overflow-hidden bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; flex-shrink:0;">
+                    <div class="rounded-3 overflow-hidden d-flex align-items-center justify-content-center flex-shrink-0" style="width:64px;height:64px;background:rgba(6,182,212,.08);">
                       @if($proImg)
                         <img src="{{ $proImg }}" alt="{{ $pro->name }}" class="w-100 h-100" style="object-fit: cover;">
                       @else
-                        <i class="fas fa-tools fs-4"></i>
+                        <i class="fas fa-tools fs-3 text-info"></i>
                       @endif
                     </div>
                     <div>
@@ -261,9 +316,16 @@
                       <i class="fas fa-phone me-1"></i> {{ $pro->contact }}
                     </div>
                   @endif
+                  <div class="mt-2 pt-2 border-top border-secondary border-opacity-10">
+                    <small class="text-info fw-semibold"><i class="fas fa-eye me-1"></i> Voir le profil complet</small>
+                  </div>
                 </div>
               </div>
             @endforeach
+          </div>
+          <div id="prosEmpty" class="text-center py-5 d-none">
+            <i class="fas fa-search fs-1 text-muted opacity-50 mb-3"></i>
+            <p class="text-muted">Aucun artisan ne correspond à votre recherche.</p>
           </div>
         @endif
       </div>
@@ -296,7 +358,7 @@
         @else
           <div class="row g-4">
             @foreach($village->events as $ev)
-              @php $evImg = $ev->image ? (Str::startsWith($ev->image, ['http://', 'https://']) ? $ev->image : Storage::url($ev->image)) : null; @endphp
+              @php $evImg = CloudinaryHelper::url($ev->image); @endphp
               <div class="col-md-6">
                 <div class="card border-0 custom-card p-3 d-flex flex-row align-items-center gap-3">
                   <div class="rounded-3 overflow-hidden bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; flex-shrink: 0;">
@@ -321,4 +383,274 @@
 
   </div>
 </div>
+
+<!-- ============================================================
+     MODAL — Personnalité
+============================================================ -->
+<div class="modal fade" id="modalPersonnalite" tabindex="-1" aria-labelledby="modalPersonnaliteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg" style="border-radius:20px; overflow:hidden;">
+      <!-- Header avec dégradé -->
+      <div class="modal-header border-0 px-4 pt-4 pb-3" style="background: linear-gradient(135deg, #0f172a, #166534);">
+        <div class="d-flex align-items-center gap-3 w-100">
+          <div id="mpPhoto" class="rounded-circle overflow-hidden shadow flex-shrink-0" style="width:72px;height:72px;border:3px solid #22c55e;background:#1e293b;"></div>
+          <div>
+            <h5 class="modal-title fw-bold font-serif text-white mb-0" id="modalPersonnaliteLabel">—</h5>
+            <span id="mpStatut" class="badge bg-warning text-dark fw-bold px-3 py-1 mt-1">—</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- Corps -->
+      <div class="modal-body p-4 p-md-5">
+        <div class="row g-4">
+          <div class="col-md-7">
+            <h6 class="fw-bold text-uppercase text-muted small mb-2"><i class="fas fa-info-circle me-1"></i> Description</h6>
+            <p id="mpDescription" class="text-main mb-4">—</p>
+          </div>
+          <div class="col-md-5">
+            <div id="mpContactWrap" class="d-none">
+              <h6 class="fw-bold text-uppercase text-muted small mb-2"><i class="fas fa-address-book me-1"></i> Contact</h6>
+              <a id="mpContact" href="#" class="btn btn-outline-success btn-sm rounded-pill px-3"><i class="fas fa-phone me-1"></i> <span></span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL — Artisan / Professionnel
+============================================================ -->
+<div class="modal fade" id="modalPro" tabindex="-1" aria-labelledby="modalProLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg" style="border-radius:20px; overflow:hidden;">
+      <div class="modal-header border-0 px-4 pt-4 pb-3" style="background: linear-gradient(135deg, #0c1a2e, #0e7490);">
+        <div class="d-flex align-items-center gap-3 w-100">
+          <div id="proPhoto" class="rounded-3 overflow-hidden shadow flex-shrink-0 d-flex align-items-center justify-content-center" style="width:72px;height:72px;background:rgba(6,182,212,.15);"></div>
+          <div>
+            <h5 class="modal-title fw-bold font-serif text-white mb-0" id="modalProLabel">—</h5>
+            <span id="proProfession" class="badge bg-info bg-opacity-75 text-white fw-bold px-3 py-1 mt-1">—</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4 p-md-5">
+        <div class="row g-4">
+          <div class="col-md-7">
+            <h6 class="fw-bold text-uppercase text-muted small mb-2"><i class="fas fa-info-circle me-1"></i> Description</h6>
+            <p id="proDescription" class="text-main mb-4">—</p>
+          </div>
+          <div class="col-md-5">
+            <div id="proContactWrap" class="d-none">
+              <h6 class="fw-bold text-uppercase text-muted small mb-2"><i class="fas fa-phone me-1"></i> Contact</h6>
+              <a id="proContact" href="#" class="btn btn-outline-info btn-sm rounded-pill px-3"><i class="fas fa-phone me-1"></i> <span></span></a>
+            </div>
+            <div id="proWhatsappWrap" class="d-none mt-3">
+              <a id="proWhatsapp" href="#" target="_blank" class="btn btn-success btn-sm rounded-pill px-3"><i class="fab fa-whatsapp me-1"></i> WhatsApp</a>
+            </div>
+            <div id="proEmailWrap" class="d-none mt-3">
+              <a id="proEmail" href="#" class="btn btn-outline-secondary btn-sm rounded-pill px-3"><i class="fas fa-envelope me-1"></i> <span></span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL — Activité
+============================================================ -->
+<div class="modal fade" id="modalActivite" tabindex="-1" aria-labelledby="modalActiviteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg" style="border-radius:20px; overflow:hidden;">
+      <div class="modal-header border-0 px-4 pt-4 pb-3" style="background: linear-gradient(135deg, #052e16, #166534);">
+        <div class="d-flex align-items-center gap-3 w-100">
+          <div id="actPhoto" class="rounded-3 overflow-hidden shadow flex-shrink-0 d-flex align-items-center justify-content-center" style="width:72px;height:72px;background:rgba(34,197,94,.15);"></div>
+          <div>
+            <h5 class="modal-title fw-bold font-serif text-white mb-0" id="modalActiviteLabel">—</h5>
+            <span id="actType" class="badge bg-info bg-opacity-75 text-white fw-bold px-3 py-1 mt-1">—</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4 p-md-5">
+        <h6 class="fw-bold text-uppercase text-muted small mb-2"><i class="fas fa-info-circle me-1"></i> Description</h6>
+        <p id="actDescription" class="text-main mb-0">—</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     DONNÉES JSON pour les modals (injectées par Blade)
+============================================================ -->
+@php
+  $personnalitesJson = $village->personalities->map(function($p) {
+    return [
+      'id'          => $p->id,
+      'name'        => $p->name,
+      'statut'      => $p->statut ?? 'Notable',
+      'description' => $p->description ?? 'Figure marquante du village.',
+      'contact'     => $p->contact,
+      'image'       => \App\Helpers\CloudinaryHelper::url($p->image),
+    ];
+  })->values();
+
+  $professionnelsJson = $village->professionals->map(function($p) {
+    return [
+      'id'          => $p->id,
+      'name'        => $p->name,
+      'profession'  => $p->profession ?? 'Artisan',
+      'description' => $p->description ?? 'Service professionnel local.',
+      'contact'     => $p->contact,
+      'whatsapp'    => $p->whatsapp ?? null,
+      'email'       => $p->email ?? null,
+      'image'       => \App\Helpers\CloudinaryHelper::url($p->image),
+    ];
+  })->values();
+
+  $activitesJson = $village->activities->map(function($a) {
+    return [
+      'id'          => $a->id,
+      'name'        => $a->name,
+      'type'        => $a->type ?? 'Activité',
+      'description' => $a->description ?? '-',
+      'image'       => \App\Helpers\CloudinaryHelper::url($a->image),
+    ];
+  })->values();
+@endphp
+<script>
+const PERSONNALITES  = @json($personnalitesJson);
+const PROFESSIONNELS = @json($professionnelsJson);
+const ACTIVITES      = @json($activitesJson);
+
+// ── Ouvrir modal Personnalité ──────────────────────────────
+function openPersonnaliteModal(id) {
+  const p = PERSONNALITES.find(x => x.id === id);
+  if (!p) return;
+
+  const photoEl = document.getElementById('mpPhoto');
+  photoEl.innerHTML = p.image
+    ? `<img src="${p.image}" class="w-100 h-100" style="object-fit:cover;" alt="${p.name}">`
+    : `<div class="w-100 h-100 d-flex align-items-center justify-content-center text-warning" style="background:rgba(234,179,8,.1);"><i class="fas fa-user fs-2"></i></div>`;
+
+  document.getElementById('modalPersonnaliteLabel').textContent = p.name;
+  document.getElementById('mpStatut').textContent = p.statut;
+  document.getElementById('mpDescription').textContent = p.description;
+
+  const cWrap = document.getElementById('mpContactWrap');
+  const cBtn  = document.getElementById('mpContact');
+  if (p.contact) {
+    cBtn.href = `tel:${p.contact}`;
+    cBtn.querySelector('span').textContent = p.contact;
+    cWrap.classList.remove('d-none');
+  } else {
+    cWrap.classList.add('d-none');
+  }
+
+  new bootstrap.Modal(document.getElementById('modalPersonnalite')).show();
+}
+
+// ── Ouvrir modal Professionnel ─────────────────────────────
+function openProModal(id) {
+  const p = PROFESSIONNELS.find(x => x.id === id);
+  if (!p) return;
+
+  const photoEl = document.getElementById('proPhoto');
+  photoEl.innerHTML = p.image
+    ? `<img src="${p.image}" class="w-100 h-100" style="object-fit:cover;" alt="${p.name}">`
+    : `<i class="fas fa-tools fs-2 text-info"></i>`;
+
+  document.getElementById('modalProLabel').textContent = p.name;
+  document.getElementById('proProfession').textContent = p.profession;
+  document.getElementById('proDescription').textContent = p.description;
+
+  const cWrap = document.getElementById('proContactWrap');
+  const cBtn  = document.getElementById('proContact');
+  if (p.contact) {
+    cBtn.href = `tel:${p.contact}`;
+    cBtn.querySelector('span').textContent = p.contact;
+    cWrap.classList.remove('d-none');
+  } else { cWrap.classList.add('d-none'); }
+
+  const wWrap = document.getElementById('proWhatsappWrap');
+  const wBtn  = document.getElementById('proWhatsapp');
+  if (p.whatsapp) {
+    wBtn.href = `https://wa.me/${p.whatsapp.replace(/\D/g,'')}`;
+    wWrap.classList.remove('d-none');
+  } else { wWrap.classList.add('d-none'); }
+
+  const eWrap = document.getElementById('proEmailWrap');
+  const eBtn  = document.getElementById('proEmail');
+  if (p.email) {
+    eBtn.href = `mailto:${p.email}`;
+    eBtn.querySelector('span').textContent = p.email;
+    eWrap.classList.remove('d-none');
+  } else { eWrap.classList.add('d-none'); }
+
+  new bootstrap.Modal(document.getElementById('modalPro')).show();
+}
+
+// ── Ouvrir modal Activité ──────────────────────────────────
+function openActiviteModal(id) {
+  const a = ACTIVITES.find(x => x.id === id);
+  if (!a) return;
+
+  const photoEl = document.getElementById('actPhoto');
+  photoEl.innerHTML = a.image
+    ? `<img src="${a.image}" class="w-100 h-100" style="object-fit:cover;" alt="${a.name}">`
+    : `<i class="fas fa-hiking fs-2 text-success"></i>`;
+
+  document.getElementById('modalActiviteLabel').textContent = a.name;
+  document.getElementById('actType').textContent = a.type;
+  document.getElementById('actDescription').textContent = a.description;
+
+  new bootstrap.Modal(document.getElementById('modalActivite')).show();
+}
+
+// ── Filtres Personnalités ─────────────────────────────────
+function filterPersonnalites() {
+  const q = (document.getElementById('searchPersonnalite')?.value || '').toLowerCase().trim();
+  const s = (document.getElementById('filterStatut')?.value || '').toLowerCase().trim();
+  const items = document.querySelectorAll('.personnalite-item');
+  let count = 0;
+  items.forEach(el => {
+    const matchName   = el.dataset.name.includes(q);
+    const matchStatut = !s || el.dataset.statut === s;
+    const show = matchName && matchStatut;
+    el.style.display = show ? '' : 'none';
+    if (show) count++;
+  });
+  document.getElementById('personnalitesEmpty').classList.toggle('d-none', count > 0);
+}
+
+// ── Filtres Artisans ──────────────────────────────────────
+function filterPros() {
+  const q = (document.getElementById('searchPro')?.value || '').toLowerCase().trim();
+  const items = document.querySelectorAll('.pro-item');
+  let count = 0;
+  items.forEach(el => {
+    const show = el.dataset.name.includes(q) || el.dataset.profession.includes(q);
+    el.style.display = show ? '' : 'none';
+    if (show) count++;
+  });
+  document.getElementById('prosEmpty').classList.toggle('d-none', count > 0);
+}
+
+// ── Filtres Activités ─────────────────────────────────────
+function filterActivites() {
+  const q = (document.getElementById('searchActivite')?.value || '').toLowerCase().trim();
+  const items = document.querySelectorAll('.activite-item');
+  let count = 0;
+  items.forEach(el => {
+    const show = el.dataset.name.includes(q) || el.dataset.type.includes(q);
+    el.style.display = show ? '' : 'none';
+    if (show) count++;
+  });
+  document.getElementById('activitesEmpty').classList.toggle('d-none', count > 0);
+}
+</script>
 @endsection

@@ -6,10 +6,11 @@
 <div class="container py-4">
   <!-- Groupement Hero Banner -->
   @php
-    $gBanner = isset($group['image']) && $group['image'] ? (Str::startsWith($group['image'], ['http://', 'https://']) ? $group['image'] : Storage::url($group['image'])) : asset('images/logofinal.png');
-    $chefImg = isset($group['chef_image']) && $group['chef_image'] ? (Str::startsWith($group['chef_image'], ['http://', 'https://']) ? $group['chef_image'] : Storage::url($group['chef_image'])) : null;
-    $vList = $group['villages'] ?? [];
-    $pasList = $group['personnalites_administratives'] ?? collect([]);
+    use App\Helpers\CloudinaryHelper;
+    $gBanner  = isset($group['image']) && $group['image'] ? CloudinaryHelper::url($group['image']) : asset('images/logofinal.png');
+    $chefImg  = isset($group['chef_image']) && $group['chef_image'] ? CloudinaryHelper::url($group['chef_image']) : null;
+    $vList    = $group['villages'] ?? [];
+    $pasList  = $group['personnalites_administratives'] ?? collect([]);
   @endphp
   <div class="custom-card p-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(34, 197, 94, 0.85)), url('{{ $gBanner }}') center/cover; color:#fff; border-radius:24px;">
     <div class="row align-items-center g-4 position-relative" style="z-index:2;">
@@ -134,8 +135,18 @@
     <!-- 2. PERSONNALITÉS ADMINISTRATIVES -->
     <div class="tab-pane fade" id="gcontent-pas" role="tabpanel">
       <div class="custom-card p-4 p-md-5">
-        <h3 class="font-serif fw-bold mb-3"><i class="fas fa-user-shield text-warning me-2"></i> Autorités Administratives du Canton</h3>
-        <p class="text-muted small mb-4">Représentants administratifs, autorités de l'État et responsables locaux rattachés au canton {{ $group['name'] }}.</p>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+          <div>
+            <h3 class="font-serif fw-bold mb-1"><i class="fas fa-user-shield text-warning me-2"></i> Autorités Administratives du Canton</h3>
+            <p class="text-muted small mb-0">Représentants administratifs, autorités de l'État et responsables locaux rattachés au canton {{ $group['name'] }}.</p>
+          </div>
+          @if(count($pasList) > 0)
+          <div class="input-group" style="max-width: 260px;">
+            <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+            <input type="text" id="searchPA" class="form-control border-start-0 ps-0" placeholder="Rechercher par nom…" oninput="filterPA()">
+          </div>
+          @endif
+        </div>
 
         @if(count($pasList) === 0)
           <div class="text-center py-5">
@@ -144,18 +155,19 @@
             <p class="text-muted small">Le répertoire des autorités administratives de ce canton sera prochainement mis à jour.</p>
           </div>
         @else
-          <div class="row g-4">
+          <div class="row g-4" id="paGrid">
             @foreach($pasList as $pa)
               @php
-                $paNom = is_array($pa) ? (($pa['prenom'] ?? '') . ' ' . ($pa['nom'] ?? '')) : (($pa->prenom ?? '') . ' ' . ($pa->nom ?? ''));
-                $paRole = is_array($pa) ? ($pa['role'] ?? 'Autorité Administrative') : ($pa->role ?? 'Autorité Administrative');
-                $paBio = is_array($pa) ? ($pa['biographie'] ?? '') : ($pa->biographie ?? '');
+                $paNom   = is_array($pa) ? (($pa['prenom'] ?? '') . ' ' . ($pa['nom'] ?? '')) : (($pa->prenom ?? '') . ' ' . ($pa->nom ?? ''));
+                $paRole  = is_array($pa) ? ($pa['role'] ?? 'Autorité Administrative') : ($pa->role ?? 'Autorité Administrative');
+                $paBio   = is_array($pa) ? ($pa['biographie'] ?? '') : ($pa->biographie ?? '');
                 $paPhoto = is_array($pa) ? ($pa['photo'] ?? null) : ($pa->photo ?? null);
-                $paPhotoUrl = $paPhoto ? (Str::startsWith($paPhoto, ['http://', 'https://']) ? $paPhoto : Storage::url($paPhoto)) : null;
+                $paPhotoUrl = $paPhoto ? CloudinaryHelper::url($paPhoto) : null;
+                $paId    = is_array($pa) ? ($pa['id'] ?? 0) : ($pa->id ?? 0);
               @endphp
-              <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 custom-card text-center p-4">
-                  <div class="rounded-circle overflow-hidden mx-auto mb-3 shadow" style="width: 100px; height: 100px;">
+              <div class="col-md-6 col-lg-4 pa-item" data-name="{{ strtolower(trim($paNom)) }}">
+                <div class="card h-100 border-0 custom-card text-center p-4" style="cursor:pointer; transition: transform .18s, box-shadow .18s;" onclick="openPAModal({{ $paId }})" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,.15)'" onmouseleave="this.style.transform='';this.style.boxShadow=''">
+                  <div class="rounded-circle overflow-hidden mx-auto mb-3 shadow" style="width: 100px; height: 100px; border: 3px solid #f59e0b;">
                     @if($paPhotoUrl)
                       <img src="{{ $paPhotoUrl }}" alt="{{ $paNom }}" class="w-100 h-100" style="object-fit: cover;">
                     @else
@@ -164,12 +176,21 @@
                       </div>
                     @endif
                   </div>
-                  <h5 class="fw-bold font-serif mb-1">{{ $paNom }}</h5>
-                  <span class="badge bg-info bg-opacity-10 text-info fw-bold mb-3 mx-auto px-3 py-1">{{ $paRole }}</span>
-                  <p class="text-muted small mb-0">{{ Str::limit($paBio ?? 'Autorité rattachée au canton.', 120) }}</p>
+                  <h5 class="fw-bold font-serif mb-1">{{ trim($paNom) }}</h5>
+                  <span class="badge bg-info bg-opacity-10 text-info fw-bold mb-2 px-3 py-1">{{ $paRole }}</span>
+                  <p class="text-muted small mb-0">{{ Str::limit($paBio ?? 'Autorité rattachée au canton.', 100) }}</p>
+                  @if($paBio && strlen($paBio) > 60)
+                  <div class="mt-3 pt-2 border-top border-secondary border-opacity-10">
+                    <small class="text-warning fw-semibold"><i class="fas fa-eye me-1"></i> Voir le profil complet</small>
+                  </div>
+                  @endif
                 </div>
               </div>
             @endforeach
+          </div>
+          <div id="paEmpty" class="text-center py-5 d-none">
+            <i class="fas fa-search fs-1 text-muted opacity-50 mb-3"></i>
+            <p class="text-muted">Aucune personnalité ne correspond à votre recherche.</p>
           </div>
         @endif
       </div>
@@ -189,4 +210,83 @@
 
   </div>
 </div>
+
+<!-- ============================================================
+     MODAL — Personnalité Administrative
+============================================================ -->
+<div class="modal fade" id="modalPA" tabindex="-1" aria-labelledby="modalPALabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg" style="border-radius:20px; overflow:hidden;">
+      <!-- Header -->
+      <div class="modal-header border-0 px-4 pt-4 pb-3" style="background: linear-gradient(135deg, #1e1b4b, #92400e);">
+        <div class="d-flex align-items-center gap-3 w-100">
+          <div id="paPhoto" class="rounded-circle overflow-hidden shadow flex-shrink-0 d-flex align-items-center justify-content-center" style="width:80px;height:80px;border:3px solid #f59e0b;background:#1e293b;"></div>
+          <div>
+            <h5 class="modal-title fw-bold font-serif text-white mb-0" id="modalPALabel">—</h5>
+            <span id="paRole" class="badge bg-warning text-dark fw-bold px-3 py-1 mt-1">—</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <!-- Corps -->
+      <div class="modal-body p-4 p-md-5">
+        <h6 class="fw-bold text-uppercase text-muted small mb-2"><i class="fas fa-scroll me-1"></i> Biographie</h6>
+        <p id="paBiographie" class="text-main mb-0 lh-lg">—</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     DONNÉES JSON pour les modals
+============================================================ -->
+<script>
+@php
+  $pasData = collect($pasList)->map(function($pa) {
+    $nom    = is_array($pa) ? (($pa['prenom'] ?? '') . ' ' . ($pa['nom'] ?? '')) : (($pa->prenom ?? '') . ' ' . ($pa->nom ?? ''));
+    $role   = is_array($pa) ? ($pa['role'] ?? 'Autorité Administrative') : ($pa->role ?? 'Autorité Administrative');
+    $bio    = is_array($pa) ? ($pa['biographie'] ?? '') : ($pa->biographie ?? '');
+    $photo  = is_array($pa) ? ($pa['photo'] ?? null) : ($pa->photo ?? null);
+    $id     = is_array($pa) ? ($pa['id'] ?? 0) : ($pa->id ?? 0);
+    return [
+      'id'    => $id,
+      'nom'   => trim($nom),
+      'role'  => $role,
+      'bio'   => $bio ?: 'Autorité rattachée au canton.',
+      'photo' => $photo ? \App\Helpers\CloudinaryHelper::url($photo) : null,
+    ];
+  });
+@endphp
+
+const PAS_DATA = @json($pasData);
+
+function openPAModal(id) {
+  const pa = PAS_DATA.find(x => x.id === id);
+  if (!pa) return;
+
+  const photoEl = document.getElementById('paPhoto');
+  photoEl.innerHTML = pa.photo
+    ? `<img src="${pa.photo}" class="w-100 h-100" style="object-fit:cover;" alt="${pa.nom}">`
+    : `<i class="fas fa-user-shield fs-2 text-warning"></i>`;
+
+  document.getElementById('modalPALabel').textContent = pa.nom;
+  document.getElementById('paRole').textContent = pa.role;
+  document.getElementById('paBiographie').textContent = pa.bio;
+
+  new bootstrap.Modal(document.getElementById('modalPA')).show();
+}
+
+// ── Filtre recherche Personnalités Administratives ──────────
+function filterPA() {
+  const q = (document.getElementById('searchPA')?.value || '').toLowerCase().trim();
+  const items = document.querySelectorAll('.pa-item');
+  let count = 0;
+  items.forEach(el => {
+    const show = el.dataset.name.includes(q);
+    el.style.display = show ? '' : 'none';
+    if (show) count++;
+  });
+  document.getElementById('paEmpty').classList.toggle('d-none', count > 0);
+}
+</script>
 @endsection

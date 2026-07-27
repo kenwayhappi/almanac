@@ -41,40 +41,148 @@
       --bg-card: #151d2a;
       --bg-header: #070a10;
       --bg-nav: #111827;
-      --text-main: #f8fafc;
-      --text-muted: #cbd5e1;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
       --border-color: #1e293b;
       --accent-green: #22c55e;
       --accent-green-hover: #16a34a;
       --accent-gold: #f59e0b;
       --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
-      --glass-bg: rgba(17, 24, 39, 0.85);
+      --glass-bg: rgba(17, 24, 39, 0.92);
       --glass-border: rgba(30, 41, 59, 0.8);
     }
 
-    html[data-theme="dark"] .text-dark,
-    html[data-theme="dark"] .text-muted,
-    html[data-theme="dark"] label,
+    /* ── Dark mode : textes généraux ─────────────────────────── */
+    html[data-theme="dark"] body,
     html[data-theme="dark"] p,
-    html[data-theme="dark"] span {
-      color: var(--text-main) !important;
+    html[data-theme="dark"] h1,
+    html[data-theme="dark"] h2,
+    html[data-theme="dark"] h3,
+    html[data-theme="dark"] h4,
+    html[data-theme="dark"] h5,
+    html[data-theme="dark"] h6,
+    html[data-theme="dark"] li,
+    html[data-theme="dark"] td,
+    html[data-theme="dark"] th,
+    html[data-theme="dark"] label {
+      color: var(--text-main);
     }
 
-    html[data-theme="dark"] .text-muted {
-      color: #cbd5e1 !important;
+    html[data-theme="dark"] .text-main { color: var(--text-main) !important; }
+    html[data-theme="dark"] .text-muted { color: var(--text-muted) !important; }
+
+    /* ── Dark mode : classes Bootstrap qui codent en dur "text-dark" ── */
+    html[data-theme="dark"] .text-dark { color: var(--text-main) !important; }
+
+    /* ── Dark mode : badges ───────────────────────────────────── */
+    /* badge bg-white text-dark (hero stats blancs) */
+    html[data-theme="dark"] .badge.bg-white {
+      background-color: rgba(255,255,255,0.12) !important;
+      color: #f1f5f9 !important;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    /* badge bg-warning text-dark (ex: statut Notable) */
+    html[data-theme="dark"] .badge.bg-warning { color: #0f172a !important; }
+    html[data-theme="dark"] .badge.bg-warning.text-dark { color: #0f172a !important; }
+    /* badge bg-warning bg-opacity-10 text-dark (fond très clair) */
+    html[data-theme="dark"] .badge.bg-warning.bg-opacity-10 {
+      background-color: rgba(245,158,11,0.2) !important;
+      color: #fcd34d !important;
+    }
+    /* badge bg-info bg-opacity-10 text-info */
+    html[data-theme="dark"] .badge.bg-info.bg-opacity-10 {
+      background-color: rgba(6,182,212,0.2) !important;
+      color: #67e8f9 !important;
+    }
+    /* badge bg-success bg-opacity-10 */
+    html[data-theme="dark"] .badge.bg-success.bg-opacity-10 {
+      background-color: rgba(34,197,94,0.2) !important;
+      color: #86efac !important;
+    }
+    /* badge bg-primary bg-opacity-10 */
+    html[data-theme="dark"] .badge.bg-primary.bg-opacity-10 {
+      background-color: rgba(99,102,241,0.2) !important;
+      color: #a5b4fc !important;
+    }
+
+    /* ── Dark mode : cartes et fonds ─────────────────────────── */
+    html[data-theme="dark"] .card,
+    html[data-theme="dark"] .custom-card {
+      background-color: var(--bg-card) !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-main);
     }
 
     html[data-theme="dark"] .bg-light,
-    html[data-theme="dark"] .bg-body-tertiary {
-      background-color: #111827 !important;
+    html[data-theme="dark"] .bg-body-tertiary,
+    html[data-theme="dark"] .bg-white {
+      background-color: #1e293b !important;
     }
 
+    /* Fonds couleur avec opacity en mode sombre */
+    html[data-theme="dark"] .bg-success.bg-opacity-10 { background-color: rgba(34,197,94,0.12) !important; }
+    html[data-theme="dark"] .bg-warning.bg-opacity-10 { background-color: rgba(245,158,11,0.12) !important; }
+    html[data-theme="dark"] .bg-info.bg-opacity-10    { background-color: rgba(6,182,212,0.12) !important; }
+    html[data-theme="dark"] .bg-primary.bg-opacity-10 { background-color: rgba(99,102,241,0.12) !important; }
+
+    /* ── Dark mode : formulaires ─────────────────────────────── */
     html[data-theme="dark"] .form-control,
-    html[data-theme="dark"] .form-select {
+    html[data-theme="dark"] .form-select,
+    html[data-theme="dark"] .input-group-text {
       background-color: #1e293b !important;
-      color: #f8fafc !important;
+      color: #f1f5f9 !important;
       border-color: #334155 !important;
     }
+    html[data-theme="dark"] .form-control::placeholder { color: #64748b; }
+
+    /* ── Dark mode : nav-pills (onglets) ─────────────────────── */
+    html[data-theme="dark"] .nav-link.text-main { color: var(--text-main) !important; }
+    html[data-theme="dark"] .nav-pills .nav-link:not(.active) {
+      color: var(--text-main) !important;
+    }
+    html[data-theme="dark"] .nav-pills .nav-link.active {
+      background-color: var(--accent-green) !important;
+      color: #fff !important;
+    }
+
+    /* ── Dark mode : modals ──────────────────────────────────── */
+    html[data-theme="dark"] .modal-content {
+      background-color: var(--bg-card) !important;
+      color: var(--text-main) !important;
+      border-color: var(--border-color) !important;
+    }
+    html[data-theme="dark"] .modal-body,
+    html[data-theme="dark"] .modal-footer { border-color: var(--border-color) !important; }
+
+    /* ── Dark mode : bordures & séparateurs ──────────────────── */
+    html[data-theme="dark"] .border-top,
+    html[data-theme="dark"] .border-bottom,
+    html[data-theme="dark"] .border-secondary { border-color: var(--border-color) !important; }
+    html[data-theme="dark"] hr { border-color: var(--border-color) !important; opacity: 1; }
+
+    /* ── Dark mode : boutons outline ─────────────────────────── */
+    html[data-theme="dark"] .btn-outline-success { color: var(--accent-green); border-color: var(--accent-green); }
+    html[data-theme="dark"] .btn-outline-success:hover { background-color: var(--accent-green); color: #fff !important; }
+    html[data-theme="dark"] .btn-outline-info    { color: #67e8f9; border-color: #67e8f9; }
+    html[data-theme="dark"] .btn-outline-secondary { color: #94a3b8; border-color: #334155; }
+    html[data-theme="dark"] .btn-secondary { background-color: #334155; border-color: #334155; color: #f1f5f9; }
+
+    /* ── Dark mode : text-success / text-info / text-warning ─── */
+    html[data-theme="dark"] .text-success { color: #4ade80 !important; }
+    html[data-theme="dark"] .text-info    { color: #67e8f9 !important; }
+    html[data-theme="dark"] .text-warning { color: #fcd34d !important; }
+    html[data-theme="dark"] .text-primary { color: #818cf8 !important; }
+
+    /* ── Dark mode : spans dans les badges blancs (hero) ─────── */
+    html[data-theme="dark"] .badge.bg-white span,
+    html[data-theme="dark"] .badge.bg-white i { color: inherit !important; }
+
+    /* ── Dark mode : font-monospace (contacts) ───────────────── */
+    html[data-theme="dark"] .font-monospace { color: var(--text-main); }
+
+    /* ── Dark mode : card-footer transparent ─────────────────── */
+    html[data-theme="dark"] .card-footer.bg-transparent { background-color: transparent !important; }
+
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
