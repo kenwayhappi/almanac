@@ -57,7 +57,7 @@
                 <div class="d-flex align-items-center gap-3">
                   <div class="rounded-circle overflow-hidden bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width:44px;height:44px;">
                     @if($p->photo)
-                      <img src="{{ Storage::url($p->photo) }}" alt="{{ $p->nom }}" class="w-100 h-100" style="object-fit:cover;">
+                      <img src="{{ \App\Helpers\CloudinaryHelper::url($p->photo) }}" alt="{{ $p->nom }}" class="w-100 h-100" style="object-fit:cover;">
                     @else
                       <i class="fas fa-user-shield fs-5"></i>
                     @endif
@@ -70,17 +70,17 @@
               <td><span class="badge bg-info bg-opacity-10 text-info fw-bold">{{ $p->role }}</span></td>
               <td><span class="badge bg-secondary bg-opacity-20 text-main">{{ $p->villageGroup->name ?? '-' }}</span></td>
               <td class="text-end">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-info rounded-start-pill px-3" onclick="openShowPersonnaliteAdmin({{ json_encode($p) }})">
+                <div class="d-inline-flex gap-1">
+                  <button type="button" class="btn btn-sm btn-outline-info rounded-pill px-2 py-1 small" onclick="openShowPersonnaliteAdmin({{ json_encode($p) }})" title="Voir les détails">
                     <i class="fas fa-eye me-1"></i> Voir
                   </button>
-                  <button type="button" class="btn btn-sm btn-outline-warning px-3" onclick="openEditPersonnaliteAdmin({{ json_encode($p) }})">
-                    <i class="fas fa-pen me-1"></i> Éditer
+                  <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 small" onclick="openEditPersonnaliteAdmin({{ json_encode($p) }})" title="Éditer">
+                    <i class="fas fa-pen"></i>
                   </button>
                   <form action="{{ route('dashboard.personnalites_administratives.destroy', $p->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Confirmer la suppression ?');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-end-pill px-3">
+                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 small" title="Supprimer">
                       <i class="fas fa-trash"></i>
                     </button>
                   </form>

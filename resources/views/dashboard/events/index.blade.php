@@ -58,7 +58,7 @@
                 <div class="d-flex align-items-center gap-3">
                   <div class="rounded-3 overflow-hidden bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width:44px;height:44px;">
                     @if($ev->image)
-                      <img src="{{ Storage::url($ev->image) }}" alt="{{ $ev->name }}" class="w-100 h-100" style="object-fit:cover;">
+                      <img src="{{ \App\Helpers\CloudinaryHelper::url($ev->image) }}" alt="{{ $ev->name }}" class="w-100 h-100" style="object-fit:cover;">
                     @else
                       <i class="fas fa-calendar-day fs-5"></i>
                     @endif
@@ -76,17 +76,17 @@
                 <span class="small fw-semibold text-danger">{{ $ev->end_date ? \Carbon\Carbon::parse($ev->end_date)->format('d/m/Y') : '-' }}</span>
               </td>
               <td class="text-end">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-info rounded-start-pill px-3" onclick="openShowEvent({{ json_encode($ev) }})">
+                <div class="d-inline-flex gap-1">
+                  <button type="button" class="btn btn-sm btn-outline-info rounded-pill px-2 py-1 small" onclick="openShowEvent({{ json_encode($ev) }})" title="Voir les détails">
                     <i class="fas fa-eye me-1"></i> Voir
                   </button>
-                  <button type="button" class="btn btn-sm btn-outline-warning px-3" onclick="openEditEvent({{ json_encode($ev) }})">
-                    <i class="fas fa-pen me-1"></i> Éditer
+                  <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 small" onclick="openEditEvent({{ json_encode($ev) }})" title="Éditer">
+                    <i class="fas fa-pen"></i>
                   </button>
                   <form action="{{ route('dashboard.events.destroy', $ev->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Supprimer cet événement ?');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-end-pill px-3">
+                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 small" title="Supprimer">
                       <i class="fas fa-trash"></i>
                     </button>
                   </form>

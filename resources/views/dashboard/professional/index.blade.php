@@ -58,7 +58,7 @@
                 <div class="d-flex align-items-center gap-3">
                   <div class="rounded-circle overflow-hidden bg-info bg-opacity-10 text-info d-flex align-items-center justify-content-center" style="width:44px;height:44px;">
                     @if($pro->image)
-                      <img src="{{ Storage::url($pro->image) }}" alt="{{ $pro->name }}" class="w-100 h-100" style="object-fit:cover;">
+                      <img src="{{ \App\Helpers\CloudinaryHelper::url($pro->image) }}" alt="{{ $pro->name }}" class="w-100 h-100" style="object-fit:cover;">
                     @else
                       <i class="fas fa-briefcase fs-5"></i>
                     @endif
@@ -72,17 +72,17 @@
               <td><span class="badge bg-secondary bg-opacity-20 text-main">{{ $pro->village->name ?? '-' }}</span></td>
               <td class="small text-muted">{{ $pro->contact ?? '-' }}</td>
               <td class="text-end">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-info rounded-start-pill px-3" onclick="openShowProfessional({{ json_encode($pro) }})">
+                <div class="d-inline-flex gap-1">
+                  <button type="button" class="btn btn-sm btn-outline-info rounded-pill px-2 py-1 small" onclick="openShowProfessional({{ json_encode($pro) }})" title="Voir les détails">
                     <i class="fas fa-eye me-1"></i> Voir
                   </button>
-                  <button type="button" class="btn btn-sm btn-outline-warning px-3" onclick="openEditProfessional({{ json_encode($pro) }})">
-                    <i class="fas fa-pen me-1"></i> Éditer
+                  <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 small" onclick="openEditProfessional({{ json_encode($pro) }})" title="Éditer">
+                    <i class="fas fa-pen"></i>
                   </button>
                   <form action="{{ route('dashboard.professional.destroy', $pro->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Supprimer cet artisan ?');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-end-pill px-3">
+                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 small" title="Supprimer">
                       <i class="fas fa-trash"></i>
                     </button>
                   </form>

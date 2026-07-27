@@ -34,12 +34,140 @@
       --bg-body: #0b0f17;
       --bg-sidebar: #070a10;
       --bg-card: #151d2a;
-      --text-main: #f8fafc;
+      --text-main: #f1f5f9;
       --text-muted: #94a3b8;
       --border-color: #1e293b;
       --accent-green: #22c55e;
       --accent-green-hover: #16a34a;
     }
+
+    /* ── Dark mode : textes généraux ─────────────────────────── */
+    html[data-theme="dark"] body,
+    html[data-theme="dark"] p,
+    html[data-theme="dark"] h1, html[data-theme="dark"] h2,
+    html[data-theme="dark"] h3, html[data-theme="dark"] h4,
+    html[data-theme="dark"] h5, html[data-theme="dark"] h6,
+    html[data-theme="dark"] li, html[data-theme="dark"] td,
+    html[data-theme="dark"] th, html[data-theme="dark"] label,
+    html[data-theme="dark"] span, html[data-theme="dark"] small { color: var(--text-main); }
+
+    html[data-theme="dark"] .text-main   { color: var(--text-main)   !important; }
+    html[data-theme="dark"] .text-muted  { color: var(--text-muted)  !important; }
+    html[data-theme="dark"] .text-dark   { color: var(--text-main)   !important; }
+    html[data-theme="dark"] .text-success { color: #4ade80 !important; }
+    html[data-theme="dark"] .text-info   { color: #67e8f9 !important; }
+    html[data-theme="dark"] .text-warning { color: #fcd34d !important; }
+    html[data-theme="dark"] .text-primary { color: #818cf8 !important; }
+    html[data-theme="dark"] .text-danger  { color: #f87171 !important; }
+
+    /* ── Dark mode : formulaires & inputs ────────────────────── */
+    html[data-theme="dark"] .form-control,
+    html[data-theme="dark"] .form-select,
+    html[data-theme="dark"] .input-group-text {
+      background-color: #1e293b !important;
+      color: #f1f5f9 !important;
+      border-color: #334155 !important;
+    }
+    html[data-theme="dark"] .form-control::placeholder,
+    html[data-theme="dark"] .form-select::placeholder { color: #64748b !important; }
+
+    /* ── Dark mode : cartes / fonds ──────────────────────────── */
+    html[data-theme="dark"] .card,
+    html[data-theme="dark"] .admin-card,
+    html[data-theme="dark"] .kpi-card {
+      background-color: var(--bg-card) !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-main) !important;
+    }
+    html[data-theme="dark"] .bg-white,
+    html[data-theme="dark"] .bg-light,
+    html[data-theme="dark"] .bg-body-tertiary { background-color: #1e293b !important; }
+
+    /* Fonds opacity */
+    html[data-theme="dark"] .bg-success.bg-opacity-10 { background-color: rgba(34,197,94,0.15)  !important; }
+    html[data-theme="dark"] .bg-warning.bg-opacity-10 { background-color: rgba(245,158,11,0.15) !important; }
+    html[data-theme="dark"] .bg-info.bg-opacity-10    { background-color: rgba(6,182,212,0.15)  !important; }
+    html[data-theme="dark"] .bg-primary.bg-opacity-10 { background-color: rgba(99,102,241,0.15) !important; }
+    html[data-theme="dark"] .bg-danger.bg-opacity-10  { background-color: rgba(239,68,68,0.15)  !important; }
+
+    /* ── Dark mode : badges ───────────────────────────────────── */
+    html[data-theme="dark"] .badge.bg-white {
+      background-color: rgba(255,255,255,0.12) !important;
+      color: #f1f5f9 !important;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    html[data-theme="dark"] .badge.bg-success { background-color: #16a34a !important; color: #fff !important; }
+    html[data-theme="dark"] .badge.bg-success.bg-opacity-10 { background-color: rgba(34,197,94,0.2) !important; color: #4ade80 !important; }
+    html[data-theme="dark"] .badge.bg-warning { color: #0f172a !important; }
+    html[data-theme="dark"] .badge.bg-warning.bg-opacity-10 { background-color: rgba(245,158,11,0.2) !important; color: #fcd34d !important; }
+    html[data-theme="dark"] .badge.bg-info.bg-opacity-10    { background-color: rgba(6,182,212,0.2) !important;  color: #67e8f9 !important; }
+    html[data-theme="dark"] .badge.bg-primary.bg-opacity-10 { background-color: rgba(99,102,241,0.2) !important; color: #a5b4fc !important; }
+    html[data-theme="dark"] .badge.bg-danger                { background-color: #dc2626 !important; color: #fff !important; }
+    html[data-theme="dark"] .badge.bg-secondary             { background-color: #334155 !important; color: #f1f5f9 !important; }
+
+    /* ── Dark mode : tableaux ─────────────────────────────────── */
+    html[data-theme="dark"] .table,
+    html[data-theme="dark"] .table > :not(caption) > * > * {
+      background-color: var(--bg-card) !important;
+      color: var(--text-main) !important;
+      border-color: var(--border-color) !important;
+    }
+    html[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) > * {
+      background-color: rgba(255,255,255,0.03) !important;
+    }
+    html[data-theme="dark"] .table-hover > tbody > tr:hover > * {
+      background-color: rgba(34,197,94,0.06) !important;
+    }
+
+    /* ── Dark mode : dropdowns & menus ───────────────────────── */
+    html[data-theme="dark"] .dropdown-menu {
+      background-color: #1e293b !important;
+      border-color: var(--border-color) !important;
+    }
+    html[data-theme="dark"] .dropdown-item { color: var(--text-main) !important; }
+    html[data-theme="dark"] .dropdown-item:hover { background-color: rgba(34,197,94,0.1) !important; color: #4ade80 !important; }
+    html[data-theme="dark"] .dropdown-header { color: var(--text-muted) !important; }
+    html[data-theme="dark"] .dropdown-divider { border-color: var(--border-color) !important; }
+
+    /* ── Dark mode : modals ──────────────────────────────────── */
+    html[data-theme="dark"] .modal-content {
+      background-color: var(--bg-card) !important;
+      color: var(--text-main) !important;
+      border-color: var(--border-color) !important;
+    }
+    html[data-theme="dark"] .modal-header,
+    html[data-theme="dark"] .modal-footer { border-color: var(--border-color) !important; }
+
+    /* ── Dark mode : alertes ─────────────────────────────────── */
+    html[data-theme="dark"] .alert-success { background-color: rgba(34,197,94,0.12) !important; border-color: rgba(34,197,94,0.3) !important; color: #4ade80 !important; }
+    html[data-theme="dark"] .alert-danger  { background-color: rgba(239,68,68,0.12)  !important; border-color: rgba(239,68,68,0.3)  !important; color: #f87171 !important; }
+    html[data-theme="dark"] .alert-warning { background-color: rgba(245,158,11,0.12) !important; border-color: rgba(245,158,11,0.3) !important; color: #fcd34d !important; }
+    html[data-theme="dark"] .alert-info    { background-color: rgba(6,182,212,0.12)  !important; border-color: rgba(6,182,212,0.3)  !important; color: #67e8f9 !important; }
+
+    /* ── Dark mode : boutons ─────────────────────────────────── */
+    html[data-theme="dark"] .btn-outline-secondary { color: #94a3b8; border-color: #334155; }
+    html[data-theme="dark"] .btn-outline-secondary:hover { background-color: #334155; color: #f1f5f9; }
+    html[data-theme="dark"] .btn-outline-success { color: #4ade80; border-color: #4ade80; }
+    html[data-theme="dark"] .btn-outline-success:hover { background-color: var(--accent-green); color: #fff !important; }
+    html[data-theme="dark"] .btn-outline-danger  { color: #f87171; border-color: #f87171; }
+    html[data-theme="dark"] .btn-secondary { background-color: #334155 !important; border-color: #334155 !important; color: #f1f5f9 !important; }
+
+    /* ── Dark mode : bordures & séparateurs ──────────────────── */
+    html[data-theme="dark"] .border-top,
+    html[data-theme="dark"] .border-bottom,
+    html[data-theme="dark"] .border-end,
+    html[data-theme="dark"] .border-start,
+    html[data-theme="dark"] .border-secondary { border-color: var(--border-color) !important; }
+    html[data-theme="dark"] hr { border-color: var(--border-color) !important; opacity: 1; }
+
+    /* ── Dark mode : pagination ──────────────────────────────── */
+    html[data-theme="dark"] .page-link {
+      background-color: var(--bg-card) !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-main) !important;
+    }
+    html[data-theme="dark"] .page-item.active .page-link { background-color: var(--accent-green) !important; border-color: var(--accent-green) !important; color: #fff !important; }
+    html[data-theme="dark"] .page-item.disabled .page-link { color: var(--text-muted) !important; }
 
     /* Force Uniform Dark Theme on Form Elements & Cards */
     html[data-theme="dark"] .form-control,
@@ -194,14 +322,57 @@
     }
 
     @media (max-width: 991.98px) {
+      .admin-navbar {
+        padding: 0 1rem;
+      }
       .admin-sidebar {
         transform: translateX(-100%);
+        box-shadow: 4px 0 25px rgba(0, 0, 0, 0.3);
       }
       .admin-sidebar.show {
         transform: translateX(0);
       }
       .admin-main {
         margin-left: 0;
+        padding: 1.25rem 1rem;
+      }
+      .sidebar-backdrop {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(3px);
+        z-index: 1015;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .sidebar-backdrop.show {
+        display: block;
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 575.98px) {
+      .admin-main {
+        padding: 0.85rem 0.75rem;
+      }
+      .admin-card {
+        padding: 1rem;
+        border-radius: 12px;
+      }
+      .kpi-card {
+        padding: 1rem;
+        gap: 0.85rem;
+        border-radius: 12px;
+      }
+      .kpi-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.25rem;
+        border-radius: 10px;
       }
     }
   </style>
@@ -213,12 +384,12 @@
   <!-- Top Navbar -->
   <header class="admin-navbar">
     <div class="d-flex align-items-center gap-3">
-      <button class="btn p-0 d-lg-none text-main fs-4" id="sidebarToggleBtn">
+      <button class="btn p-0 d-lg-none text-main fs-4" id="sidebarToggleBtn" aria-label="Toggle Navigation">
         <i class="fas fa-bars"></i>
       </button>
       <a href="{{ route('dashboard.index') }}" class="d-flex align-items-center gap-2 text-decoration-none">
         <img src="{{ asset('images/logofinal.png') }}" alt="Logo" style="height:36px;">
-        <span class="font-serif fw-bold fs-4 text-main">Almanac <span class="badge bg-success bg-opacity-10 text-success fs-xs">Admin</span></span>
+        <span class="font-serif fw-bold fs-4 text-main">Admin</span>
       </a>
     </div>
 
@@ -259,13 +430,12 @@
     </div>
   </header>
 
+  <!-- Mobile Backdrop Overlay -->
+  <div class="sidebar-backdrop d-lg-none" id="sidebarBackdrop"></div>
+
   <!-- Sidebar -->
   <aside class="admin-sidebar" id="adminSidebar">
-    <div class="sidebar-brand-badge">
-      <span>🇨🇲</span> Almanac Cameroun (+237)
-    </div>
-
-    <div class="sidebar-section-title"><i class="fas fa-compass me-1"></i> Général</div>
+    <div class="sidebar-section-title mt-0"><i class="fas fa-compass me-1"></i> Général</div>
     <a href="{{ route('dashboard.index') }}" class="sidebar-link {{ request()->routeIs('dashboard.index') ? 'active' : '' }}">
       <i class="fas fa-chart-pie"></i> Vue d'ensemble
     </a>
@@ -367,10 +537,33 @@
       }
     })();
 
-    // Mobile Sidebar Toggle
-    document.getElementById('sidebarToggleBtn')?.addEventListener('click', function() {
-      document.getElementById('adminSidebar')?.classList.toggle('show');
-    });
+    // Mobile Sidebar Toggle & Backdrop
+    (function() {
+      const toggleBtn = document.getElementById('sidebarToggleBtn');
+      const sidebar = document.getElementById('adminSidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+
+      function toggleSidebar() {
+        sidebar?.classList.toggle('show');
+        backdrop?.classList.toggle('show');
+      }
+
+      function closeSidebar() {
+        sidebar?.classList.remove('show');
+        backdrop?.classList.remove('show');
+      }
+
+      toggleBtn?.addEventListener('click', toggleSidebar);
+      backdrop?.addEventListener('click', closeSidebar);
+
+      document.querySelectorAll('#adminSidebar .sidebar-link').forEach(link => {
+        link.addEventListener('click', function() {
+          if (window.innerWidth < 992) {
+            closeSidebar();
+          }
+        });
+      });
+    })();
 
     // Floating Back to Top Button on Scroll
     window.addEventListener('scroll', function () {

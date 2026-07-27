@@ -92,6 +92,11 @@ Route::prefix('dashboard')->name('dashboard.')->middleware('auth')->group(functi
         Route::get('/create', fn() => redirect()->route('dashboard.pays.index'))->name('pays.create');
         Route::get('/{id}', fn() => redirect()->route('dashboard.pays.index'))->name('pays.show');
         Route::get('/{id}/edit', fn() => redirect()->route('dashboard.pays.index'))->name('pays.edit');
+
+        // Modales CRUD Divisions Administratives
+        Route::post('/divisions', [CountryDashboardController::class, 'storeDivision'])->name('pays.divisions.store');
+        Route::put('/divisions/{id}', [CountryDashboardController::class, 'updateDivision'])->name('pays.divisions.update');
+        Route::delete('/divisions/{id}', [CountryDashboardController::class, 'destroyDivision'])->name('pays.divisions.destroy');
     });
 
     // Groupements

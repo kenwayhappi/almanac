@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Mon Profil Administrateur - Almanac Admin')
+@section('title', 'Mon Profil Administrateur - Admin')
 
 @section('content')
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
@@ -18,7 +18,7 @@
       </div>
       <h5 class="fw-bold font-serif mb-1">{{ $user->name }}</h5>
       <p class="text-muted small mb-3">{{ $user->email }}</p>
-      <span class="badge bg-success bg-opacity-20 text-success fw-bold px-3 py-2 rounded-pill">Administrateur Principal</span>
+      <span class="badge bg-success text-white fw-bold px-3 py-2 rounded-pill shadow-sm"><i class="fas fa-shield-alt me-1"></i> Administrateur Principal</span>
     </div>
   </div>
 
