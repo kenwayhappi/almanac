@@ -1,0 +1,244 @@
+/* Variables de couleur */
+:root {
+    --green-400: #ffffff;
+    --green-500: #000000;
+    --green-700: #2E7D32;
+    --green-800: #1B5E20;
+    --green-600: #edfb58;
+    --primary: #FFD700;
+  }
+
+  /* Background colors */
+  .bg-green-400 { background-color: var(--green-400); }
+  .bg-green-500 { background-color: var(--green-500); }
+  .bg-green-600 { background-color: var(--green-600); }
+  .bg-green-700 { background-color: var(--green-700); }
+  .bg-green-800 { background-color: var(--green-800); }
+  .text-primary { color: var(--primary); }
+
+  /* Header */
+
+
+  .info-menu {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .info-menu small { font-size: 0.9rem; }
+
+  .social-icons a {
+    color: var(--primary);
+    margin-left: 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  /* Navbar */
+  .navbar-custom .navbar-nav .nav-link {
+    padding: 1rem;
+    font-size: 1.1rem;
+    color: black;
+  }
+
+  .navbar-custom .navbar-nav .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Carrousel */
+  .carousel {
+    overflow: hidden;
+  }
+
+  .carousel-item {
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .carousel-caption {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 2rem;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .carousel-caption:hover {
+    transform: scale(1.05);
+  }
+
+  .carousel-caption h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .carousel-caption p {
+    font-size: 1.25rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  }
+
+  .carousel-caption .btn {
+    font-size: 1.1rem;
+    padding: 0.75rem 2rem;
+    border-radius: 25px;
+  }
+
+  /* Village Info */
+  .village-info-item {
+    min-height: 150px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+
+  .village-info-item:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .village-info-item i {
+    color: var(--primary);
+  }
+
+  .village-info-item h5 {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .village-info-item p {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  /* Activités */
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .card-text {
+    font-size: 1rem;
+    color: #666;
+  }
+
+  /* Section Title */
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+  }
+
+  /* Responsive Styles */
+  @media (max-width: 992px) {
+    .header-logofinal {
+      height: 80px;
+    }
+
+    .info-menu {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0.5rem;
+    }
+
+    .info-menu .social-icons {
+      margin-top: 0.5rem;
+    }
+
+    .navbar-custom .navbar-nav .nav-link {
+      padding: 0.5rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .header-logofinal {
+      height: 60px;
+    }
+
+    .carousel-caption h1 {
+      font-size: 2rem;
+    }
+
+    .carousel-caption p {
+      font-size: 1rem;
+    }
+  }
+
+  /* Bouton flottant */
+  .floating-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 50%;
+    font-size: 2rem;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .floating-button:hover {
+    background-color: #ffcc00;
+    transform: scale(1.1);
+  }
+
+  /* Animations */
+  .fade-in {
+    animation: fadeIn 1.5s ease-out;
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  .icon-social {
+    color: white;
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+  }
+
+  .icon-social:hover {
+    color: var(--primary);
+  }
+
+  .search-form .form-control {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--primary);
+    color: black;
+    border-radius: 25px;
+    padding: 0.5rem 1rem;
+    width: 100%;
+  }
+
+  .search-form .form-control::placeholder {
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  .search-form .btn-search {
+    background-color: var(--primary);
+    border: none;
+    border-radius: 25px;
+    padding: 0.5rem 1rem;
+    color: var(--green-500);
+    transition: background-color 0.3s ease;
+  }
+
+  .search-form .btn-search:hover {
+    background-color: #ffc107;
+  }

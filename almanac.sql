@@ -1,0 +1,769 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Hôte : 127.0.0.1:3306
+-- Généré le : lun. 27 juil. 2026 à 14:19
+-- Version du serveur : 9.1.0
+-- Version de PHP : 8.3.14
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de données : `almanac`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `activites`
+--
+
+DROP TABLE IF EXISTS `activites`;
+CREATE TABLE IF NOT EXISTS `activites` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `description` text,
+  `village_id` bigint UNSIGNED NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `village_id` (`village_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `activites`
+--
+
+INSERT INTO `activites` (`id`, `name`, `type`, `description`, `village_id`, `image`, `created_at`, `updated_at`) VALUES
+(2, 'Visite des Chutes de la Mouénée', 'Tourisme', 'Découverte des impressionnantes chutes d\'eau de Bafang.', 16, NULL, '2026-07-22 10:50:05', '2026-07-22 10:50:05'),
+(3, 'Musée des Civilisations', 'Culture', 'Découverte du riche patrimoine des chefferies de l\'Ouest situé sur les rives du lac municipal.', 21, NULL, '2026-07-22 10:50:37', '2026-07-22 10:50:37');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `administrative_divisions`
+--
+
+DROP TABLE IF EXISTS `administrative_divisions`;
+CREATE TABLE IF NOT EXISTS `administrative_divisions` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `type_id` bigint UNSIGNED NOT NULL,
+  `parent_id` bigint UNSIGNED DEFAULT NULL,
+  `country_id` int UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `type_id` (`type_id`),
+  KEY `parent_id` (`parent_id`),
+  KEY `country_id` (`country_id`),
+  KEY `idx_admin_div_country` (`country_id`),
+  KEY `idx_admin_div_parent` (`parent_id`),
+  KEY `idx_admin_div_type` (`type_id`),
+  KEY `idx_admin_div_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=612 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `administrative_divisions`
+--
+
+INSERT INTO `administrative_divisions` (`id`, `name`, `type_id`, `parent_id`, `country_id`, `created_at`, `updated_at`) VALUES
+(305, 'Adamaoua', 4, NULL, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(306, 'Centre', 4, NULL, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(307, 'Est', 4, NULL, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(308, 'Extrême-Nord', 4, NULL, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(309, 'Littoral', 4, NULL, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(310, 'Nord', 4, NULL, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(311, 'Nord-Ouest', 4, NULL, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(312, 'Ouest', 4, NULL, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(313, 'Sud', 4, NULL, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(314, 'Sud-Ouest', 4, NULL, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(315, 'Djérem', 5, 305, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(316, 'Faro-et-Déo', 5, 305, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(317, 'Mayo-Banyo', 5, 305, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(318, 'Mbéré', 5, 305, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(319, 'Vina', 5, 305, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(320, 'Haute-Sanaga', 5, 306, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(321, 'Lekié', 5, 306, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(322, 'Mbam-et-Inoubou', 5, 306, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(323, 'Mbam-et-Kim', 5, 306, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(324, 'Méfou-et-Afamba', 5, 306, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(325, 'Boumba-et-Ngoko', 5, 307, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(326, 'Haut-Nyong', 5, 307, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(327, 'Kadey', 5, 307, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(328, 'Lom-et-Djérem', 5, 307, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(329, 'Diamaré', 5, 308, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(330, 'Logone-et-Chari', 5, 308, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(331, 'Mayo-Danay', 5, 308, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(332, 'Mayo-Kani', 5, 308, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(333, 'Mayo-Tsanaga', 5, 308, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(334, 'Moungo', 5, 309, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(335, 'Nkam', 5, 309, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(336, 'Sanaga-Maritime', 5, 309, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(337, 'Wouri', 5, 309, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(338, 'Bénoué', 5, 310, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(339, 'Faro', 5, 310, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(340, 'Mayo-Louti', 5, 310, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(341, 'Mayo-Rey', 5, 310, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(342, 'Boyo', 5, 311, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(343, 'Bui', 5, 311, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(344, 'Donga-Mantung', 5, 311, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(345, 'Menchum', 5, 311, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(346, 'Mezam', 5, 311, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(347, 'Bamboutos', 5, 312, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(348, 'Haut-Nkam', 5, 312, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(349, 'Hauts-Plateaux', 5, 312, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(350, 'Koung-Khi', 5, 312, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(351, 'Menoua', 5, 312, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(352, 'Mifi', 5, 312, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(353, 'Ndé', 5, 312, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(354, 'Noun', 5, 312, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(355, 'Dja-et-Lobo', 5, 313, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(356, 'Mvila', 5, 313, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(357, 'Océan', 5, 313, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(358, 'Vallée-du-Ntem', 5, 313, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(359, 'Fako', 5, 314, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(360, 'Koupé-Manengouba', 5, 314, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(361, 'Lebialem', 5, 314, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(362, 'Manyu', 5, 314, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(363, 'Meme', 5, 314, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(364, 'Tibati', 6, 315, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(365, 'Ngaoundal', 6, 315, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(366, 'Belel', 6, 315, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(367, 'Mbé', 6, 315, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(368, 'Tignère', 6, 315, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(369, 'Tignère', 6, 316, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(370, 'Galim-Tignère', 6, 316, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(371, 'Bankim', 6, 317, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(372, 'Banyo', 6, 317, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(373, 'Mayo-Darlé', 6, 317, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(374, 'Kékem', 6, 317, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(375, 'Tcholliré', 6, 317, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(376, 'Djohong', 6, 318, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(377, 'Meiganga', 6, 318, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(378, 'Ngaoui', 6, 318, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(379, 'Dir', 6, 318, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(380, 'Belel', 6, 318, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(381, 'Ngaoundéré 1er', 6, 319, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(382, 'Ngaoundéré 2e', 6, 319, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(383, 'Ngaoundéré 3e', 6, 319, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(384, 'Nganha', 6, 319, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(385, 'Martap', 6, 319, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(386, 'Nanga-Eboko', 6, 320, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(387, 'Mbandjock', 6, 320, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(388, 'Lembe-Yezoum', 6, 320, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(389, 'Bibey', 6, 320, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(390, 'Nkoteng', 6, 320, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(391, 'Monatélé', 6, 321, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(392, 'Obala', 6, 321, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(393, 'Batchenga', 6, 321, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(394, 'Ebebda', 6, 321, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(395, 'Elig-Mfomo', 6, 321, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(396, 'Bafia', 6, 322, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(397, 'Bokito', 6, 322, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(398, 'Kon-Yambetta', 6, 322, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(399, 'Makénéné', 6, 322, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(400, 'Ndikiniméki', 6, 322, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(401, 'Ngoro', 6, 323, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(402, 'Ntui', 6, 323, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(403, 'Ngog-Mapubi', 6, 323, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(404, 'Mbankomo', 6, 323, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(405, 'Dibang', 6, 323, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(406, 'Soa', 6, 324, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(407, 'Awaé', 6, 324, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(408, 'Nkolafamba', 6, 324, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(409, 'Esse', 6, 324, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(410, 'Afamba', 6, 324, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(411, 'Yokadouma', 6, 325, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(412, 'Moloundou', 6, 325, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(413, 'Salapoumbé', 6, 325, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(414, 'Gari-Gombo', 6, 325, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(415, 'Atok', 6, 325, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(416, 'Abong-Mbang', 6, 326, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(417, 'Doumé', 6, 326, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(418, 'Lomié', 6, 326, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(419, 'Messamena', 6, 326, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(420, 'Ngoyla', 6, 326, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(421, 'Batouri', 6, 327, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(422, 'Kette', 6, 327, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(423, 'Ndelele', 6, 327, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(424, 'Ouli', 6, 327, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(425, 'Mbonda', 6, 327, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(426, 'Bertoua 1er', 6, 328, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(427, 'Bertoua 2e', 6, 328, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(428, 'Garoua-Boulaï', 6, 328, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(429, 'Bétaré-Oya', 6, 328, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(430, 'Diang', 6, 328, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(431, 'Maroua 1er', 6, 329, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(432, 'Maroua 2e', 6, 329, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(433, 'Maroua 3e', 6, 329, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(434, 'Bogo', 6, 329, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(435, 'Gazawa', 6, 329, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(436, 'Kousséri', 6, 330, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(437, 'Logone-Birni', 6, 330, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(438, 'Makary', 6, 330, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(439, 'Goulfey', 6, 330, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(440, 'Waza', 6, 330, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(441, 'Yagoua', 6, 331, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(442, 'Kaelé', 6, 331, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(443, 'Gobo', 6, 331, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(444, 'Guéré', 6, 331, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(445, 'Tchatibali', 6, 331, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(446, 'Kaï-Kaï', 6, 332, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(447, 'Guidiguis', 6, 332, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(448, 'Moutourwa', 6, 332, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(449, 'Taibong', 6, 332, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(450, 'Touloum', 6, 332, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(451, 'Mokolo', 6, 333, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(452, 'Bourrha', 6, 333, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(453, 'Hina', 6, 333, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(454, 'Koza', 6, 333, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(455, 'Mogodé', 6, 333, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(456, 'Nkongsamba 1er', 6, 334, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(457, 'Nkongsamba 2e', 6, 334, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(458, 'Nkongsamba 3e', 6, 334, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(459, 'Loum', 6, 334, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(460, 'Manjo', 6, 334, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(461, 'Mbanga', 6, 334, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(462, 'Penja', 6, 334, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(463, 'Dibombari', 6, 334, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(464, 'Fiko', 6, 334, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(465, 'Bonaléa', 6, 334, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(466, 'Mombo', 6, 334, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(467, 'Melong', 6, 334, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(468, 'Yabassi', 6, 335, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(469, 'Nkondjock', 6, 335, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(470, 'Yingui', 6, 335, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(471, 'Nord-Makombé', 6, 335, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(472, 'Edéa 1er', 6, 336, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(473, 'Edéa 2e', 6, 336, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(474, 'Dizangué', 6, 336, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(475, 'Mouanko', 6, 336, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(476, 'Ndom', 6, 336, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(477, 'Ngwei', 6, 336, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(478, 'Douala 1er', 6, 337, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(479, 'Douala 2e', 6, 337, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(480, 'Douala 3e', 6, 337, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(481, 'Douala 4e', 6, 337, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(482, 'Douala 5e', 6, 337, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(483, 'Garoua 1er', 6, 338, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(484, 'Garoua 2e', 6, 338, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(485, 'Garoua 3e', 6, 338, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(486, 'Bibemi', 6, 338, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(487, 'Dembo', 6, 338, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(488, 'Poli', 6, 339, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(489, 'Beka', 6, 339, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(490, 'Guider', 6, 340, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(491, 'Figuil', 6, 340, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(492, 'Mayo-Oulo', 6, 340, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(493, 'Madingring', 6, 340, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(494, 'Lagdo', 6, 340, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(495, 'Tcholliré', 6, 341, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(496, 'Touboro', 6, 341, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(497, 'Madingring', 6, 341, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(498, 'Rey-Bouba', 6, 341, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(499, 'Barndaké', 6, 341, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(500, 'Fundong', 6, 342, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(501, 'Belo', 6, 342, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(502, 'Bum', 6, 342, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(503, 'Njinikom', 6, 342, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(504, 'Mbengwi', 6, 342, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(505, 'Kumbo', 6, 343, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(506, 'Jakiri', 6, 343, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(507, 'Nkor', 6, 343, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(508, 'Mbven', 6, 343, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(509, 'Oku', 6, 343, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(510, 'Nkambe', 6, 344, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(511, 'Ako', 6, 344, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(512, 'Ndu', 6, 344, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(513, 'Nwa', 6, 344, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(514, 'Misaje', 6, 344, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(515, 'Wum', 6, 345, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(516, 'Furu-Awa', 6, 345, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(517, 'Fungom', 6, 345, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(518, 'Menchum-Valley', 6, 345, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(519, 'Zhoa', 6, 345, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(520, 'Bamenda 1er', 6, 346, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(521, 'Bamenda 2e', 6, 346, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(522, 'Bamenda 3e', 6, 346, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(523, 'Bafut', 6, 346, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(524, 'Tubah', 6, 346, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(525, 'Mbouda', 6, 347, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(526, 'Babadjou', 6, 347, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(527, 'Galim', 6, 347, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(528, 'Batcham', 6, 347, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(529, 'Bafang', 6, 348, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(530, 'Bana', 6, 348, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(531, 'Bandja', 6, 348, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(532, 'Banka', 6, 348, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(533, 'Kékem', 6, 348, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(534, 'Banwa', 6, 348, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(535, 'Bakou', 6, 348, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(536, 'Baham', 6, 349, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(537, 'Bamendjou', 6, 349, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(538, 'Batié', 6, 349, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(539, 'Bandja', 6, 350, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(540, 'Bayangam', 6, 350, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(541, 'Demeteng', 6, 350, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(542, 'Dschang', 6, 351, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(543, 'Fokoué', 6, 351, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(544, 'Fongo-Tongo', 6, 351, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(545, 'Nkong-Zem', 6, 351, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(546, 'Penka-Michel', 6, 351, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(547, 'Santchou', 6, 351, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(548, 'Bafoussam 1er', 6, 352, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(549, 'Bafoussam 2e', 6, 352, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(550, 'Bafoussam 3e', 6, 352, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(551, 'Bangangté', 6, 353, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(552, 'Bazou', 6, 353, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(553, 'Tongua', 6, 353, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(554, 'Tsekané', 6, 353, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(555, 'Foumban', 6, 354, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(556, 'Foumbot', 6, 354, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(557, 'Koung-Khi', 6, 354, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(558, 'Koutaba', 6, 354, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(559, 'Bangourain', 6, 354, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(560, 'Malentouen', 6, 354, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(561, 'Massangam', 6, 354, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(562, 'Njimom', 6, 354, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(563, 'Magba', 6, 354, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(564, 'Sangmélima', 6, 355, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(565, 'Bengbis', 6, 355, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(566, 'Meyomessala', 6, 355, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(567, 'Meyomessi', 6, 355, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(568, 'Zoétélé', 6, 355, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(569, 'Ebolowa 1er', 6, 356, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(570, 'Ebolowa 2e', 6, 356, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(571, 'Biwong-Bane', 6, 356, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(572, 'Biwong-Bulu', 6, 356, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(573, 'Efoulan', 6, 356, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(574, 'Kribi 1er', 6, 357, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(575, 'Kribi 2e', 6, 357, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(576, 'Campo', 6, 357, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(577, 'Lolodorf', 6, 357, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(578, 'Mvengue', 6, 357, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(579, 'Ambam', 6, 358, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(580, 'Kye-Ossi', 6, 358, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(581, 'Ma’an', 6, 358, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(582, 'Olamzé', 6, 358, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(583, 'Akoeman', 6, 358, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(584, 'Buea', 6, 359, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(585, 'Limbe 1er', 6, 359, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(586, 'Limbe 2e', 6, 359, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(587, 'Tiko', 6, 359, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(588, 'Muyuka', 6, 359, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(589, 'Bangem', 6, 360, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(590, 'Nguti', 6, 360, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(591, 'Tombel', 6, 360, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(592, 'Manjo', 6, 360, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(593, 'Mbonge', 6, 360, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(594, 'Alou', 6, 361, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(595, 'Fontem', 6, 361, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(596, 'Wabane', 6, 361, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(597, 'Mundani', 6, 361, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(598, 'Besali', 6, 361, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(599, 'Mamfe', 6, 362, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(600, 'Akwaya', 6, 362, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(601, 'Eyumodjock', 6, 362, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(602, 'Upper Bayang', 6, 362, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(603, 'Tinto', 6, 362, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(604, 'Kumba 1er', 6, 363, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(605, 'Kumba 2e', 6, 363, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(606, 'Kumba 3e', 6, 363, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(607, 'Konye', 6, 363, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(608, 'Mbonge', 6, 363, 237, '2025-05-07 11:12:06', '2025-05-07 11:12:06'),
+(609, 'ger1', 7, NULL, 49, '2025-05-11 12:21:23', '2025-05-11 12:21:23'),
+(610, 'niveau2', 8, 609, 49, '2025-05-11 12:21:23', '2025-05-11 12:21:23'),
+(611, 'starbour', 9, 610, 49, '2025-05-11 12:21:23', '2025-05-11 12:21:23');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `administrative_division_types`
+--
+
+DROP TABLE IF EXISTS `administrative_division_types`;
+CREATE TABLE IF NOT EXISTS `administrative_division_types` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `level` int NOT NULL,
+  `country_id` int UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `country_id` (`country_id`,`level`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `administrative_division_types`
+--
+
+INSERT INTO `administrative_division_types` (`id`, `name`, `level`, `country_id`, `created_at`, `updated_at`) VALUES
+(4, 'region', 1, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(5, 'Département', 2, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(6, 'Arrondissement', 3, 237, '2025-05-07 11:12:05', '2025-05-07 11:12:05'),
+(7, 'state', 1, 49, '2025-05-11 12:21:23', '2025-05-11 12:21:23'),
+(8, 'commune', 2, 49, '2025-05-11 12:21:23', '2025-05-11 12:21:23'),
+(9, 'lagion', 3, 49, '2025-05-11 12:21:23', '2025-05-11 12:21:23');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `advertisements`
+--
+
+DROP TABLE IF EXISTS `advertisements`;
+CREATE TABLE IF NOT EXISTS `advertisements` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `file_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `views` bigint UNSIGNED NOT NULL DEFAULT '0',
+  `position` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `end_date` date DEFAULT NULL,
+  `end_time` time DEFAULT NULL,
+  `owner_contact` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `owner_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_ad_position` (`position`),
+  KEY `idx_ad_type` (`type`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `ad_views`
+--
+
+DROP TABLE IF EXISTS `ad_views`;
+CREATE TABLE IF NOT EXISTS `ad_views` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `advertisement_id` bigint UNSIGNED NOT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `session_id` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent_hash` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ad_unique_view_idx` (`advertisement_id`,`ip_address`,`session_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `ad_views`
+--
+
+INSERT INTO `ad_views` (`id`, `advertisement_id`, `ip_address`, `session_id`, `user_agent_hash`, `created_at`, `updated_at`) VALUES
+(1, 12, '127.0.0.1', '0OgfiJstcE3wsdjJVBkrqCEn2h9tgWW9ViUOL0aT', 'c33c588009b95570bda142ca18d363d2', '2026-07-21 23:42:35', '2026-07-21 23:42:35'),
+(2, 13, '127.0.0.1', 'IjhmW4OMKPQziyJQrjjZ3bg6DCz80ju9c4fh9IHv', 'c33c588009b95570bda142ca18d363d2', '2026-07-22 11:08:32', '2026-07-22 11:08:32');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `contributions`
+--
+
+DROP TABLE IF EXISTS `contributions`;
+CREATE TABLE IF NOT EXISTS `contributions` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `event_id` bigint UNSIGNED NOT NULL,
+  `contributor_type` enum('person','association') NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `event_id` (`event_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `countries`
+--
+
+DROP TABLE IF EXISTS `countries`;
+CREATE TABLE IF NOT EXISTS `countries` (
+  `id` varchar(5) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `code` varchar(5) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `countries`
+--
+
+INSERT INTO `countries` (`id`, `name`, `code`, `created_at`, `updated_at`) VALUES
+('237', 'Cameroon', 'CM', '2025-05-07 10:01:45', '2025-05-07 10:01:45');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `events`
+--
+
+DROP TABLE IF EXISTS `events`;
+CREATE TABLE IF NOT EXISTS `events` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `type` enum('Festival','Cérémonie','Marché','Autre') NOT NULL,
+  `description` text,
+  `village_id` bigint UNSIGNED NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_events_village_id` (`village_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `events`
+--
+
+INSERT INTO `events` (`id`, `name`, `type`, `description`, `village_id`, `start_date`, `end_date`, `image`, `created_at`, `updated_at`) VALUES
+(5, 'Fête des récoltes Bafang', 'Festival', NULL, 16, '2026-11-15', '2026-11-20', NULL, '2026-07-22 10:50:05', '2026-07-22 10:50:05'),
+(6, 'Festival Culturel Macabo', 'Festival', NULL, 20, '2026-12-10', '2026-12-15', NULL, '2026-07-22 10:50:37', '2026-07-22 10:50:37');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `migrations`
+--
+
+DROP TABLE IF EXISTS `migrations`;
+CREATE TABLE IF NOT EXISTS `migrations` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(1, '2026_07_22_000000_create_ad_views_table', 1),
+(2, '2026_07_22_000001_add_indexes_to_almanac_tables', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `personnalite`
+--
+
+DROP TABLE IF EXISTS `personnalite`;
+CREATE TABLE IF NOT EXISTS `personnalite` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `statut` varchar(100) NOT NULL,
+  `contact` varchar(50) DEFAULT NULL,
+  `description` text,
+  `village_id` bigint UNSIGNED NOT NULL,
+  `has_paid` tinyint(1) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `personnalite_village_id_foreign` (`village_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `personnalite`
+--
+
+INSERT INTO `personnalite` (`id`, `name`, `statut`, `contact`, `description`, `village_id`, `has_paid`, `image`, `created_at`, `updated_at`) VALUES
+(10, 'Élite Babone', 'Homme d\'affaires', NULL, 'Grand promoteur du développement local.', 16, 1, NULL, '2026-07-22 10:50:05', '2026-07-22 10:50:05'),
+(11, 'Professeur Menoua', 'Universitaire', NULL, 'Enseignant-chercheur natif de Foréké, contribuant au rayonnement de l\'Université de Dschang.', 19, 1, NULL, '2026-07-22 10:50:37', '2026-07-22 10:50:37');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `personnalites_administratives`
+--
+
+DROP TABLE IF EXISTS `personnalites_administratives`;
+CREATE TABLE IF NOT EXISTS `personnalites_administratives` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `village_group_id` bigint UNSIGNED NOT NULL,
+  `nom` varchar(255) NOT NULL,
+  `prenom` varchar(255) NOT NULL,
+  `role` varchar(255) NOT NULL,
+  `biographie` text,
+  `photo` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `personnalites_administratives_village_group_id_foreign` (`village_group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `personnalites_administratives`
+--
+
+INSERT INTO `personnalites_administratives` (`id`, `village_group_id`, `nom`, `prenom`, `role`, `biographie`, `photo`, `created_at`, `updated_at`) VALUES
+(2, 27, 'Maire', 'Bafang', 'Maire', 'Administration communale de Bafang.', NULL, '2026-07-22 10:48:56', '2026-07-22 10:48:56'),
+(3, 27, 'Sous-Préfet', 'Bafang', 'Sous-Préfet', 'Représentant de l\'État dans l\'arrondissement.', NULL, '2026-07-22 10:48:56', '2026-07-22 10:48:56'),
+(4, 28, 'Maire', 'Dschang', 'Maire', 'Maire de la Commune de Dschang, pôle d\'excellence.', NULL, '2026-07-22 10:50:37', '2026-07-22 10:50:37');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `professionals`
+--
+
+DROP TABLE IF EXISTS `professionals`;
+CREATE TABLE IF NOT EXISTS `professionals` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `profession` varchar(100) NOT NULL,
+  `contact` varchar(20) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `whatsapp` varchar(20) DEFAULT NULL,
+  `village_id` bigint UNSIGNED NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_professionals_village_id` (`village_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `professionals`
+--
+
+INSERT INTO `professionals` (`id`, `name`, `profession`, `contact`, `email`, `whatsapp`, `village_id`, `image`, `created_at`, `updated_at`) VALUES
+(3, 'Coopérative Agricole Haut-Nkam', 'Agriculture', NULL, NULL, NULL, 17, NULL, '2026-07-22 10:50:37', '2026-07-22 10:50:37'),
+(4, 'Artisanat du Bambou', 'Artisan', NULL, NULL, NULL, 19, NULL, '2026-07-22 10:50:37', '2026-07-22 10:50:37');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Déchargement des données de la table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Administrateur', 'happi@gmail.com', NULL, '$2y$12$jWI8t5c8sIkCqYzNNFw5e.D5.NfqgVlyGVVVbC.7vefRhPL16Ewsi', NULL, '2025-05-08 08:40:27', '2025-05-08 08:40:27');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `villages`
+--
+
+DROP TABLE IF EXISTS `villages`;
+CREATE TABLE IF NOT EXISTS `villages` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `description` text,
+  `histoire` text,
+  `population` int DEFAULT NULL,
+  `village_image` varchar(255) DEFAULT NULL,
+  `chief_image` varchar(255) DEFAULT NULL,
+  `chef_village` varchar(100) DEFAULT NULL,
+  `is_village` tinyint(1) NOT NULL,
+  `village_group_id` bigint UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `current_chief` varchar(255) DEFAULT NULL,
+  `chief_description` text,
+  `chief_achievements` text,
+  `chief_interventions` text,
+  `village_history` text,
+  `historical_dynasty` text,
+  PRIMARY KEY (`id`),
+  KEY `idx_villages_village_group_id` (`village_group_id`),
+  KEY `idx_v_group` (`village_group_id`),
+  KEY `idx_v_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `villages`
+--
+
+INSERT INTO `villages` (`id`, `name`, `description`, `histoire`, `population`, `village_image`, `chief_image`, `chef_village`, `is_village`, `village_group_id`, `created_at`, `updated_at`, `current_chief`, `chief_description`, `chief_achievements`, `chief_interventions`, `village_history`, `historical_dynasty`) VALUES
+(14, 'Village Hsem Bandjoun', 'Cœur historique du royaume Bandjoun abritant le palais royal et le musée d\'art traditionnel.', NULL, 25000, NULL, NULL, 'S.M. Honoré Djomo Kamga', 1, 25, '2026-07-21 22:58:01', '2026-07-21 22:58:01', NULL, NULL, NULL, NULL, NULL, NULL),
+(15, 'Village Endeck Akonolinga', 'Village pittoresque du canton Akonolinga réputé pour ses activités agricoles et la pêche sur le Nyong.', NULL, 12000, NULL, NULL, 'S.M. Raymond Ndongo', 1, 26, '2026-07-21 22:58:01', '2026-07-21 22:58:01', NULL, NULL, NULL, NULL, NULL, NULL),
+(16, 'Babone', 'Village traditionnel de Bafang.', NULL, 4500, NULL, NULL, 'Chef Nguatchou', 1, 27, '2026-07-22 10:48:56', '2026-07-22 10:48:56', NULL, 'Garant des traditions et des coutumes du village Babone.', NULL, NULL, NULL, NULL),
+(17, 'Bassap', 'Village rural reconnu pour son agriculture.', NULL, 3200, NULL, NULL, 'Chef Tchuente', 1, 27, '2026-07-22 10:48:56', '2026-07-22 10:48:56', NULL, 'Défenseur des terres agricoles de Bassap.', NULL, NULL, NULL, NULL),
+(18, 'Quartier Administratif Bafang', 'Quartier urbain abritant les services administratifs, sans chef coutumier propre (dépend du chef de groupement).', NULL, 8500, NULL, NULL, NULL, 0, 27, '2026-07-22 10:48:56', '2026-07-22 10:48:56', NULL, NULL, NULL, NULL, NULL, NULL),
+(19, 'Atochi', 'Village rattaché à Foréké-Dschang.', NULL, 2800, NULL, NULL, 'Chef Tiogo', 1, 28, '2026-07-22 10:50:37', '2026-07-22 10:50:37', NULL, 'Responsable coutumier d\'Atochi.', NULL, NULL, NULL, NULL),
+(20, 'Banki', 'Village vallonné de la Menoua.', NULL, 4100, NULL, NULL, 'Chef Nkenfac', 1, 28, '2026-07-22 10:50:37', '2026-07-22 10:50:37', NULL, 'Chef traditionnel de Banki.', NULL, NULL, NULL, NULL),
+(21, 'Quartier Tsen (Centre Dschang)', 'Quartier très actif proche du marché B et du musée des civilisations.', NULL, 12000, NULL, NULL, NULL, 0, 28, '2026-07-22 10:50:37', '2026-07-22 10:50:37', NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `village_groups`
+--
+
+DROP TABLE IF EXISTS `village_groups`;
+CREATE TABLE IF NOT EXISTS `village_groups` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `description` text,
+  `chef_groupement` varchar(100) DEFAULT NULL,
+  `histoire` text,
+  `chef_image` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `parent_id` bigint UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`),
+  KEY `idx_vg_parent` (`parent_id`),
+  KEY `idx_vg_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Déchargement des données de la table `village_groups`
+--
+
+INSERT INTO `village_groups` (`id`, `name`, `description`, `chef_groupement`, `histoire`, `chef_image`, `image`, `parent_id`, `created_at`, `updated_at`) VALUES
+(23, 'Canton Bandjoun', 'Chefferie supérieure bamiléké majeure du Cameroun, réputée pour sa Grande Chefferie d\'Hsem et son patrimoine culturel traditionnel.', 'S.M. Honoré Djomo Kamga', NULL, 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80', 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=800&q=80', 305, '2026-07-21 22:57:44', '2026-07-21 22:57:44'),
+(24, 'Canton Akonolinga', 'Canton historique du Nyong-et-Mfoumou, berceau des coutumes et traditions forestières Ekang.', 'S.M. Raymond Ndongo', NULL, 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80', 305, '2026-07-21 22:57:44', '2026-07-21 22:57:44'),
+(25, 'Canton Bandjoun', 'Chefferie supérieure bamiléké majeure du Cameroun, réputée pour sa Grande Chefferie d\'Hsem et son patrimoine culturel traditionnel.', 'S.M. Honoré Djomo Kamga', NULL, 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80', 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=800&q=80', 305, '2026-07-21 22:58:01', '2026-07-21 22:58:01'),
+(26, 'Canton Akonolinga', 'Canton historique du Nyong-et-Mfoumou, berceau des coutumes et traditions forestières Ekang.', 'S.M. Raymond Ndongo', NULL, 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80', 389, '2026-07-21 22:58:01', '2026-07-21 23:36:41'),
+(27, 'Chefferie Supérieure Bafang', 'La chefferie supérieure de Bafang est un groupement traditionnel majeur du département du Haut-Nkam.', 'SM Kameni René', 'Le groupement Bafang tire son origine de la grande dynastie Bamiléké, reconnue pour ses traditions séculaires, son commerce et son agriculture dynamique. Il est classé chefferie de 2ème degré.', NULL, NULL, 529, '2026-07-22 10:47:55', '2026-07-22 10:47:55'),
+(28, 'Chefferie Supérieure Foréké-Dschang', 'Groupement majeur de l\'arrondissement de Dschang, pôle historique et universitaire.', 'SM Djoumessi III Wamba', 'La chefferie Foréké-Dschang est un haut lieu d\'histoire et de culture de la Menoua. Elle abrite une partie de la ville universitaire de Dschang et est impliquée dans la Route des Chefferies.', NULL, NULL, 542, '2026-07-22 10:50:37', '2026-07-22 10:50:37');
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

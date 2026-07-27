@@ -1,0 +1,551 @@
+CREATE TABLE contributions (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    event_id BIGINT UNSIGNED NOT NULL,
+    contributor_type ENUM('person', 'association') NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMP NULL DEFAULT NULL,
+    updated_at TIMESTAMP NULL DEFAULT NULL,
+    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+);
+
+insatller  composer require barryvdh/laravel-dompdf
+
+rm -rf public/storage
+
+creer utilisateur :
+INSERT INTO users (name, email, password, created_at, updated_at)
+VALUES ('Administrateur', 'admin@almanac.com', '$2y$12$jWI8t5c8sIkCqYzNNFw5e.D5.NfqgVlyGVVVbC.7vefRhPL16Ewsi', NOW(), NOW());
+mot de passe admin123
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Country extends Model
+{
+    use HasFactory;
+
+    // Supprimez ces lignes car les IDs sont des entiers auto-incrémentés
+    // public $incrementing = false;
+    // protected $keyType = 'string';
+
+    protected $fillable = [
+        'id',
+        'name',
+        'code',
+    ];
+
+    public function administrativeDivisionTypes()
+    {
+        return $this->hasMany(AdministrativeDivisionType::class)
+                    ->orderBy('level', 'asc');
+    }
+
+    public function administrativeDivisions()
+    {
+        return $this->hasMany(AdministrativeDivision::class);
+    }
+
+    public function villages()
+    {
+        return Village::whereHas('villageGroup', function ($query) {
+            $query->whereHas('parent', function ($q) {
+                $q->where('country_id', $this->id);
+            });
+        })->get();
+    }
+}
+
+
+ALTER TABLE administrative_divisions MODIFY country_id INT;
+ALTER TABLE administrative_division_types MODIFY country_id INT;
+
+
+requette pour les divsion :
+-- Insérer les régions (type_id=1, country_id=237, parent_id=NULL)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Adamaoua', 1, NULL, 237, NOW(), NOW()),
+('Centre', 1, NULL, 237, NOW(), NOW()),
+('Est', 1, NULL, 237, NOW(), NOW()),
+('Extrême-Nord', 1, NULL, 237, NOW(), NOW()),
+('Littoral', 1, NULL, 237, NOW(), NOW()),
+('Nord', 1, NULL, 237, NOW(), NOW()),
+('Nord-Ouest', 1, NULL, 237, NOW(), NOW()),
+('Ouest', 1, NULL, 237, NOW(), NOW()),
+('Sud', 1, NULL, 237, NOW(), NOW()),
+('Sud-Ouest', 1, NULL, 237, NOW(), NOW());
+
+-- Insérer les départements (type_id=2, parent_id=region_id, country_id=237)
+-- Adamaoua (5 départements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Djérem', 2, 1, 237, NOW(), NOW()),
+('Faro-et-Déo', 2, 1, 237, NOW(), NOW()),
+('Mayo-Banyo', 2, 1, 237, NOW(), NOW()),
+('Mbéré', 2, 1, 237, NOW(), NOW()),
+('Vina', 2, 1, 237, NOW(), NOW());
+
+-- Centre (5 départements sur 10)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Haute-Sanaga', 2, 2, 237, NOW(), NOW()),
+('Lekié', 2, 2, 237, NOW(), NOW()),
+('Mbam-et-Inoubou', 2, 2, 237, NOW(), NOW()),
+('Mbam-et-Kim', 2, 2, 237, NOW(), NOW()),
+('Méfou-et-Afamba', 2, 2, 237, NOW(), NOW());
+
+-- Est (5 départements sur 4, donc tous)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Boumba-et-Ngoko', 2, 3, 237, NOW(), NOW()),
+('Haut-Nyong', 2, 3, 237, NOW(), NOW()),
+('Kadey', 2, 3, 237, NOW(), NOW()),
+('Lom-et-Djérem', 2, 3, 237, NOW(), NOW());
+
+-- Extrême-Nord (5 départements sur 6)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Diamaré', 2, 4, 237, NOW(), NOW()),
+('logofinalne-et-Chari', 2, 4, 237, NOW(), NOW()),
+('Mayo-Danay', 2, 4, 237, NOW(), NOW()),
+('Mayo-Kani', 2, 4, 237, NOW(), NOW()),
+('Mayo-Tsanaga', 2, 4, 237, NOW(), NOW());
+
+-- Littoral (tous les 4 départements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Moungo', 2, 5, 237, NOW(), NOW()),
+('Nkam', 2, 5, 237, NOW(), NOW()),
+('Sanaga-Maritime', 2, 5, 237, NOW(), NOW()),
+('Wouri', 2, 5, 237, NOW(), NOW());
+
+-- Nord (5 départements sur 4, donc tous)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Bénoué', 2, 6, 237, NOW(), NOW()),
+('Faro', 2, 6, 237, NOW(), NOW()),
+('Mayo-Louti', 2, 6, 237, NOW(), NOW()),
+('Mayo-Rey', 2, 6, 237, NOW(), NOW());
+
+-- Nord-Ouest (5 départements sur 7)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Boyo', 2, 7, 237, NOW(), NOW()),
+('Bui', 2, 7, 237, NOW(), NOW()),
+('Donga-Mantung', 2, 7, 237, NOW(), NOW()),
+('Menchum', 2, 7, 237, NOW(), NOW()),
+('Mezam', 2, 7, 237, NOW(), NOW());
+
+-- Ouest (tous les 8 départements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Bamboutos', 2, 8, 237, NOW(), NOW()),
+('Haut-Nkam', 2, 8, 237, NOW(), NOW()),
+('Hauts-Plateaux', 2, 8, 237, NOW(), NOW()),
+('Koung-Khi', 2, 8, 237, NOW(), NOW()),
+('Menoua', 2, 8, 237, NOW(), NOW()),
+('Mifi', 2, 8, 237, NOW(), NOW()),
+('Ndé', 2, 8, 237, NOW(), NOW()),
+('Noun', 2, 8, 237, NOW(), NOW());
+
+-- Sud (5 départements sur 4, donc tous)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Dja-et-Lobo', 2, 9, 237, NOW(), NOW()),
+('Mvila', 2, 9, 237, NOW(), NOW()),
+('Océan', 2, 9, 237, NOW(), NOW()),
+('Vallée-du-Ntem', 2, 9, 237, NOW(), NOW());
+
+-- Sud-Ouest (5 départements sur 6)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Fako', 2, 10, 237, NOW(), NOW()),
+('Koupé-Manengouba', 2, 10, 237, NOW(), NOW()),
+('Lebialem', 2, 10, 237, NOW(), NOW()),
+('Manyu', 2, 10, 237, NOW(), NOW()),
+('Meme', 2, 10, 237, NOW(), NOW());
+
+-- Insérer les arrondissements (type_id=3, parent_id=departement_id, country_id=237)
+-- Adamaoua: Djérem (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Tibati', 3, 11, 237, NOW(), NOW()),
+('Ngaoundal', 3, 11, 237, NOW(), NOW()),
+('Belel', 3, 11, 237, NOW(), NOW()),
+('Mbé', 3, 11, 237, NOW(), NOW()),
+('Tignère', 3, 11, 237, NOW(), NOW());
+
+-- Adamaoua: Faro-et-Déo (2 arrondissements disponibles)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Tignère', 3, 12, 237, NOW(), NOW()),
+('Galim-Tignère', 3, 12, 237, NOW(), NOW());
+
+-- Adamaoua: Mayo-Banyo (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Bankim', 3, 13, 237, NOW(), NOW()),
+('Banyo', 3, 13, 237, NOW(), NOW()),
+('Mayo-Darlé', 3, 13, 237, NOW(), NOW()),
+('Kékem', 3, 13, 237, NOW(), NOW()),
+('Tcholliré', 3, 13, 237, NOW(), NOW());
+
+-- Adamaoua: Mbéré (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Djohong', 3, 14, 237, NOW(), NOW()),
+('Meiganga', 3, 14, 237, NOW(), NOW()),
+('Ngaoui', 3, 14, 237, NOW(), NOW()),
+('Dir', 3, 14, 237, NOW(), NOW()),
+('Belel', 3, 14, 237, NOW(), NOW());
+
+-- Adamaoua: Vina (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Ngaoundéré 1er', 3, 15, 237, NOW(), NOW()),
+('Ngaoundéré 2e', 3, 15, 237, NOW(), NOW()),
+('Ngaoundéré 3e', 3, 15, 237, NOW(), NOW()),
+('Nganha', 3, 15, 237, NOW(), NOW()),
+('Martap', 3, 15, 237, NOW(), NOW());
+
+-- Centre: Haute-Sanaga (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Nanga-Eboko', 3, 16, 237, NOW(), NOW()),
+('Mbandjock', 3, 16, 237, NOW(), NOW()),
+('Lembe-Yezoum', 3, 16, 237, NOW(), NOW()),
+('Bibey', 3, 16, 237, NOW(), NOW()),
+('Nkoteng', 3, 16, 237, NOW(), NOW());
+
+-- Centre: Lekié (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Monatélé', 3, 17, 237, NOW(), NOW()),
+('Obala', 3, 17, 237, NOW(), NOW()),
+('Batchenga', 3, 17, 237, NOW(), NOW()),
+('Ebebda', 3, 17, 237, NOW(), NOW()),
+('Elig-Mfomo', 3, 17, 237, NOW(), NOW());
+
+-- Centre: Mbam-et-Inoubou (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Bafia', 3, 18, 237, NOW(), NOW()),
+('Bokito', 3, 18, 237, NOW(), NOW()),
+('Kon-Yambetta', 3, 18, 237, NOW(), NOW()),
+('Makénéné', 3, 18, 237, NOW(), NOW()),
+('Ndikiniméki', 3, 18, 237, NOW(), NOW());
+
+-- Centre: Mbam-et-Kim (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Ngoro', 3, 19, 237, NOW(), NOW()),
+('Ntui', 3, 19, 237, NOW(), NOW()),
+('Ngog-Mapubi', 3, 19, 237, NOW(), NOW()),
+('Mbankomo', 3, 19, 237, NOW(), NOW()),
+('Dibang', 3, 19, 237, NOW(), NOW());
+
+-- Centre: Méfou-et-Afamba (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Soa', 3, 20, 237, NOW(), NOW()),
+('Awaé', 3, 20, 237, NOW(), NOW()),
+('Nkolafamba', 3, 20, 237, NOW(), NOW()),
+('Esse', 3, 20, 237, NOW(), NOW()),
+('Afamba', 3, 20, 237, NOW(), NOW());
+
+-- Est: Boumba-et-Ngoko (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Yokadouma', 3, 21, 237, NOW(), NOW()),
+('Moloundou', 3, 21, 237, NOW(), NOW()),
+('Salapoumbé', 3, 21, 237, NOW(), NOW()),
+('Gari-Gombo', 3, 21, 237, NOW(), NOW()),
+('Atok', 3, 21, 237, NOW(), NOW());
+
+-- Est: Haut-Nyong (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Abong-Mbang', 3, 22, 237, NOW(), NOW()),
+('Doumé', 3, 22, 237, NOW(), NOW()),
+('Lomié', 3, 22, 237, NOW(), NOW()),
+('Messamena', 3, 22, 237, NOW(), NOW()),
+('Ngoyla', 3, 22, 237, NOW(), NOW());
+
+-- Est: Kadey (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Batouri', 3, 23, 237, NOW(), NOW()),
+('Kette', 3, 23, 237, NOW(), NOW()),
+('Ndelele', 3, 23, 237, NOW(), NOW()),
+('Ouli', 3, 23, 237, NOW(), NOW()),
+('Mbonda', 3, 23, 237, NOW(), NOW());
+
+-- Est: Lom-et-Djérem (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Bertoua 1er', 3, 24, 237, NOW(), NOW()),
+('Bertoua 2e', 3, 24, 237, NOW(), NOW()),
+('Garoua-Boulaï', 3, 24, 237, NOW(), NOW()),
+('Bétaré-Oya', 3, 24, 237, NOW(), NOW()),
+('Diang', 3, 24, 237, NOW(), NOW());
+
+-- Extrême-Nord: Diamaré (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Maroua 1er', 3, 25, 237, NOW(), NOW()),
+('Maroua 2e', 3, 25, 237, NOW(), NOW()),
+('Maroua 3e', 3, 25, 237, NOW(), NOW()),
+('Bogo', 3, 25, 237, NOW(), NOW()),
+('Gazawa', 3, 25, 237, NOW(), NOW());
+
+-- Extrême-Nord: logofinalne-et-Chari (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Kousséri', 3, 26, 237, NOW(), NOW()),
+('logofinalne-Birni', 3, 26, 237, NOW(), NOW()),
+('Makary', 3, 26, 237, NOW(), NOW()),
+('Goulfey', 3, 26, 237, NOW(), NOW()),
+('Waza', 3, 26, 237, NOW(), NOW());
+
+-- Extrême-Nord: Mayo-Danay (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Yagoua', 3, 27, 237, NOW(), NOW()),
+('Kaelé', 3, 27, 237, NOW(), NOW()),
+('Gobo', 3, 27, 237, NOW(), NOW()),
+('Guéré', 3, 27, 237, NOW(), NOW()),
+('Tchatibali', 3, 27, 237, NOW(), NOW());
+
+-- Extrême-Nord: Mayo-Kani (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Kaï-Kaï', 3, 28, 237, NOW(), NOW()),
+('Guidiguis', 3, 28, 237, NOW(), NOW()),
+('Moutourwa', 3, 28, 237, NOW(), NOW()),
+('Taibong', 3, 28, 237, NOW(), NOW()),
+('Touloum', 3, 28, 237, NOW(), NOW());
+
+-- Extrême-Nord: Mayo-Tsanaga (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Mokolo', 3, 29, 237, NOW(), NOW()),
+('Bourrha', 3, 29, 237, NOW(), NOW()),
+('Hina', 3, 29, 237, NOW(), NOW()),
+('Koza', 3, 29, 237, NOW(), NOW()),
+('Mogodé', 3, 29, 237, NOW(), NOW());
+
+-- Littoral: Moungo (tous les arrondissements, 12)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Nkongsamba 1er', 3, 30, 237, NOW(), NOW()),
+('Nkongsamba 2e', 3, 30, 237, NOW(), NOW()),
+('Nkongsamba 3e', 3, 30, 237, NOW(), NOW()),
+('Loum', 3, 30, 237, NOW(), NOW()),
+('Manjo', 3, 30, 237, NOW(), NOW()),
+('Mbanga', 3, 30, 237, NOW(), NOW()),
+('Penja', 3, 30, 237, NOW(), NOW()),
+('Dibombari', 3, 30, 237, NOW(), NOW()),
+('Fiko', 3, 30, 237, NOW(), NOW()),
+('Bonaléa', 3, 30, 237, NOW(), NOW()),
+('Mombo', 3, 30, 237, NOW(), NOW()),
+('Melong', 3, 30, 237, NOW(), NOW());
+
+-- Littoral: Nkam (tous les arrondissements, 4)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Yabassi', 3, 31, 237, NOW(), NOW()),
+('Nkondjock', 3, 31, 237, NOW(), NOW()),
+('Yingui', 3, 31, 237, NOW(), NOW()),
+('Nord-Makombé', 3, 31, 237, NOW(), NOW());
+
+-- Littoral: Sanaga-Maritime (tous les arrondissements, 6)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Edéa 1er', 3, 32, 237, NOW(), NOW()),
+('Edéa 2e', 3, 32, 237, NOW(), NOW()),
+('Dizangué', 3, 32, 237, NOW(), NOW()),
+('Mouanko', 3, 32, 237, NOW(), NOW()),
+('Ndom', 3, 32, 237, NOW(), NOW()),
+('Ngwei', 3, 32, 237, NOW(), NOW());
+
+-- Littoral: Wouri (tous les arrondissements, 5)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Douala 1er', 3, 33, 237, NOW(), NOW()),
+('Douala 2e', 3, 33, 237, NOW(), NOW()),
+('Douala 3e', 3, 33, 237, NOW(), NOW()),
+('Douala 4e', 3, 33, 237, NOW(), NOW()),
+('Douala 5e', 3, 33, 237, NOW(), NOW());
+
+-- Nord: Bénoué (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Garoua 1er', 3, 34, 237, NOW(), NOW()),
+('Garoua 2e', 3, 34, 237, NOW(), NOW()),
+('Garoua 3e', 3, 34, 237, NOW(), NOW()),
+('Bibemi', 3, 34, 237, NOW(), NOW()),
+('Dembo', 3, 34, 237, NOW(), NOW());
+
+-- Nord: Faro (2 arrondissements disponibles)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Poli', 3, 35, 237, NOW(), NOW()),
+('Beka', 3, 35, 237, NOW(), NOW());
+
+-- Nord: Mayo-Louti (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Guider', 3, 36, 237, NOW(), NOW()),
+('Figuil', 3, 36, 237, NOW(), NOW()),
+('Mayo-Oulo', 3, 36, 237, NOW(), NOW()),
+('Madingring', 3, 36, 237, NOW(), NOW()),
+('Lagdo', 3, 36, 237, NOW(), NOW());
+
+-- Nord: Mayo-Rey (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Tcholliré', 3, 37, 237, NOW(), NOW()),
+('Touboro', 3, 37, 237, NOW(), NOW()),
+('Madingring', 3, 37, 237, NOW(), NOW()),
+('Rey-Bouba', 3, 37, 237, NOW(), NOW()),
+('Barndaké', 3, 37, 237, NOW(), NOW());
+
+-- Nord-Ouest: Boyo (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Fundong', 3, 38, 237, NOW(), NOW()),
+('Belo', 3, 38, 237, NOW(), NOW()),
+('Bum', 3, 38, 237, NOW(), NOW()),
+('Njinikom', 3, 38, 237, NOW(), NOW()),
+('Mbengwi', 3, 38, 237, NOW(), NOW());
+
+-- Nord-Ouest: Bui (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Kumbo', 3, 39, 237, NOW(), NOW()),
+('Jakiri', 3, 39, 237, NOW(), NOW()),
+('Nkor', 3, 39, 237, NOW(), NOW()),
+('Mbven', 3, 39, 237, NOW(), NOW()),
+('Oku', 3, 39, 237, NOW(), NOW());
+
+-- Nord-Ouest: Donga-Mantung (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Nkambe', 3, 40, 237, NOW(), NOW()),
+('Ako', 3, 40, 237, NOW(), NOW()),
+('Ndu', 3, 40, 237, NOW(), NOW()),
+('Nwa', 3, 40, 237, NOW(), NOW()),
+('Misaje', 3, 40, 237, NOW(), NOW());
+
+-- Nord-Ouest: Menchum (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Wum', 3, 41, 237, NOW(), NOW()),
+('Furu-Awa', 3, 41, 237, NOW(), NOW()),
+('Fungom', 3, 41, 237, NOW(), NOW()),
+('Menchum-Valley', 3, 41, 237, NOW(), NOW()),
+('Zhoa', 3, 41, 237, NOW(), NOW());
+
+-- Nord-Ouest: Mezam (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Bamenda 1er', 3, 42, 237, NOW(), NOW()),
+('Bamenda 2e', 3, 42, 237, NOW(), NOW()),
+('Bamenda 3e', 3, 42, 237, NOW(), NOW()),
+('Bafut', 3, 42, 237, NOW(), NOW()),
+('Tubah', 3, 42, 237, NOW(), NOW());
+
+-- Ouest: Bamboutos (tous les arrondissements, 4)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Mbouda', 3, 43, 237, NOW(), NOW()),
+('Babadjou', 3, 43, 237, NOW(), NOW()),
+('Galim', 3, 43, 237, NOW(), NOW()),
+('Batcham', 3, 43, 237, NOW(), NOW());
+
+-- Ouest: Haut-Nkam (tous les arrondissements, 7)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Bafang', 3, 44, 237, NOW(), NOW()),
+('Bana', 3, 44, 237, NOW(), NOW()),
+('Bandjoun', 3, 44, 237, NOW(), NOW()),
+('Banka', 3, 44, 237, NOW(), NOW()),
+('Kékem', 3, 44, 237, NOW(), NOW()),
+('Badjoun', 3, 44, 237, NOW(), NOW()),
+('Bakou', 3, 44, 237, NOW(), NOW());
+
+-- Ouest: Hauts-Plateaux (tous les arrondissements, 3)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Baham', 3, 45, 237, NOW(), NOW()),
+('Bamendjou', 3, 45, 237, NOW(), NOW()),
+('Batié', 3, 45, 237, NOW(), NOW());
+
+-- Ouest: Koung-Khi (tous les arrondissements, 3)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Bandja', 3, 46, 237, NOW(), NOW()),
+('Bayangam', 3, 46, 237, NOW(), NOW()),
+('Demeteng', 3, 46, 237, NOW(), NOW());
+
+-- Ouest: Menoua (tous les arrondissements, 6)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Dschang', 3, 47, 237, NOW(), NOW()),
+('Fokoué', 3, 47, 237, NOW(), NOW()),
+('Fongo-Tongo', 3, 47, 237, NOW(), NOW()),
+('Nkong-Zem', 3, 47, 237, NOW(), NOW()),
+('Penka-Michel', 3, 47, 237, NOW(), NOW()),
+('Santchou', 3, 47, 237, NOW(), NOW());
+
+-- Ouest: Mifi (tous les arrondissements, 3)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Bafoussam 1er', 3, 48, 237, NOW(), NOW()),
+('Bafoussam 2e', 3, 48, 237, NOW(), NOW()),
+('Bafoussam 3e', 3, 48, 237, NOW(), NOW());
+
+-- Ouest: Ndé (tous les arrondissements, 4)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Bangangté', 3, 49, 237, NOW(), NOW()),
+('Bazou', 3, 49, 237, NOW(), NOW()),
+('Tongua', 3, 49, 237, NOW(), NOW()),
+('Tsekané', 3, 49, 237, NOW(), NOW());
+
+-- Ouest: Noun (tous les arrondissements, 9)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Foumban', 3, 50, 237, NOW(), NOW()),
+('Foumbot', 3, 50, 237, NOW(), NOW()),
+('Koung-Khi', 3, 50, 237, NOW(), NOW()),
+('Koutaba', 3, 50, 237, NOW(), NOW()),
+('Bangourain', 3, 50, 237, NOW(), NOW()),
+('Malentouen', 3, 50, 237, NOW(), NOW()),
+('Massangam', 3, 50, 237, NOW(), NOW()),
+('Njimom', 3, 50, 237, NOW(), NOW()),
+('Magba', 3, 50, 237, NOW(), NOW());
+
+-- Sud: Dja-et-Lobo (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Sangmélima', 3, 51, 237, NOW(), NOW()),
+('Bengbis', 3, 51, 237, NOW(), NOW()),
+('Meyomessala', 3, 51, 237, NOW(), NOW()),
+('Meyomessi', 3, 51, 237, NOW(), NOW()),
+('Zoétélé', 3, 51, 237, NOW(), NOW());
+
+-- Sud: Mvila (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Ebolowa 1er', 3, 52, 237, NOW(), NOW()),
+('Ebolowa 2e', 3, 52, 237, NOW(), NOW()),
+('Biwong-Bane', 3, 52, 237, NOW(), NOW()),
+('Biwong-Bulu', 3, 52, 237, NOW(), NOW()),
+('Efoulan', 3, 52, 237, NOW(), NOW());
+
+-- Sud: Océan (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Kribi 1er', 3, 53, 237, NOW(), NOW()),
+('Kribi 2e', 3, 53, 237, NOW(), NOW()),
+('Campo', 3, 53, 237, NOW(), NOW()),
+('Lolodorf', 3, 53, 237, NOW(), NOW()),
+('Mvengue', 3, 53, 237, NOW(), NOW());
+
+-- Sud: Vallée-du-Ntem (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Ambam', 3, 54, 237, NOW(), NOW()),
+('Kye-Ossi', 3, 54, 237, NOW(), NOW()),
+('Ma’an', 3, 54, 237, NOW(), NOW()),
+('Olamzé', 3, 54, 237, NOW(), NOW()),
+('Akoeman', 3, 54, 237, NOW(), NOW());
+
+-- Sud-Ouest: Fako (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Buea', 3, 55, 237, NOW(), NOW()),
+('Limbe 1er', 3, 55, 237, NOW(), NOW()),
+('Limbe 2e', 3, 55, 237, NOW(), NOW()),
+('Tiko', 3, 55, 237, NOW(), NOW()),
+('Muyuka', 3, 55, 237, NOW(), NOW());
+
+-- Sud-Ouest: Koupé-Manengouba (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Bangem', 3, 56, 237, NOW(), NOW()),
+('Nguti', 3, 56, 237, NOW(), NOW()),
+('Tombel', 3, 56, 237, NOW(), NOW()),
+('Manjo', 3, 56, 237, NOW(), NOW()),
+('Mbonge', 3, 56, 237, NOW(), NOW());
+
+-- Sud-Ouest: Lebialem (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Alou', 3, 57, 237, NOW(), NOW()),
+('Fontem', 3, 57, 237, NOW(), NOW()),
+('Wabane', 3, 57, 237, NOW(), NOW()),
+('Mundani', 3, 57, 237, NOW(), NOW()),
+('Besali', 3, 57, 237, NOW(), NOW());
+
+-- Sud-Ouest: Manyu (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Mamfe', 3, 58, 237, NOW(), NOW()),
+('Akwaya', 3, 58, 237, NOW(), NOW()),
+('Eyumodjock', 3, 58, 237, NOW(), NOW()),
+('Upper Bayang', 3, 58, 237, NOW(), NOW()),
+('Tinto', 3, 58, 237, NOW(), NOW());
+
+-- Sud-Ouest: Meme (5 arrondissements)
+INSERT INTO administrative_divisions (name, type_id, parent_id, country_id, created_at, updated_at) VALUES
+('Kumba 1er', 3, 59, 237, NOW(), NOW()),
+('Kumba 2e', 3, 59, 237, NOW(), NOW()),
+('Kumba 3e', 3, 59, 237, NOW(), NOW()),
+('Konye', 3, 59, 237, NOW(), NOW()),
+('Mbonge', 3, 59, 237, NOW(), NOW());
