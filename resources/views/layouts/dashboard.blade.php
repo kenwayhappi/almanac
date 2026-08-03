@@ -408,8 +408,11 @@
       gap: 0.25rem !important;
     }
 
-    nav[role="navigation"] > div:first-child {
-      display: none !important;
+    nav[role="navigation"] > div:first-child p,
+    nav[role="navigation"] > div:first-child span {
+      font-size: 0.85rem !important;
+      color: var(--text-muted) !important;
+      margin: 0 !important;
     }
   </style>
 

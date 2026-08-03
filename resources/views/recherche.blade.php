@@ -240,9 +240,14 @@
             @endforeach
           </div>
 
-          @if(method_exists($villages, 'links'))
-            <div class="d-flex justify-content-center mt-5">
-              {{ $villages->links() }}
+          @if(method_exists($villages, 'links') && $villages->hasPages())
+            <div class="d-flex flex-column align-items-center gap-2 mt-4">
+              <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill small fw-bold">
+                Page {{ $villages->currentPage() }} sur {{ $villages->lastPage() }} &bull; {{ $villages->total() }} résultat(s)
+              </span>
+              <div>
+                {{ $villages->links() }}
+              </div>
             </div>
           @endif
         @else
@@ -293,9 +298,14 @@
             @endforeach
           </div>
 
-          @if(method_exists($groupements, 'links'))
-            <div class="d-flex justify-content-center mt-5">
-              {{ $groupements->links() }}
+          @if(method_exists($groupements, 'links') && $groupements->hasPages())
+            <div class="d-flex flex-column align-items-center gap-2 mt-4">
+              <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill small fw-bold">
+                Page {{ $groupements->currentPage() }} sur {{ $groupements->lastPage() }} &bull; {{ $groupements->total() }} résultat(s)
+              </span>
+              <div>
+                {{ $groupements->links() }}
+              </div>
             </div>
           @endif
         @else
