@@ -341,7 +341,7 @@ class VillageDashboardController extends Controller
             });
         }
 
-        $villages = $villageQuery->paginate(12, ['*'], 'villages_page')->withQueryString();
+        $villages = $villageQuery->paginate(4, ['*'], 'villages_page')->withQueryString();
 
         // Requête pour les groupements
         $groupementQuery = VillageGroup::query()->withCount('villages');
@@ -372,7 +372,7 @@ class VillageDashboardController extends Controller
             });
         }
 
-        $groupements = $groupementQuery->paginate(12, ['*'], 'groupements_page')->withQueryString();
+        $groupements = $groupementQuery->paginate(4, ['*'], 'groupements_page')->withQueryString();
 
         $advertisements = Advertisement::where('position', 'rechercher')
             ->whereIn('type', ['video', 'photo', 'pdf', 'text'])

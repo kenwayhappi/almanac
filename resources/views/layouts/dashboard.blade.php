@@ -374,6 +374,42 @@
         font-size: 1.25rem;
         border-radius: 10px;
       }
+    /* ── Admin Pagination Styling & SVG Arrow Fix ── */
+    .pagination, nav[role="navigation"] {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 0.35rem !important;
+      margin-top: 1rem !important;
+      margin-bottom: 1rem !important;
+    }
+
+    .pagination svg, nav[role="navigation"] svg,
+    .pagination .page-link svg, nav[role="navigation"] a svg, nav[role="navigation"] span svg {
+      width: 14px !important;
+      height: 14px !important;
+      max-width: 14px !important;
+      max-height: 14px !important;
+      min-width: 14px !important;
+      min-height: 14px !important;
+      display: inline-block !important;
+      vertical-align: middle !important;
+    }
+
+    .pagination .page-link, nav[role="navigation"] a, nav[role="navigation"] span {
+      padding: 0.35rem 0.65rem !important;
+      font-size: 0.85rem !important;
+      border-radius: 8px !important;
+      line-height: 1.2 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 0.25rem !important;
+    }
+
+    nav[role="navigation"] > div:first-child {
+      display: none !important;
     }
   </style>
 
