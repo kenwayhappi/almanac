@@ -260,7 +260,7 @@
     }
 
     .brand-logo {
-      height: 48px;
+      height: 64px;
       width: auto;
       object-fit: contain;
       transition: transform 0.3s ease;
@@ -439,9 +439,8 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg main-navbar">
     <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('accueil') }}">
-        <img src="{{ asset('images/logofinal.png') }}" alt="Almanac Logo" class="brand-logo">
-        <span class="brand-title">Almanac<span>.</span></span>
+      <a class="navbar-brand d-flex align-items-center" href="{{ route('accueil') }}">
+        <img src="{{ asset('images/logofinal.png') }}" alt="Almanach Logo" class="brand-logo" style="height: 64px;">
       </a>
 
       <!-- Controls Right (Mobile & Desktop) -->
@@ -487,8 +486,8 @@
   <div class="offcanvas offcanvas-end mobile-drawer" tabindex="-1" id="mobileMenu">
     <div class="offcanvas-header border-bottom border-secondary border-opacity-10">
       <div class="d-flex align-items-center gap-2">
-        <img src="{{ asset('images/logofinal.png') }}" alt="Logo" class="brand-logo" style="height:36px;">
-        <span class="fw-bold fs-5">Almanac</span>
+        <img src="{{ asset('images/logofinal.png') }}" alt="Logo" class="brand-logo" style="height:48px;">
+        <span class="fw-bold fs-5">Almanach</span>
       </div>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
@@ -533,8 +532,8 @@
       <div class="row g-4">
         <div class="col-lg-4 col-md-6">
           <div class="d-flex align-items-center gap-2 mb-3">
-            <img src="{{ asset('images/logofinal.png') }}" alt="Almanac Logo" style="height:40px;">
-            <span class="font-serif fw-bold fs-4 text-white">Almanac</span>
+            <img src="{{ asset('images/logofinal.png') }}" alt="Almanach Logo" style="height:50px;">
+            <span class="font-serif fw-bold fs-4 text-white">Almanach</span>
           </div>
           <p class="small text-muted mb-3">
             La bible numérique d'inventaire, de préservation et de découverte du patrimoine culturel, historique et démographique des villages et groupements.
@@ -570,14 +569,14 @@
           <h5>Contact</h5>
           <ul class="list-unstyled d-flex flex-column gap-2 small">
             <li><i class="fas fa-map-marker-alt text-success me-2"></i> Yaoundé, Cameroun</li>
-            <li><i class="fas fa-envelope text-success me-2"></i> contact@almanac.cm</li>
+            <li><i class="fas fa-envelope text-success me-2"></i> contact@almanach.cm</li>
             <li><i class="fas fa-phone-alt text-success me-2"></i> +237 699 99 99 99</li>
           </ul>
         </div>
       </div>
 
       <div class="footer-bottom text-center py-3">
-        <p class="small mb-0">© {{ date('Y') }} Almanac. Tous droits réservés.</p>
+        <p class="small mb-0">© {{ date('Y') }} Almanach. Tous droits réservés.</p>
       </div>
     </div>
   </footer>

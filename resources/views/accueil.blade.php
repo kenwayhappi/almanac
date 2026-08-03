@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Almanac - L\'Encyclopédie Numérique des Villages & Groupements')
+@section('title', 'Almanach - L\'Encyclopédie Numérique des Villages & Groupements')
 
 @section('content')
 <!-- Hero Section -->
@@ -15,7 +15,7 @@
           Découvrez la Richesse Historique et Démographique de nos <span class="text-success">Villages</span>.
         </h1>
         <p class="lead text-muted mb-4 fs-5">
-          Almanac rassemble l’histoire, les cantons, les chefferies traditionnelles, les personnalités inspirantes et les opportunités des localités d'Afrique.
+          Almanach rassemble l’histoire, les cantons, les chefferies traditionnelles, les personnalités inspirantes et les opportunités des localités d'Afrique.
         </p>
 
         <!-- Quick Search Bar -->
@@ -155,7 +155,7 @@
     <div class="custom-card p-5 text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, #0f172a 0%, #16a34a 100%); color:#fff; border:none; border-radius: 28px;">
       <div class="row justify-content-center">
         <div class="col-lg-8">
-          <h2 class="font-serif fw-bold display-6 mb-3 text-white">Contribuez à l'Almanac de votre Village</h2>
+          <h2 class="font-serif fw-bold display-6 mb-3 text-white">Contribuez à l'Almanach de votre Village</h2>
           <p class="lead mb-4 opacity-90 fs-6">
             Vous souhaitez documenter l'histoire de votre localité, inscrire vos notables ou faire la promotion d'artisans locaux ?
           </p>

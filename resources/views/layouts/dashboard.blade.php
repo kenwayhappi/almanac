@@ -387,9 +387,8 @@
       <button class="btn p-0 d-lg-none text-main fs-4" id="sidebarToggleBtn" aria-label="Toggle Navigation">
         <i class="fas fa-bars"></i>
       </button>
-      <a href="{{ route('dashboard.index') }}" class="d-flex align-items-center gap-2 text-decoration-none">
-        <img src="{{ asset('images/logofinal.png') }}" alt="Logo" style="height:36px;">
-        <span class="font-serif fw-bold fs-4 text-main">Admin</span>
+      <a href="{{ route('dashboard.index') }}" class="d-flex align-items-center text-decoration-none">
+        <img src="{{ asset('images/logofinal.png') }}" alt="Almanach Logo" style="height:52px;">
       </a>
     </div>
 
