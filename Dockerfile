@@ -40,10 +40,16 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction \
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Make entrypoint executable
+RUN chmod +x /var/www/html/docker/entrypoint.sh
+
 # Permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+RUN mkdir -p storage/framework/views storage/framework/sessions storage/framework/cache/data storage/logs \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 8080
+
+ENTRYPOINT ["/var/www/html/docker/entrypoint.sh"]
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
