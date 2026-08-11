@@ -125,7 +125,7 @@
             <div class="item text-center cursor-pointer" onclick="viewAdvertisement({{ $ad->id }}, '{{ addslashes($ad->title ?? 'Annonce') }}', '{{ $ad->type }}', '{{ $ad->file_url }}', '{{ addslashes($ad->content ?? '') }}')">
               <div class="position-relative overflow-hidden rounded-3 mb-2" style="max-height:180px; background:#000;">
                 @if($ad->type === 'photo')
-                  <img src="{{ $ad->file_url }}" alt="{{ $ad->title }}" class="img-fluid w-100" style="height:180px; object-fit:cover;">
+                  <img src="{{ $ad->file_url }}" alt="{{ $ad->title }}" class="img-fluid w-100" style="height:180px; object-fit:cover;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'d-flex flex-column align-items-center justify-content-center h-100 py-5 bg-secondary bg-opacity-20 text-muted\'><i class=\'fas fa-image fs-2 text-warning mb-1\'></i><span class=\'small\'>Annonce Photo</span></div>';">
                 @elseif($ad->type === 'video')
                   <div class="d-flex align-items-center justify-content-center h-100 py-5 bg-dark text-white">
                     <i class="fas fa-play-circle fs-1 text-success"></i>
@@ -161,7 +161,7 @@
             <div class="item text-center cursor-pointer p-2" onclick="viewAdvertisement({{ $ad->id }}, '{{ addslashes($ad->title ?? 'Annonce') }}', '{{ $ad->type }}', '{{ $ad->file_url }}', '{{ addslashes($ad->content ?? '') }}')">
               <div class="position-relative overflow-hidden rounded-3 mb-2 shadow-sm" style="height: 200px; background:#000;">
                 @if($ad->type === 'photo')
-                  <img src="{{ $ad->file_url }}" alt="{{ $ad->title }}" class="w-100 h-100" style="object-fit: cover;">
+                  <img src="{{ $ad->file_url }}" alt="{{ $ad->title }}" class="w-100 h-100" style="object-fit: cover;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'d-flex flex-column align-items-center justify-content-center h-100 bg-secondary bg-opacity-20 text-muted\'><i class=\'fas fa-image fs-1 mb-1 text-warning\'></i><span class=\'small fw-bold\'>Annonce Photo</span></div>';">
                 @elseif($ad->type === 'video')
                   <div class="d-flex align-items-center justify-content-center h-100 bg-dark text-white">
                     <i class="fas fa-play-circle fs-1 text-success"></i>

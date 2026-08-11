@@ -24,10 +24,18 @@ class CloudinaryHelper
                 'folder' => 'almanac/' . $folder,
                 'resource_type' => 'auto',
             ]);
+
+            if (is_object($result) && method_exists($result, 'getSecurePath') && $result->getSecurePath()) {
+                return $result->getSecurePath();
+            }
+            if (is_array($result) && isset($result['secure_url'])) {
+                return $result['secure_url'];
+            }
             return $result->getPublicId();
         } catch (\Exception $e) {
             Log::error('Cloudinary upload error', [
                 'folder' => $folder,
+                'file' => is_object($file) ? $file->getClientOriginalName() : 'unknown',
                 'message' => $e->getMessage(),
             ]);
             return null;
