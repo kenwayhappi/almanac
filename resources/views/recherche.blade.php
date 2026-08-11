@@ -227,7 +227,7 @@
                       <div class="d-flex justify-content-between align-items-center small text-muted mb-3">
                         <span><i class="fas fa-layer-group text-success me-1"></i> {{ $v->villageGroup->name ?? 'Groupement' }}</span>
                         @if($v->chef_village)
-                          <span><i class="fas fa-user-shield text-warning me-1"></i> {{ Str::limit($v->chef_village, 16) }}</span>
+                          <span class="text-wrap text-end" style="word-break: break-word; max-width: 60%;" title="{{ $v->chef_village }}"><i class="fas fa-user-shield text-warning me-1"></i> {{ $v->chef_village }}</span>
                         @endif
                       </div>
                       <a href="{{ route('village.show', $v->id . '-' . Str::slug($v->name)) }}" class="btn btn-sm btn-outline-success w-100 rounded-pill font-semibold">

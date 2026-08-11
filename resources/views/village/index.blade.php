@@ -40,8 +40,8 @@
             <i class="fas fa-users me-1 text-success"></i> {{ number_format($village->population ?? 0) }} Habitants
           </span>
           @if($cName)
-            <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold fs-6">
-              <i class="fas fa-user-shield me-1 text-warning"></i> Chef: {{ $cName }}
+            <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold text-wrap text-start d-inline-flex align-items-center" style="white-space: normal; line-height: 1.3; font-size: 0.95rem; max-width: 100%;">
+              <i class="fas fa-user-shield me-2 text-warning flex-shrink-0"></i> <span>Chef: {{ $cName }}</span>
             </span>
           @endif
         </div>
@@ -102,7 +102,7 @@
                   </div>
                 @endif
               </div>
-              <h5 class="fw-bold font-serif mb-1">{{ $cName }}</h5>
+              <h5 class="fw-bold font-serif mb-1 text-wrap" style="word-break: break-word;">{{ $cName }}</h5>
               <span class="badge bg-warning bg-opacity-10 text-dark fw-bold px-3 py-1">Autorité Traditionnelle</span>
             </div>
 

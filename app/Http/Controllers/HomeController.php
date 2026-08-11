@@ -33,7 +33,7 @@ class HomeController extends Controller
                 ->get()
                 ->map(function ($ad) {
                     if (!empty($ad->file_path)) {
-                        $ad->file_url = CloudinaryHelper::url($ad->file_path);
+                        $ad->file_url = CloudinaryHelper::url($ad->file_path, $ad->type);
                     }
                     return $ad;
                 });

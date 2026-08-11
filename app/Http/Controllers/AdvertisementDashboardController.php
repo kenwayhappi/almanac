@@ -21,7 +21,7 @@ class AdvertisementDashboardController extends Controller
             $advertisements = $query->paginate(9)->withQueryString();
             $advertisements->getCollection()->transform(function ($advertisement) {
                 $advertisement->file_url = $advertisement->file_path
-                    ? CloudinaryHelper::url($advertisement->file_path)
+                    ? CloudinaryHelper::url($advertisement->file_path, $advertisement->type)
                     : null;
                 return $advertisement;
             });
@@ -56,13 +56,13 @@ class AdvertisementDashboardController extends Controller
             'owner_contact' => 'nullable|string|max:20',
             'owner_name' => 'nullable|string|max:100',
             'file' => [
-                'nullable', 'file', 'max:102400', // 100MB max
+                'nullable', 'file', 'max:15360', // 15MB max pour éviter les erreurs Nginx 413
                 function ($attribute, $value, $fail) use ($request) {
                     $type = $request->input('type');
                     $mimes = [
-                        'video' => ['mp4', 'mpeg', 'avi'],
-                        'photo' => ['jpg', 'jpeg', 'png'],
-                        'audio' => ['mp3', 'wav'],
+                        'video' => ['mp4', 'mpeg', 'avi', 'mov', 'webm'],
+                        'photo' => ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+                        'audio' => ['mp3', 'wav', 'ogg'],
                         'pdf' => ['pdf'],
                         'text' => null,
                     ];
@@ -77,6 +77,8 @@ class AdvertisementDashboardController extends Controller
                 },
             ],
             'content' => 'nullable|string|required_if:type,text|max:100000',
+        ], [
+            'file.max' => 'Le fichier est trop volumineux (15 Mo maximum autorisé pour éviter les erreurs de serveur).',
         ]);
 
         if ($validator->fails()) {
@@ -128,7 +130,7 @@ class AdvertisementDashboardController extends Controller
                 'owner_contact' => $advertisement->owner_contact,
                 'owner_name' => $advertisement->owner_name,
                 'file_path' => $advertisement->file_path,
-                'file_url' => $advertisement->file_path ? CloudinaryHelper::url($advertisement->file_path) : null,
+                'file_url' => $advertisement->file_path ? CloudinaryHelper::url($advertisement->file_path, $advertisement->type) : null,
                 'content' => $advertisement->content,
                 'created_at' => $advertisement->created_at,
                 'updated_at' => $advertisement->updated_at,
@@ -156,7 +158,7 @@ class AdvertisementDashboardController extends Controller
                 'owner_contact' => $advertisement->owner_contact,
                 'owner_name' => $advertisement->owner_name,
                 'file_path' => $advertisement->file_path,
-                'file_url' => $advertisement->file_path ? CloudinaryHelper::url($advertisement->file_path) : null,
+                'file_url' => $advertisement->file_path ? CloudinaryHelper::url($advertisement->file_path, $advertisement->type) : null,
                 'content' => $advertisement->content,
             ];
 
@@ -179,13 +181,13 @@ class AdvertisementDashboardController extends Controller
             'owner_contact' => 'nullable|string|max:20',
             'owner_name' => 'nullable|string|max:100',
             'file' => [
-                'nullable', 'file', 'max:102400', // 100MB max
+                'nullable', 'file', 'max:15360', // 15MB max
                 function ($attribute, $value, $fail) use ($request) {
                     $type = $request->input('type');
                     $mimes = [
-                        'video' => ['mp4', 'mpeg', 'avi'],
-                        'photo' => ['jpg', 'jpeg', 'png'],
-                        'audio' => ['mp3', 'wav'],
+                        'video' => ['mp4', 'mpeg', 'avi', 'mov', 'webm'],
+                        'photo' => ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+                        'audio' => ['mp3', 'wav', 'ogg'],
                         'pdf' => ['pdf'],
                         'text' => null,
                     ];
@@ -198,6 +200,8 @@ class AdvertisementDashboardController extends Controller
                 },
             ],
             'content' => 'nullable|string|required_if:type,text|max:100000',
+        ], [
+            'file.max' => 'Le fichier est trop volumineux (15 Mo maximum autorisé pour éviter les erreurs de serveur).',
         ]);
 
         if ($validator->fails()) {

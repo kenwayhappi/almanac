@@ -84,7 +84,7 @@
               <td>
                 @if($isVillage)
                   @if($v->chef_village)
-                    <span class="badge bg-warning bg-opacity-10 text-dark"><i class="fas fa-crown me-1 text-warning"></i> {{ $v->chef_village }}</span>
+                    <span class="badge bg-warning bg-opacity-10 text-dark text-wrap text-start" style="white-space: normal; max-width: 200px;"><i class="fas fa-crown me-1 text-warning"></i> {{ $v->chef_village }}</span>
                   @else
                     <span class="text-muted small">Non renseigné</span>
                   @endif

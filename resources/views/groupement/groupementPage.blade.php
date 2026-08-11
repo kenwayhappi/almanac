@@ -28,8 +28,8 @@
             <i class="fas fa-home me-1 text-success"></i> {{ count($vList) }} {{ Str::plural('Village', count($vList)) }} Rattaché{{ count($vList) > 1 ? 's' : '' }}
           </span>
           @if(isset($group['chef_groupement']) && $group['chef_groupement'])
-            <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold fs-6">
-              <i class="fas fa-crown me-1 text-warning"></i> Chef de Canton: {{ $group['chef_groupement'] }}
+            <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold text-wrap text-start d-inline-flex align-items-center" style="white-space: normal; line-height: 1.3; font-size: 0.95rem; max-width: 100%;">
+              <i class="fas fa-crown me-2 text-warning flex-shrink-0"></i> <span>Chef de Canton: {{ $group['chef_groupement'] }}</span>
             </span>
           @endif
         </div>
@@ -80,7 +80,7 @@
                   </div>
                 @endif
               </div>
-              <h5 class="fw-bold font-serif mb-1">{{ $group['chef_groupement'] ?? 'Chef Supérieur de Canton' }}</h5>
+              <h5 class="fw-bold font-serif mb-1 text-wrap" style="word-break: break-word;">{{ $group['chef_groupement'] ?? 'Chef Supérieur de Canton' }}</h5>
               <span class="badge bg-warning bg-opacity-10 text-dark fw-bold px-3 py-1">Chefferie Traditionnelle</span>
             </div>
 

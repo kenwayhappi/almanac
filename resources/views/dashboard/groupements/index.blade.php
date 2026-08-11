@@ -72,7 +72,7 @@
               </td>
               <td>
                 @if(isset($g->chef_groupement) && $g->chef_groupement)
-                  <span class="badge bg-warning bg-opacity-10 text-dark"><i class="fas fa-crown me-1 text-warning"></i> {{ $g->chef_groupement }}</span>
+                  <span class="badge bg-warning bg-opacity-10 text-dark text-wrap text-start" style="white-space: normal; max-width: 200px;"><i class="fas fa-crown me-1 text-warning"></i> {{ $g->chef_groupement }}</span>
                 @else
                   <span class="text-muted small">Non spécifié</span>
                 @endif

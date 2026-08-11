@@ -140,6 +140,7 @@
             <div class="col-md-6">
               <label class="form-label small fw-bold text-uppercase text-muted">Fichier Média</label>
               <input type="file" name="file" class="form-control py-2">
+              <small class="text-muted d-block mt-1"><i class="fas fa-info-circle text-info me-1"></i> Max 12 Mo (MP4, JPG, PNG, PDF). Vidéos courtes recommandées.</small>
             </div>
             <div class="col-md-6">
               <label class="form-label small fw-bold text-uppercase text-muted">Nom du Client / Propriétaire</label>
@@ -204,6 +205,7 @@
             <div class="col-md-6">
               <label class="form-label small fw-bold text-uppercase text-muted">Remplacer Fichier</label>
               <input type="file" name="file" class="form-control py-2">
+              <small class="text-muted d-block mt-1"><i class="fas fa-info-circle text-info me-1"></i> Max 12 Mo (MP4, JPG, PNG, PDF).</small>
             </div>
             <div class="col-md-6">
               <label class="form-label small fw-bold text-uppercase text-muted">Nom du Client</label>
@@ -252,6 +254,26 @@
 
 @section('scripts')
 <script>
+  $(document).ready(function() {
+    // Client-side file size validation to prevent 413 Nginx error
+    $('form').on('change', 'input[type="file"][name="file"]', function() {
+      const file = this.files[0];
+      const maxMb = 12; // 12 MB max limit
+      if (file && file.size > maxMb * 1024 * 1024) {
+        alert('⚠️ Fichier trop lourd (' + (file.size / (1024 * 1024)).toFixed(1) + ' Mo).\n\nLa taille maximale autorisée est de ' + maxMb + ' Mo pour garantir un envoi rapide et éviter l\'erreur de serveur (413 Request Entity Too Large).\n\nVeuillez compresser votre vidéo ou choisir un fichier plus léger.');
+        this.value = '';
+      }
+    });
+
+    // Loading spinner on submit
+    $('form').on('submit', function() {
+      const btn = $(this).find('button[type="submit"]');
+      if (btn.length) {
+        btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Traitement en cours...');
+      }
+    });
+  });
+
   function openEditAd(ad) {
     $('#formEditAd').attr('action', '/dashboard/advertisements/' + ad.id);
     $('#ad_edit_title').val(ad.title || '');

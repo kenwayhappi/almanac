@@ -678,30 +678,40 @@
       let bodyHtml = '';
 
       if (type === 'video') {
-        bodyHtml = `
-          <div class="ad-media-container">
-            <video controls autoplay class="w-100">
-              <source src="${fileUrl}" type="video/mp4">
-              Votre navigateur ne prend pas en charge la vidéo.
-            </video>
-          </div>`;
+        if (fileUrl && fileUrl !== 'null' && fileUrl !== 'undefined') {
+          bodyHtml = `
+            <div class="ad-media-container text-center bg-black rounded p-2 overflow-hidden">
+              <video controls autoplay playsinline class="w-100 rounded" style="max-height: 65vh; object-fit: contain;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'p-4 text-center text-muted bg-body-tertiary rounded\'><i class=\'fas fa-exclamation-triangle fs-1 text-warning mb-2 d-block\'></i><p class=\'mb-0\'>Impossible de charger la vidéo promotionnelle.</p></div>';">
+                <source src="${fileUrl}" type="video/mp4">
+                <source src="${fileUrl}" type="video/webm">
+                <source src="${fileUrl}" type="video/quicktime">
+                Votre navigateur ne prend pas en charge la lecture vidéo.
+              </video>
+            </div>`;
+        } else {
+          bodyHtml = `<div class="p-4 text-center text-muted bg-body-tertiary rounded"><i class="fas fa-video-slash fs-1 text-warning mb-2 d-block"></i><p class="mb-0">Vidéo non disponible.</p></div>`;
+        }
       } else if (type === 'photo') {
-        bodyHtml = `
-          <div class="ad-media-container">
-            <img src="${fileUrl}" alt="${title}" class="img-fluid rounded">
-          </div>`;
+        if (fileUrl && fileUrl !== 'null' && fileUrl !== 'undefined') {
+          bodyHtml = `
+            <div class="ad-media-container text-center">
+              <img src="${fileUrl}" alt="${title || 'Publicité'}" class="img-fluid rounded" style="max-height: 65vh; object-fit: contain;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'p-4 text-center text-muted bg-body-tertiary rounded\'><i class=\'fas fa-image fs-1 text-warning mb-2 d-block\'></i><p class=\'mb-0\'>Impossible de charger l image promotionnelle.</p></div>';">
+            </div>`;
+        } else {
+          bodyHtml = `<div class="p-4 text-center text-muted bg-body-tertiary rounded"><i class="fas fa-image fs-1 text-warning mb-2 d-block"></i><p class="mb-0">Image non disponible.</p></div>`;
+        }
       } else if (type === 'pdf') {
         bodyHtml = `
-          <div class="ratio ratio-16x9">
+          <div class="ratio ratio-16x9 mb-3">
             <iframe src="${fileUrl}" allowfullscreen></iframe>
           </div>
-          <div class="text-center mt-3">
-            <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-success rounded-pill">
+          <div class="text-center">
+            <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-success rounded-pill px-4">
               <i class="fas fa-download me-1"></i> Télécharger le PDF
             </a>
           </div>`;
       } else if (type === 'text') {
-        bodyHtml = `<div class="p-3 bg-body-tertiary rounded fs-5">${contentText || ''}</div>`;
+        bodyHtml = `<div class="p-4 bg-body-tertiary rounded fs-5 text-main lh-base">${contentText || title || 'Aucun texte fourni.'}</div>`;
       }
 
       $('#adModalBody').html(bodyHtml);
