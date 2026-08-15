@@ -64,7 +64,7 @@
                     @endif
                   </div>
                   <div>
-                    <div class="fw-bold font-serif fs-6">{{ $ev->name }}</div>
+                    <a href="{{ route('dashboard.events.show', $ev->id) }}" class="fw-bold font-serif fs-6 text-decoration-none text-main hover-success">{{ $ev->name }}</a>
                   </div>
                 </div>
               </td>
@@ -77,9 +77,9 @@
               </td>
               <td class="text-end">
                 <div class="d-inline-flex gap-1">
-                  <button type="button" class="btn btn-sm btn-outline-info rounded-pill px-2 py-1 small" onclick="openShowEvent({{ json_encode($ev) }})" title="Voir les détails">
-                    <i class="fas fa-eye me-1"></i> Voir
-                  </button>
+                  <a href="{{ route('dashboard.events.show', $ev->id) }}" class="btn btn-sm btn-outline-info rounded-pill px-2 py-1 small" title="Voir les cotisations et détails">
+                    <i class="fas fa-eye me-1"></i> Voir & Cotisations
+                  </a>
                   <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 small" onclick="openEditEvent({{ json_encode($ev) }})" title="Éditer">
                     <i class="fas fa-pen"></i>
                   </button>

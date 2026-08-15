@@ -21,3 +21,6 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/util pour rapport
+/util pour rapport/*
+

@@ -51,7 +51,7 @@
                 @enderror
             </div>
             <div class="col-md-4">
-                <label for="amount" class="form-label fw-semibold">Montant (€) <span class="text-danger">*</span></label>
+                <label for="amount" class="form-label fw-semibold">Montant (FCFA) <span class="text-danger">*</span></label>
                 <input type="number" class="form-control" id="amount" name="amount" step="0.01" min="0" value="{{ old('amount', $contribution->amount) }}" required>
                 @error('amount')
                     <div class="text-danger small">{{ $message }}</div>

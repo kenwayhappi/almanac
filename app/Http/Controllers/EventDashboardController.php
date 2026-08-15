@@ -565,13 +565,11 @@ class EventDashboardController extends Controller
             $contributions = Contribution::where('event_id', $eventId)->get();
             $totalAmount = $contributions->sum('amount');
 
-            $data = [
+            $pdf = Pdf::loadView('dashboard.events.contributions_pdf', [
                 'event' => $event,
                 'contributions' => $contributions,
-                'total_amount' => $totalAmount,
-            ];
-
-            $pdf = PDF::loadView('pdf.contributions', $data);
+                'totalAmount' => $totalAmount,
+            ]);
 
             Log::info('PDF des contributions publiques généré', [
                 'event_id' => $eventId,

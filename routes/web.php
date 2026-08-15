@@ -161,8 +161,15 @@ Route::prefix('dashboard')->name('dashboard.')->middleware('auth')->group(functi
         Route::put('/{id}', [EventDashboardController::class, 'update'])->name('update');
         Route::delete('/{id}', [EventDashboardController::class, 'destroy'])->name('destroy');
         Route::get('/create', fn() => redirect()->route('dashboard.events.index'))->name('create');
-        Route::get('/{id}', fn() => redirect()->route('dashboard.events.index'))->name('show');
+        Route::get('/{id}', [EventDashboardController::class, 'show'])->name('show');
         Route::get('/{id}/edit', fn() => redirect()->route('dashboard.events.index'))->name('edit');
+
+        // Contributions / Cotisations
+        Route::post('/{id}/contributions', [EventDashboardController::class, 'storeContribution'])->name('contributions.store');
+        Route::get('/{id}/contributions/{contributionId}/edit', [EventDashboardController::class, 'editContribution'])->name('contributions.edit');
+        Route::put('/{id}/contributions/{contributionId}', [EventDashboardController::class, 'updateContribution'])->name('contributions.update');
+        Route::delete('/{id}/contributions/{contributionId}', [EventDashboardController::class, 'destroyContribution'])->name('contributions.destroy');
+        Route::get('/{id}/contributions/pdf', [EventDashboardController::class, 'downloadContributionsPdf'])->name('contributions.pdf');
     });
 
     // Personnalités
