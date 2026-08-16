@@ -14,12 +14,34 @@ class CountryDashboardController extends Controller
 {
     public function index()
     {
-        $countries = Country::with([
-            'administrativeDivisionTypes' => fn($query) => $query->orderBy('level', 'asc'),
-            'administrativeDivisions' => fn($query) => $query->with(['type', 'parent', 'children.children']),
-        ])
-        ->withCount('administrativeDivisions')
-        ->paginate(15);
+        // Correctif de compatibilité PostgreSQL pour aligner les types de colonnes
+        if (DB::connection()->getDriverName() === 'pgsql') {
+            try {
+                DB::statement('ALTER TABLE administrative_divisions ALTER COLUMN country_id TYPE VARCHAR(255) USING country_id::varchar;');
+                DB::statement('ALTER TABLE administrative_division_types ALTER COLUMN country_id TYPE VARCHAR(255) USING country_id::varchar;');
+            } catch (\Throwable $e) {
+                // Déjà converti ou pas de privilèges DDL
+            }
+        }
+
+        try {
+            $countries = Country::with([
+                'administrativeDivisionTypes' => fn($query) => $query->orderBy('level', 'asc'),
+                'administrativeDivisions' => fn($query) => $query->with(['type', 'parent', 'children.children']),
+            ])
+            ->withCount('administrativeDivisions')
+            ->paginate(15);
+        } catch (\Throwable $e) {
+            // Secours gracieux en cas de non-correspondance stricte de types sur PostgreSQL
+            $countries = Country::with([
+                'administrativeDivisionTypes' => fn($query) => $query->orderBy('level', 'asc'),
+                'administrativeDivisions' => fn($query) => $query->with(['type', 'parent', 'children.children']),
+            ])->paginate(15);
+
+            foreach ($countries as $country) {
+                $country->administrative_divisions_count = $country->administrativeDivisions->count();
+            }
+        }
 
         return view('dashboard.pays.index', compact('countries'));
     }

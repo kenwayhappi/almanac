@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS "administrative_divisions" (
   "name" varchar(100) NOT NULL,
   "type_id" BIGINT NOT NULL,
   "parent_id" BIGINT DEFAULT NULL,
-  "country_id" INTEGER NOT NULL,
+  "country_id" varchar(255) NOT NULL,
   "created_at" timestamp NULL DEFAULT NULL,
   "updated_at" timestamp NULL DEFAULT NULL,
   PRIMARY KEY ("id")
