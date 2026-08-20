@@ -3,9 +3,9 @@
 @section('title', 'Moteur de Recherche - Almanac')
 
 @section('content')
-<div class="container py-4">
+<div class="container pt-2 pb-4 py-md-4">
   <!-- Search Hero Header -->
-  <div class="custom-card p-4 p-md-5 mb-4 text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(22, 163, 74, 0.08), rgba(15, 23, 42, 0.03)); border-color: rgba(22, 163, 74, 0.2);">
+  <div class="custom-card p-3 p-md-5 mb-3 mb-md-4 text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(22, 163, 74, 0.08), rgba(15, 23, 42, 0.03)); border-color: rgba(22, 163, 74, 0.2);">
     <div class="row justify-content-center">
       <div class="col-lg-8">
         <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-bold mb-3">

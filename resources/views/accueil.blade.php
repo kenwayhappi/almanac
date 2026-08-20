@@ -4,7 +4,7 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="py-5 position-relative overflow-hidden">
+<section class="pt-2 pb-4 py-md-5 position-relative overflow-hidden">
   <div class="container">
     <div class="row align-items-center g-5">
       <div class="col-lg-7">
