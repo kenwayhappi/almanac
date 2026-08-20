@@ -6,6 +6,18 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title', 'Almanac - La Bible des Villages & Groupements')</title>
 
+  @php $gaId = config('services.google.analytics_id') ?? env('GOOGLE_ANALYTICS_ID', 'G-KBN3NE10ZV'); @endphp
+  @if($gaId)
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ $gaId }}');
+    </script>
+  @endif
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
