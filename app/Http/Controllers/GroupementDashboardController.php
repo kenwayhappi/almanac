@@ -98,7 +98,7 @@ class GroupementDashboardController extends Controller
             $group = new VillageGroup();
             $group->name = $request->name;
             $group->description = $request->description;
-            $group->chef_groupement = $request->chef_groupement;
+            $group->chef_groupement = \App\Helpers\FormatHelper::formatChefName($request->chef_groupement);
             $group->histoire = $request->histoire;
             $group->parent_id = $request->division3 ?: $request->division2 ?: $request->division1;
 
@@ -110,6 +110,21 @@ class GroupementDashboardController extends Controller
             if ($request->hasFile('image')) {
                 $publicId = CloudinaryHelper::upload($request->file('image'), 'groupements/images');
                 $group->image = $publicId;
+            }
+
+            if ($request->hasFile('carousel_images')) {
+                $carousel = [];
+                foreach (array_slice($request->file('carousel_images'), 0, 4) as $cImg) {
+                    if ($cImg) {
+                        $uploaded = CloudinaryHelper::upload($cImg, 'groupements/carousel');
+                        if ($uploaded) {
+                            $carousel[] = $uploaded;
+                        }
+                    }
+                }
+                if (!empty($carousel)) {
+                    $group->carousel_images = $carousel;
+                }
             }
 
             $group->save();
@@ -212,7 +227,7 @@ class GroupementDashboardController extends Controller
             $group = VillageGroup::findOrFail($id);
             $group->name = $request->name;
             $group->description = $request->description;
-            $group->chef_groupement = $request->chef_groupement;
+            $group->chef_groupement = \App\Helpers\FormatHelper::formatChefName($request->chef_groupement);
             $group->histoire = $request->histoire;
             if ($request->filled('division3') || $request->filled('division2') || $request->filled('division1')) {
                 $group->parent_id = $request->division3 ?: $request->division2 ?: $request->division1;
@@ -220,14 +235,25 @@ class GroupementDashboardController extends Controller
 
             if ($request->hasFile('chef_image')) {
                 CloudinaryHelper::delete($group->chef_image);
-                $publicId = CloudinaryHelper::upload($request->file('chef_image'), 'groupements/chefs');
-                $group->chef_image = $publicId;
+                $group->chef_image = CloudinaryHelper::upload($request->file('chef_image'), 'groupements/chefs');
             }
 
             if ($request->hasFile('image')) {
                 CloudinaryHelper::delete($group->image);
-                $publicId = CloudinaryHelper::upload($request->file('image'), 'groupements/images');
-                $group->image = $publicId;
+                $group->image = CloudinaryHelper::upload($request->file('image'), 'groupements/images');
+            }
+
+            if ($request->hasFile('carousel_images')) {
+                $carousel = is_array($group->carousel_images) ? $group->carousel_images : [];
+                foreach (array_slice($request->file('carousel_images'), 0, 4) as $cImg) {
+                    if ($cImg) {
+                        $uploaded = CloudinaryHelper::upload($cImg, 'groupements/carousel');
+                        if ($uploaded) {
+                            $carousel[] = $uploaded;
+                        }
+                    }
+                }
+                $group->carousel_images = array_slice($carousel, 0, 4);
             }
 
             $group->save();

@@ -161,13 +161,17 @@
               </select>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label small fw-bold text-uppercase text-muted">Photo du Chef</label>
               <input type="file" name="chef_image" class="form-control py-2" accept="image/*">
             </div>
-            <div class="col-md-6">
-              <label class="form-label small fw-bold text-uppercase text-muted">Couverture / Blason</label>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold text-uppercase text-muted">Photo de Couverture</label>
               <input type="file" name="image" class="form-control py-2" accept="image/*">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold text-uppercase text-muted">Photos Carrousel (Max 4)</label>
+              <input type="file" name="carousel_images[]" class="form-control py-2" accept="image/*" multiple>
             </div>
             <div class="col-12">
               <label class="form-label small fw-bold text-uppercase text-muted">Description</label>
@@ -232,13 +236,17 @@
               </select>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label small fw-bold text-uppercase text-muted">Changer Photo Chef</label>
               <input type="file" name="chef_image" class="form-control py-2" accept="image/*">
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label small fw-bold text-uppercase text-muted">Changer Couverture</label>
               <input type="file" name="image" class="form-control py-2" accept="image/*">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-bold text-uppercase text-muted">Ajouter Photos Carrousel (Max 4)</label>
+              <input type="file" name="carousel_images[]" class="form-control py-2" accept="image/*" multiple>
             </div>
             <div class="col-12">
               <label class="form-label small fw-bold text-uppercase text-muted">Description</label>

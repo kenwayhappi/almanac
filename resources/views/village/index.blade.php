@@ -3,34 +3,41 @@
 @section('title', 'Village '.$village->name.' - Almanac')
 
 @section('content')
-<div class="container py-4">
+<div class="container pt-2 pb-4 py-md-4">
   <!-- Village Hero Banner -->
   @php
     use App\Helpers\CloudinaryHelper;
+    use App\Helpers\FormatHelper;
+
     $vBanner = CloudinaryHelper::url($village->village_image) ?? asset('images/logofinal.png');
 
     if ($village->is_village) {
         $cPhoto = CloudinaryHelper::url($village->chief_image);
-        $cName = $village->chef_village ?? $village->current_chief ?? 'Chef de Village';
+        $rawCName = $village->chef_village ?? $village->current_chief ?? null;
+        $chefRoleBadge = 'Chef du Village';
     } else {
         $groupement = $village->villageGroup;
         $cPhoto = ($groupement && $groupement->chef_image) ? CloudinaryHelper::url($groupement->chef_image) : null;
-        $cName = ($groupement && $groupement->chef_groupement) ? $groupement->chef_groupement : 'Chef de Groupement';
+        $rawCName = ($groupement && $groupement->chef_groupement) ? $groupement->chef_groupement : null;
+        $chefRoleBadge = 'Chef de Groupement';
     }
+    $cNameFormatted = FormatHelper::formatChefName($rawCName);
+    $cleanCantonName = $village->villageGroup ? FormatHelper::cleanCantonName($village->villageGroup->name) : null;
   @endphp
-  <div class="custom-card p-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(22, 163, 74, 0.88)), url('{{ $vBanner }}') center/cover; color:#fff; border-radius:24px;">
+  <div class="custom-card p-3 p-md-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(22, 163, 74, 0.88)), url('{{ $vBanner }}') center/cover; color:#fff; border-radius:24px;">
     <div class="row align-items-center g-4 position-relative" style="z-index:2;">
-      <div class="col-lg-8">
+      <!-- Details Left -->
+      <div class="col-lg-7 col-md-7">
         @if($village->villageGroup)
-          <a href="{{ route('groupement.show', $village->villageGroup->id . '-' . Str::slug($village->villageGroup->name)) }}" class="badge bg-warning text-dark font-bold px-3 py-2 rounded-pill mb-3 text-decoration-none" title="Visiter la fiche du Canton {{ $village->villageGroup->name }}">
-            <i class="fas fa-layer-group me-1"></i> Canton {{ $village->villageGroup->name }}
+          <a href="{{ route('groupement.show', $village->villageGroup->id . '-' . Str::slug($village->villageGroup->name)) }}" class="badge bg-warning text-dark font-bold px-3 py-2 rounded-pill mb-3 text-decoration-none" title="Visiter la fiche du {{ $cleanCantonName }}">
+            <i class="fas fa-layer-group me-1"></i> {{ $cleanCantonName }}
           </a>
         @else
           <span class="badge bg-warning text-dark font-bold px-3 py-2 rounded-pill mb-3">
             <i class="fas fa-layer-group me-1"></i> Groupement
           </span>
         @endif
-        <h1 class="font-serif fw-bold display-4 text-white mb-2">{{ $village->name }}</h1>
+        <h1 class="font-serif fw-bold display-4 text-white mb-2">{{ FormatHelper::cleanVillageName($village->name) }}</h1>
         <p class="lead opacity-90 fs-6 mb-4">
           {{ Str::limit($village->description ?? $village->histoire ?? 'Village traditionnel riche en histoire, coutumes et chefferie.', 180) }}
         </p>
@@ -39,13 +46,28 @@
           <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold fs-6">
             <i class="fas fa-users me-1 text-success"></i> {{ number_format($village->population ?? 0) }} Habitants
           </span>
-          @if($cName)
-            <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold text-wrap text-start d-inline-flex align-items-center" style="white-space: normal; line-height: 1.3; font-size: 0.95rem; max-width: 100%;">
-              <i class="fas fa-user-shield me-2 text-warning flex-shrink-0"></i> <span>Chef: {{ $cName }}</span>
-            </span>
-          @endif
         </div>
       </div>
+
+      <!-- Chef Profile Photo & Info (Right Side inside Hero Banner) -->
+      @if($cNameFormatted)
+      <div class="col-lg-5 col-md-5 text-center">
+        <div class="d-inline-block p-3 rounded-4 backdrop-blur shadow-lg position-relative cursor-pointer" data-bs-toggle="modal" data-bs-target="#chefPhotoModal" title="Cliquer pour afficher la photo en grand format" style="background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.25); width: 100%; max-width: 290px;">
+          <div class="rounded-circle overflow-hidden mx-auto shadow-lg mb-2" style="width: 130px; height: 130px; border: 4px solid #f59e0b; transition: transform .2s ease;">
+            @if($cPhoto)
+              <img src="{{ $cPhoto }}" alt="{{ $cNameFormatted }}" class="w-100 h-100" style="object-fit: cover;">
+            @else
+              <div class="w-100 h-100 bg-warning bg-opacity-20 d-flex align-items-center justify-content-center text-warning">
+                <i class="fas fa-user-shield fs-1"></i>
+              </div>
+            @endif
+          </div>
+          <span class="badge bg-warning text-dark fw-bold mb-2 px-3 py-1"><i class="fas fa-crown me-1"></i> {{ $chefRoleBadge }}</span>
+          <h5 class="fw-bold font-serif text-white mb-1 text-center lh-sm" style="word-break: break-word; font-size: 1.05rem;">{{ $cNameFormatted }}</h5>
+          <small class="text-white opacity-75 d-block fs-xs">Cliquez pour agrandir la photo</small>
+        </div>
+      </div>
+      @endif
     </div>
   </div>
 
@@ -86,44 +108,43 @@
     <!-- 1. VUE D'ENSEMBLE -->
     <div class="tab-pane fade show active" id="content-overview" role="tabpanel">
       <div class="row g-4">
-        <!-- Chief Profile -->
-        <div class="col-lg-5 col-xl-4">
+        <!-- Village Carousel Gallery (Left Side) -->
+        <div class="col-lg-5 col-xl-5">
           <div class="custom-card p-4 h-100">
-            <h4 class="font-serif fw-bold mb-3"><i class="fas fa-crown text-warning me-2"></i> Chefferie Traditionnelle</h4>
+            <h4 class="font-serif fw-bold mb-3"><i class="fas fa-images text-success me-2"></i> Galerie du Village</h4>
             <hr class="opacity-10 mb-4">
 
-            <div class="text-center mb-4">
-              <div class="rounded-circle overflow-hidden mx-auto mb-3 shadow" style="width: 150px; height: 150px; border: 4px solid var(--accent-green);">
-                @if($cPhoto)
-                  <img src="{{ $cPhoto }}" alt="Chef" class="w-100 h-100" style="object-fit: cover;">
-                @else
-                  <div class="w-100 h-100 bg-secondary bg-opacity-20 d-flex align-items-center justify-content-center text-muted">
-                    <i class="fas fa-user-shield fs-1"></i>
-                  </div>
+            @php $cUrls = $village->carousel_image_urls; @endphp
+            @if(count($cUrls) > 0)
+              <div id="villageGalleryCarousel" class="carousel slide rounded-3 overflow-hidden shadow-sm" data-bs-ride="carousel" style="max-height: 350px;">
+                <div class="carousel-inner">
+                  @foreach(array_slice($cUrls, 0, 4) as $idx => $imgUrl)
+                    <div class="carousel-item {{ $idx === 0 ? 'active' : '' }}">
+                      <img src="{{ $imgUrl }}" class="d-block w-100" alt="Photo {{ $idx + 1 }}" style="height: 320px; object-fit: cover;">
+                    </div>
+                  @endforeach
+                </div>
+                @if(count($cUrls) > 1)
+                  <button class="carousel-control-prev" type="button" data-bs-target="#villageGalleryCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#villageGalleryCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  </button>
                 @endif
               </div>
-              <h5 class="fw-bold font-serif mb-1 text-wrap" style="word-break: break-word;">{{ $cName }}</h5>
-              <span class="badge bg-warning bg-opacity-10 text-dark fw-bold px-3 py-1">Autorité Traditionnelle</span>
-            </div>
-
-            @if($village->chief_description)
-              <div class="mb-3">
-                <h6 class="fw-bold small text-uppercase text-muted">Présentation</h6>
-                <p class="small text-muted mb-0">{{ $village->chief_description }}</p>
-              </div>
-            @endif
-
-            @if($village->chief_achievements)
-              <div class="mb-3">
-                <h6 class="fw-bold small text-uppercase text-muted">Réalisations Majeures</h6>
-                <p class="small text-muted mb-0">{{ $village->chief_achievements }}</p>
+            @else
+              <div class="bg-dark bg-opacity-50 text-white rounded-3 p-5 text-center d-flex flex-column align-items-center justify-content-center" style="min-height: 250px;">
+                <i class="fas fa-mountain fs-1 text-success mb-3 opacity-75"></i>
+                <h6 class="fw-bold mb-1">Patrimoine & Paysages</h6>
+                <p class="small text-muted mb-0">Photos d'illustration du village {{ FormatHelper::cleanVillageName($village->name) }}.</p>
               </div>
             @endif
           </div>
         </div>
 
-        <!-- Presentation -->
-        <div class="col-lg-7 col-xl-8">
+        <!-- Presentation (Right Side) -->
+        <div class="col-lg-7 col-xl-7">
           <div class="custom-card p-4 p-md-5 h-100">
             <h3 class="font-serif fw-bold mb-3"><i class="fas fa-scroll text-success me-2"></i> Présentation du Village</h3>
             <hr class="opacity-10 mb-4">
@@ -133,11 +154,17 @@
             </div>
 
             @if($village->villageGroup)
+              @php
+                $gGroupChefFormatted = FormatHelper::formatChefName($village->villageGroup->chef_groupement);
+              @endphp
               <div class="p-4 bg-success bg-opacity-10 rounded-3 border border-success border-opacity-20 mt-4">
                 <h5 class="fw-bold font-serif text-success mb-2"><i class="fas fa-layer-group me-2"></i> Rattachement Cantonal</h5>
-                <p class="small text-main mb-3">Rattaché au <a href="{{ route('groupement.show', $village->villageGroup->id . '-' . Str::slug($village->villageGroup->name)) }}" class="fw-bold text-success text-decoration-underline">{{ $village->villageGroup->name }}</a> ({{ $village->villageGroup->chef_groupement ?? 'Chef de Canton' }}).</p>
+                <p class="small text-main mb-3">
+                  Rattaché au <a href="{{ route('groupement.show', $village->villageGroup->id . '-' . Str::slug($village->villageGroup->name)) }}" class="fw-bold text-success text-decoration-underline">{{ $cleanCantonName }}</a>
+                  @if($gGroupChefFormatted) ({{ $gGroupChefFormatted }}) @endif.
+                </p>
                 <a href="{{ route('groupement.show', $village->villageGroup->id . '-' . Str::slug($village->villageGroup->name)) }}" class="btn btn-sm btn-outline-success rounded-pill px-4 py-2 fw-bold">
-                  Voir le Canton {{ $village->villageGroup->name }} <i class="fas fa-arrow-right ms-1"></i>
+                  Voir le {{ $cleanCantonName }} <i class="fas fa-arrow-right ms-1"></i>
                 </a>
               </div>
             @endif
@@ -652,5 +679,35 @@ function filterActivites() {
   });
   document.getElementById('activitesEmpty').classList.toggle('d-none', count > 0);
 }
+<!-- Modal Affichage Photo Chef Grand Format -->
+@if($cNameFormatted)
+<div class="modal fade" id="chefPhotoModal" tabindex="-1" aria-labelledby="chefPhotoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered text-center">
+    <div class="modal-content bg-dark text-white border-0 shadow-lg" style="border-radius: 20px;">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title font-serif text-warning fw-bold" id="chefPhotoModalLabel">{{ $cNameFormatted }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body p-4 text-center">
+        @if($cPhoto)
+          <img src="{{ $cPhoto }}" alt="{{ $cNameFormatted }}" class="img-fluid rounded-4 shadow-lg" style="max-height: 75vh; object-fit: contain;">
+        @else
+          <div class="p-5 bg-secondary bg-opacity-20 rounded-4">
+            <i class="fas fa-user-shield fs-1 text-warning mb-2"></i>
+            <p class="mb-0 text-muted">Photo non disponible en haute définition.</p>
+          </div>
+        @endif
+        @if($village->chief_description)
+          <p class="small text-white-50 mt-3 mb-0">{{ $village->chief_description }}</p>
+        @endif
+      </div>
+      <div class="modal-footer border-0 justify-content-center pt-0">
+        <span class="badge bg-warning text-dark fw-bold px-3 py-2 fs-6">Chefferie Traditionnelle de {{ FormatHelper::cleanVillageName($village->name) }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+@endif
+
 </script>
 @endsection

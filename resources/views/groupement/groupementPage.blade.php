@@ -3,22 +3,38 @@
 @section('title', 'Groupement '.$group['name'].' - Almanac')
 
 @section('content')
-<div class="container py-4">
+<div class="container pt-2 pb-4 py-md-4">
   <!-- Groupement Hero Banner -->
   @php
     use App\Helpers\CloudinaryHelper;
+    use App\Helpers\FormatHelper;
+
     $gBanner  = isset($group['image']) && $group['image'] ? CloudinaryHelper::url($group['image']) : asset('images/logofinal.png');
     $chefImg  = isset($group['chef_image']) && $group['chef_image'] ? CloudinaryHelper::url($group['chef_image']) : null;
     $vList    = $group['villages'] ?? [];
     $pasList  = $group['personnalites_administratives'] ?? collect([]);
+    
+    $chefNameFormatted = FormatHelper::formatChefName($group['chef_groupement'] ?? null);
+    $cleanCantonName   = FormatHelper::cleanCantonName($group['name'] ?? 'Groupement');
+    $cImagesRaw        = $group['carousel_images'] ?? [];
+    $cUrls             = [];
+    if (is_array($cImagesRaw) && count($cImagesRaw) > 0) {
+        foreach ($cImagesRaw as $cImg) {
+            if ($cImg) { $cUrls[] = CloudinaryHelper::url($cImg); }
+        }
+    }
+    if (empty($cUrls) && isset($group['image']) && $group['image']) {
+        $cUrls[] = CloudinaryHelper::url($group['image']);
+    }
   @endphp
-  <div class="custom-card p-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(34, 197, 94, 0.85)), url('{{ $gBanner }}') center/cover; color:#fff; border-radius:24px;">
+  <div class="custom-card p-3 p-md-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(34, 197, 94, 0.85)), url('{{ $gBanner }}') center/cover; color:#fff; border-radius:24px;">
     <div class="row align-items-center g-4 position-relative" style="z-index:2;">
-      <div class="col-lg-8">
+      <!-- Details Left -->
+      <div class="col-lg-7 col-md-7">
         <span class="badge bg-warning text-dark font-bold px-3 py-2 rounded-pill mb-3">
           <i class="fas fa-layer-group me-1"></i> Canton / Groupement
         </span>
-        <h1 class="font-serif fw-bold display-4 text-white mb-2">{{ $group['name'] }}</h1>
+        <h1 class="font-serif fw-bold display-4 text-white mb-2">{{ $cleanCantonName }}</h1>
         <p class="lead opacity-90 fs-6 mb-4">
           {{ Str::limit($group['description'] ?? 'Groupement traditionnel regroupant plusieurs villages et localités d\'histoire.', 180) }}
         </p>
@@ -27,13 +43,28 @@
           <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold fs-6">
             <i class="fas fa-home me-1 text-success"></i> {{ count($vList) }} {{ Str::plural('Village', count($vList)) }} Rattaché{{ count($vList) > 1 ? 's' : '' }}
           </span>
-          @if(isset($group['chef_groupement']) && $group['chef_groupement'])
-            <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold text-wrap text-start d-inline-flex align-items-center" style="white-space: normal; line-height: 1.3; font-size: 0.95rem; max-width: 100%;">
-              <i class="fas fa-crown me-2 text-warning flex-shrink-0"></i> <span>Chef de Canton: {{ $group['chef_groupement'] }}</span>
-            </span>
-          @endif
         </div>
       </div>
+
+      <!-- Chef Profile Photo & Info (Right Side inside Hero Banner) -->
+      @if($chefNameFormatted)
+      <div class="col-lg-5 col-md-5 text-center">
+        <div class="d-inline-block p-3 rounded-4 backdrop-blur shadow-lg position-relative cursor-pointer" data-bs-toggle="modal" data-bs-target="#chefGroupementPhotoModal" title="Cliquer pour afficher la photo en grand format" style="background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.25); width: 100%; max-width: 290px;">
+          <div class="rounded-circle overflow-hidden mx-auto shadow-lg mb-2" style="width: 130px; height: 130px; border: 4px solid #f59e0b; transition: transform .2s ease;">
+            @if($chefImg)
+              <img src="{{ $chefImg }}" alt="{{ $chefNameFormatted }}" class="w-100 h-100" style="object-fit: cover;">
+            @else
+              <div class="w-100 h-100 bg-warning bg-opacity-20 d-flex align-items-center justify-content-center text-warning">
+                <i class="fas fa-user-shield fs-1"></i>
+              </div>
+            @endif
+          </div>
+          <span class="badge bg-warning text-dark fw-bold mb-2 px-3 py-1"><i class="fas fa-crown me-1"></i> Chef de Groupement</span>
+          <h5 class="fw-bold font-serif text-white mb-1 text-center lh-sm" style="word-break: break-word; font-size: 1.05rem;">{{ $chefNameFormatted }}</h5>
+          <small class="text-white opacity-75 d-block fs-xs">Cliquez pour agrandir la photo</small>
+        </div>
+      </div>
+      @endif
     </div>
   </div>
 
@@ -64,35 +95,42 @@
     <!-- 1. VILLAGES DU GROUPEMENT -->
     <div class="tab-pane fade show active" id="gcontent-villages" role="tabpanel">
       <div class="row g-4 mb-4">
-        <!-- Chef Canton Card -->
-        <div class="col-lg-4">
+        <!-- Groupement Carousel Gallery (Left Side) -->
+        <div class="col-lg-5 col-xl-4">
           <div class="custom-card p-4 h-100">
-            <h4 class="font-serif fw-bold mb-3"><i class="fas fa-crown text-warning me-2"></i> Chefferie du Canton</h4>
+            <h4 class="font-serif fw-bold mb-3"><i class="fas fa-images text-success me-2"></i> Galerie du Canton</h4>
             <hr class="opacity-10 mb-4">
 
-            <div class="text-center mb-4">
-              <div class="rounded-circle overflow-hidden mx-auto mb-3 shadow" style="width: 140px; height: 140px; border: 4px solid var(--accent-green);">
-                @if($chefImg)
-                  <img src="{{ $chefImg }}" alt="Chef Canton" class="w-100 h-100" style="object-fit: cover;">
-                @else
-                  <div class="w-100 h-100 bg-secondary bg-opacity-20 d-flex align-items-center justify-content-center text-muted">
-                    <i class="fas fa-user-shield fs-1"></i>
-                  </div>
+            @if(count($cUrls) > 0)
+              <div id="groupementGalleryCarousel" class="carousel slide rounded-3 overflow-hidden shadow-sm" data-bs-ride="carousel" style="max-height: 350px;">
+                <div class="carousel-inner">
+                  @foreach(array_slice($cUrls, 0, 4) as $idx => $imgUrl)
+                    <div class="carousel-item {{ $idx === 0 ? 'active' : '' }}">
+                      <img src="{{ $imgUrl }}" class="d-block w-100" alt="Photo {{ $idx + 1 }}" style="height: 320px; object-fit: cover;">
+                    </div>
+                  @endforeach
+                </div>
+                @if(count($cUrls) > 1)
+                  <button class="carousel-control-prev" type="button" data-bs-target="#groupementGalleryCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#groupementGalleryCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  </button>
                 @endif
               </div>
-              <h5 class="fw-bold font-serif mb-1 text-wrap" style="word-break: break-word;">{{ $group['chef_groupement'] ?? 'Chef Supérieur de Canton' }}</h5>
-              <span class="badge bg-warning bg-opacity-10 text-dark fw-bold px-3 py-1">Chefferie Traditionnelle</span>
-            </div>
-
-            <div class="mb-3">
-              <h6 class="fw-bold small text-uppercase text-muted">Statut</h6>
-              <p class="small text-muted mb-0">Canton traditionnel regroupant les localités d'origine du territoire.</p>
-            </div>
+            @else
+              <div class="bg-dark bg-opacity-50 text-white rounded-3 p-5 text-center d-flex flex-column align-items-center justify-content-center" style="min-height: 250px;">
+                <i class="fas fa-layer-group fs-1 text-success mb-3 opacity-75"></i>
+                <h6 class="fw-bold mb-1">Canton {{ $cleanCantonName }}</h6>
+                <p class="small text-muted mb-0">Photos d'illustration du canton.</p>
+              </div>
+            @endif
           </div>
         </div>
 
-        <!-- Villages Grid -->
-        <div class="col-lg-8">
+        <!-- Villages Grid (Right Side) -->
+        <div class="col-lg-7 col-xl-8">
           <div class="custom-card p-4 p-md-5 h-100">
             <h3 class="font-serif fw-bold mb-3"><i class="fas fa-tree text-success me-2"></i> Villages & Localités Rattachés</h3>
             <hr class="opacity-10 mb-4">
@@ -105,7 +143,12 @@
             @else
               <div class="row g-3">
                 @foreach($vList as $v)
-                  @php $vId = is_array($v) ? $v['id'] : $v->id; $vName = is_array($v) ? $v['name'] : $v->name; $vDesc = is_array($v) ? ($v['description'] ?? '') : ($v->description ?? ''); @endphp
+                  @php
+                    $vId = is_array($v) ? $v['id'] : $v->id;
+                    $vRawName = is_array($v) ? $v['name'] : $v->name;
+                    $vCleanName = FormatHelper::cleanVillageName($vRawName);
+                    $vDesc = is_array($v) ? ($v['description'] ?? '') : ($v->description ?? '');
+                  @endphp
                   <div class="col-md-6">
                     <div class="card h-100 border-0 custom-card p-3 shadow-sm">
                       <div class="d-flex align-items-center gap-3">
@@ -113,12 +156,12 @@
                           <i class="fas fa-home fs-5"></i>
                         </div>
                         <div class="flex-grow-1 overflow-hidden">
-                          <h6 class="fw-bold font-serif mb-1 text-truncate">{{ $vName }}</h6>
+                          <h6 class="fw-bold font-serif mb-1 text-truncate">{{ $vCleanName }}</h6>
                           <small class="text-muted d-block text-truncate">{{ Str::limit($vDesc, 60) }}</small>
                         </div>
                       </div>
                       <div class="mt-3 pt-2 border-top border-secondary border-opacity-10 text-end">
-                        <a href="{{ route('village.show', $vId . '-' . Str::slug($vName)) }}" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1 small">
+                        <a href="{{ route('village.show', $vId . '-' . Str::slug($vRawName)) }}" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1 small">
                           Visiter la fiche <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                       </div>
@@ -288,5 +331,32 @@ function filterPA() {
   });
   document.getElementById('paEmpty').classList.toggle('d-none', count > 0);
 }
+<!-- Modal Affichage Photo Chef Groupement Grand Format -->
+@if($chefNameFormatted)
+<div class="modal fade" id="chefGroupementPhotoModal" tabindex="-1" aria-labelledby="chefGroupementPhotoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered text-center">
+    <div class="modal-content bg-dark text-white border-0 shadow-lg" style="border-radius: 20px;">
+      <div class="modal-header border-0 pb-0">
+        <h5 class="modal-title font-serif text-warning fw-bold" id="chefGroupementPhotoModalLabel">{{ $chefNameFormatted }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <div class="modal-body p-4 text-center">
+        @if($chefImg)
+          <img src="{{ $chefImg }}" alt="{{ $chefNameFormatted }}" class="img-fluid rounded-4 shadow-lg" style="max-height: 75vh; object-fit: contain;">
+        @else
+          <div class="p-5 bg-secondary bg-opacity-20 rounded-4">
+            <i class="fas fa-user-shield fs-1 text-warning mb-2"></i>
+            <p class="mb-0 text-muted">Photo non disponible en haute définition.</p>
+          </div>
+        @endif
+      </div>
+      <div class="modal-footer border-0 justify-content-center pt-0">
+        <span class="badge bg-warning text-dark fw-bold px-3 py-2 fs-6">Chefferie Supérieure du Canton / Groupement {{ $cleanCantonName }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+@endif
+
 </script>
 @endsection

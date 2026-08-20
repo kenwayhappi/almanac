@@ -75,6 +75,12 @@ class VillageDashboardController extends Controller
             $data['chief_achievements'] = null;
             $data['chief_image'] = null;
         } else {
+            if (!empty($data['chef_village'])) {
+                $data['chef_village'] = \App\Helpers\FormatHelper::formatChefName($data['chef_village']);
+            }
+            if (!empty($data['current_chief'])) {
+                $data['current_chief'] = \App\Helpers\FormatHelper::formatChefName($data['current_chief']);
+            }
             if ($request->hasFile('chief_image')) {
                 $data['chief_image'] = CloudinaryHelper::upload($request->file('chief_image'), 'villages/chiefs');
             }
@@ -82,6 +88,22 @@ class VillageDashboardController extends Controller
 
         if ($request->hasFile('village_image')) {
             $data['village_image'] = CloudinaryHelper::upload($request->file('village_image'), 'villages/images');
+        }
+
+        // Processing carousel images (max 4)
+        if ($request->hasFile('carousel_images')) {
+            $carousel = [];
+            foreach (array_slice($request->file('carousel_images'), 0, 4) as $cImg) {
+                if ($cImg) {
+                    $uploaded = CloudinaryHelper::upload($cImg, 'villages/carousel');
+                    if ($uploaded) {
+                        $carousel[] = $uploaded;
+                    }
+                }
+            }
+            if (!empty($carousel)) {
+                $data['carousel_images'] = $carousel;
+            }
         }
 
         $village = Village::create($data);
@@ -142,6 +164,12 @@ class VillageDashboardController extends Controller
             $data['chief_achievements'] = null;
             $data['chief_image'] = null;
         } else {
+            if (!empty($data['chef_village'])) {
+                $data['chef_village'] = \App\Helpers\FormatHelper::formatChefName($data['chef_village']);
+            }
+            if (!empty($data['current_chief'])) {
+                $data['current_chief'] = \App\Helpers\FormatHelper::formatChefName($data['current_chief']);
+            }
             if ($request->hasFile('chief_image')) {
                 CloudinaryHelper::delete($village->chief_image);
                 $data['chief_image'] = CloudinaryHelper::upload($request->file('chief_image'), 'villages/chiefs');
@@ -151,6 +179,19 @@ class VillageDashboardController extends Controller
         if ($request->hasFile('village_image')) {
             CloudinaryHelper::delete($village->village_image);
             $data['village_image'] = CloudinaryHelper::upload($request->file('village_image'), 'villages/images');
+        }
+
+        if ($request->hasFile('carousel_images')) {
+            $carousel = is_array($village->carousel_images) ? $village->carousel_images : [];
+            foreach (array_slice($request->file('carousel_images'), 0, 4) as $cImg) {
+                if ($cImg) {
+                    $uploaded = CloudinaryHelper::upload($cImg, 'villages/carousel');
+                    if ($uploaded) {
+                        $carousel[] = $uploaded;
+                    }
+                }
+            }
+            $data['carousel_images'] = array_slice($carousel, 0, 4);
         }
 
         $village->update($data);

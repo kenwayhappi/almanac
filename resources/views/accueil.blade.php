@@ -11,7 +11,7 @@
         <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-bold mb-3">
           <i class="fas fa-landmark me-1"></i> Patrimoine & Culture Africaine
         </span>
-        <h1 class="font-serif fw-extrabold display-4 mb-4" style="line-height: 1.15;">
+        <h1 class="font-serif fw-extrabold mb-4" style="line-height: 1.25; font-size: calc(1.35rem + 1.2vw);">
           Découvrez la Richesse Historique et Démographique de nos <span class="text-success">Villages</span>.
         </h1>
         <p class="lead text-muted mb-4 fs-5">
@@ -31,15 +31,15 @@
           </form>
         </div>
 
-        <!-- Quick Stats -->
+        <!-- Quick Stats (Order: Groupement/Canton first, then Village, then Personnalité) -->
         <div class="row g-3 pt-2 text-center text-sm-start">
-          <div class="col-4">
-            <h3 class="fw-bold font-serif mb-0 text-success">{{ number_format($totalVillages ?? 0) }}+</h3>
-            <small class="text-muted fw-semibold">Villages Répertoriés</small>
-          </div>
           <div class="col-4">
             <h3 class="fw-bold font-serif mb-0 text-success">{{ number_format($totalGroupements ?? 0) }}+</h3>
             <small class="text-muted fw-semibold">Groupements / Cantons</small>
+          </div>
+          <div class="col-4">
+            <h3 class="fw-bold font-serif mb-0 text-success">{{ number_format($totalVillages ?? 0) }}+</h3>
+            <small class="text-muted fw-semibold">Villages Répertoriés</small>
           </div>
           <div class="col-4">
             <h3 class="fw-bold font-serif mb-0 text-warning">{{ number_format($totalPersonalities ?? 0) }}+</h3>
@@ -92,8 +92,7 @@
                 {{ $ad->type }}
               </span>
             </div>
-            <h6 class="fw-bold font-serif text-truncate mb-1">{{ $ad->title ?? 'Offre Sponsorisée' }}</h6>
-            <small class="text-success fw-semibold"><i class="fas fa-external-link-alt me-1"></i> Ouvrir la publicité</small>
+            <h6 class="fw-bold font-serif text-truncate mb-0 text-center">{{ $ad->title ?? 'Offre Sponsorisée' }}</h6>
           </div>
         </div>
       @endforeach
@@ -107,7 +106,7 @@
 <section class="py-5">
   <div class="container">
     <div class="text-center max-w-2xl mx-auto mb-5">
-      <h2 class="font-serif fw-bold mb-3">Groupements & Cantons par Territoire</h2>
+      <h2 class="font-serif fw-bold mb-3">Groupements ou Cantons par Territoire</h2>
       <p class="text-muted">Parcourez les structures traditionnelles et les cantons organisés par pays.</p>
     </div>
 

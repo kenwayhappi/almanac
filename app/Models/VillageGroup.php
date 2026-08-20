@@ -17,9 +17,14 @@ class VillageGroup extends Model
         'parent_id',
         'chef_image',
         'image',
+        'carousel_images',
     ];
 
-    protected $appends = ['image_url', 'chef_image_url'];
+    protected $casts = [
+        'carousel_images' => 'array',
+    ];
+
+    protected $appends = ['image_url', 'chef_image_url', 'carousel_image_urls'];
 
     public function parent()
     {
@@ -43,11 +48,27 @@ class VillageGroup extends Model
 
     public function getImageUrlAttribute()
     {
-        return $this->image ? url('storage/' . $this->image) : null;
+        return $this->image ? \App\Helpers\CloudinaryHelper::url($this->image) : null;
     }
 
     public function getChefImageUrlAttribute()
     {
-        return $this->chef_image ? url('storage/' . $this->chef_image) : null;
+        return $this->chef_image ? \App\Helpers\CloudinaryHelper::url($this->chef_image) : null;
+    }
+
+    public function getCarouselImageUrlsAttribute()
+    {
+        $urls = [];
+        if (!empty($this->carousel_images) && is_array($this->carousel_images)) {
+            foreach ($this->carousel_images as $img) {
+                if ($img) {
+                    $urls[] = \App\Helpers\CloudinaryHelper::url($img);
+                }
+            }
+        }
+        if (empty($urls) && $this->image) {
+            $urls[] = \App\Helpers\CloudinaryHelper::url($this->image);
+        }
+        return $urls;
     }
 }

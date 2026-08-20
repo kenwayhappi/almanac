@@ -691,6 +691,7 @@ CREATE TABLE IF NOT EXISTS "villages" (
   "chief_interventions" text,
   "village_history" text,
   "historical_dynasty" text,
+  "carousel_images" text DEFAULT NULL,
   PRIMARY KEY ("id")
 );
 
@@ -723,6 +724,7 @@ CREATE TABLE IF NOT EXISTS "village_groups" (
   "histoire" text,
   "chef_image" varchar(255) DEFAULT NULL,
   "image" varchar(255) DEFAULT NULL,
+  "carousel_images" text DEFAULT NULL,
   "parent_id" BIGINT NOT NULL,
   "created_at" timestamp NULL DEFAULT NULL,
   "updated_at" timestamp NULL DEFAULT NULL,
@@ -734,9 +736,9 @@ CREATE TABLE IF NOT EXISTS "village_groups" (
 --
 
 INSERT INTO "village_groups" ("id", "name", "description", "chef_groupement", "histoire", "chef_image", "image", "parent_id", "created_at", "updated_at") VALUES
-(23, 'Canton Bandjoun', 'Chefferie supérieure bamiléké majeure du Cameroun, réputée pour sa Grande Chefferie d''Hsem et son patrimoine culturel traditionnel.', 'S.M. Honoré Djomo Kamga', NULL, 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80', 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=800&q=80', 305, '2026-07-21 22:57:44', '2026-07-21 22:57:44'),
+(23, 'Groupement Bandjoun', 'Chefferie supérieure bamiléké majeure du Cameroun, réputée pour sa Grande Chefferie d''Hsem et son patrimoine culturel traditionnel.', 'S.M. Honoré Djomo Kamga', NULL, 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80', 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=800&q=80', 305, '2026-07-21 22:57:44', '2026-07-21 22:57:44'),
 (24, 'Canton Akonolinga', 'Canton historique du Nyong-et-Mfoumou, berceau des coutumes et traditions forestières Ekang.', 'S.M. Raymond Ndongo', NULL, 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80', 305, '2026-07-21 22:57:44', '2026-07-21 22:57:44'),
-(25, 'Canton Bandjoun', 'Chefferie supérieure bamiléké majeure du Cameroun, réputée pour sa Grande Chefferie d''Hsem et son patrimoine culturel traditionnel.', 'S.M. Honoré Djomo Kamga', NULL, 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80', 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=800&q=80', 305, '2026-07-21 22:58:01', '2026-07-21 22:58:01'),
+(25, 'Groupement Bandjoun', 'Chefferie supérieure bamiléké majeure du Cameroun, réputée pour sa Grande Chefferie d''Hsem et son patrimoine culturel traditionnel.', 'S.M. Honoré Djomo Kamga', NULL, 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80', 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=800&q=80', 305, '2026-07-21 22:58:01', '2026-07-21 22:58:01'),
 (26, 'Canton Akonolinga', 'Canton historique du Nyong-et-Mfoumou, berceau des coutumes et traditions forestières Ekang.', 'S.M. Raymond Ndongo', NULL, 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80', 389, '2026-07-21 22:58:01', '2026-07-21 23:36:41'),
 (27, 'Chefferie Supérieure Bafang', 'La chefferie supérieure de Bafang est un groupement traditionnel majeur du département du Haut-Nkam.', 'SM Kameni René', 'Le groupement Bafang tire son origine de la grande dynastie Bamiléké, reconnue pour ses traditions séculaires, son commerce et son agriculture dynamique. Il est classé chefferie de 2ème degré.', NULL, NULL, 529, '2026-07-22 10:47:55', '2026-07-22 10:47:55'),
 (28, 'Chefferie Supérieure Foréké-Dschang', 'Groupement majeur de l''arrondissement de Dschang, pôle historique et universitaire.', 'SM Djoumessi III Wamba', 'La chefferie Foréké-Dschang est un haut lieu d''histoire et de culture de la Menoua. Elle abrite une partie de la ville universitaire de Dschang et est impliquée dans la Route des Chefferies.', NULL, NULL, 542, '2026-07-22 10:50:37', '2026-07-22 10:50:37');

@@ -33,7 +33,7 @@
         <form action="{{ route('recherche') }}" method="GET" id="searchFilterForm">
           <!-- Type selector (Compact & Elegant on Desktop) -->
           <div class="mb-3">
-            <label class="form-label small fw-bold text-uppercase text-muted">Type de recherche</label>
+            <label class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-list me-1"></i> Type de recherche</label>
             <input type="hidden" name="searchType" id="searchTypeInput" value="{{ $searchType ?? 'villages' }}">
             <div class="btn-group btn-group-sm w-100" role="group">
               <button type="button" class="btn btn-sm btn-outline-success rounded-start-pill py-1 px-3 fw-bold {{ ($searchType ?? 'villages') === 'villages' ? 'active' : '' }}" id="tabBtnVillages" onclick="switchSearchTab('villages')">
@@ -47,7 +47,7 @@
 
           <!-- Keyword Search -->
           <div class="mb-3">
-            <label for="nameInput" class="form-label small fw-bold text-uppercase text-muted">Nom / Mot-clé</label>
+            <label for="nameInput" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-font me-1"></i> Nom / Mot-clé</label>
             <div class="input-group">
               <span class="input-group-text bg-body border-end-0"><i class="fas fa-search text-muted"></i></span>
               <input type="text" class="form-control border-start-0" id="nameInput" name="name" value="{{ request('name') ?? request('search') }}" placeholder="Ex: Yaoundé, Bandjoun...">
@@ -56,7 +56,7 @@
 
           <!-- Country Filter (Cascade Trigger) -->
           <div class="mb-3">
-            <label for="paysSelect" class="form-label small fw-bold text-uppercase text-muted">Pays</label>
+            <label for="paysSelect" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-globe me-1"></i> Pays</label>
             <select class="form-select" id="paysSelect" name="pays">
               <option value="">Tous les pays</option>
               @foreach($countries as $c)
@@ -67,7 +67,7 @@
 
           <!-- Division 1: Région (AJAX Cascade) -->
           <div class="mb-3" id="regionContainer" style="{{ request('pays') ? 'display:block;' : 'display:none;' }}">
-            <label for="division1Select" class="form-label small fw-bold text-uppercase text-muted">Région</label>
+            <label for="division1Select" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-map-marked-alt me-1"></i> Région</label>
             <select class="form-select" id="division1Select" name="division1">
               <option value="">Toutes les régions</option>
             </select>
@@ -75,7 +75,7 @@
 
           <!-- Division 2: Département (AJAX Cascade) -->
           <div class="mb-3" id="departementContainer" style="display:none;">
-            <label for="division2Select" class="form-label small fw-bold text-uppercase text-muted">Département</label>
+            <label for="division2Select" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-map-pin me-1"></i> Département</label>
             <select class="form-select" id="division2Select" name="division2">
               <option value="">Tous les départements</option>
             </select>
@@ -83,7 +83,7 @@
 
           <!-- Division 3: Arrondissement (AJAX Cascade) -->
           <div class="mb-3" id="arrondissementContainer" style="display:none;">
-            <label for="arrondissementSelect" class="form-label small fw-bold text-uppercase text-muted">Arrondissement</label>
+            <label for="arrondissementSelect" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-city me-1"></i> Arrondissement</label>
             <select class="form-select" id="arrondissementSelect" name="arrondissement">
               <option value="">Tous les arrondissements</option>
             </select>
@@ -91,7 +91,7 @@
 
           <!-- Groupement de Rattachement Filter -->
           <div class="mb-4">
-            <label for="groupementSelect" class="form-label small fw-bold text-uppercase text-muted">Groupement de Rattachement</label>
+            <label for="groupementSelect" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-layer-group me-1"></i> Groupement / Canton</label>
             <select class="form-select" id="groupementSelect" name="division3">
               <option value="">Tous les groupements</option>
               @if(isset($allGroupements))
@@ -138,7 +138,6 @@
                 @endif
               </div>
               <h6 class="fw-bold small text-truncate mb-1">{{ $ad->title ?? 'Voir l\'annonce' }}</h6>
-              <small class="text-success fw-semibold"><i class="fas fa-external-link-alt me-1"></i> Cliquer pour consulter</small>
             </div>
           @endforeach
         </div>
@@ -182,7 +181,6 @@
                 </span>
               </div>
               <h6 class="fw-bold font-serif text-truncate mb-1">{{ $ad->title ?? 'Voir l\'offre sponsorisée' }}</h6>
-              <small class="text-success fw-semibold"><i class="fas fa-external-link-alt me-1"></i> Ouvrir l'annonce</small>
             </div>
           @endforeach
         </div>
@@ -201,11 +199,16 @@
         @if($villages->count() > 0)
           <div class="row g-4">
             @foreach($villages as $v)
+              @php
+                $vCleanName = \App\Helpers\FormatHelper::cleanVillageName($v->name);
+                $vUrl = route('village.show', $v->id . '-' . Str::slug($v->name));
+                $vChefFormatted = \App\Helpers\FormatHelper::formatChefName($v->chef_village);
+              @endphp
               <div class="col-md-6 col-xl-4">
-                <div class="custom-card h-100 d-flex flex-column overflow-hidden">
+                <div class="custom-card h-100 d-flex flex-column overflow-hidden cursor-pointer" onclick="window.location.href='{{ $vUrl }}'" style="transition: transform .2s ease, box-shadow .2s ease;">
                   <div class="position-relative" style="height: 180px; background-color: #1e293b;">
                     @if($v->village_image)
-                      <img src="{{ Storage::url($v->village_image) }}" alt="{{ $v->name }}" class="w-100 h-100" style="object-fit: cover;">
+                      <img src="{{ Storage::url($v->village_image) }}" alt="{{ $vCleanName }}" class="w-100 h-100" style="object-fit: cover;">
                     @else
                       <div class="d-flex flex-column align-items-center justify-content-center h-100 text-white opacity-50">
                         <i class="fas fa-tree fs-1 mb-2"></i>
@@ -218,21 +221,18 @@
                   </div>
 
                   <div class="p-4 d-flex flex-column flex-grow-1">
-                    <h5 class="fw-bold font-serif mb-2">{{ $v->name }}</h5>
-                    <p class="small text-muted mb-3 flex-grow-1">
+                    <h5 class="fw-bold font-serif mb-2 text-center text-success">{{ $vCleanName }}</h5>
+                    <p class="small text-muted mb-3 flex-grow-1 text-center">
                       {{ Str::limit($v->description ?? $v->histoire ?? 'Village traditionnel riche en histoire et coutumes.', 90) }}
                     </p>
 
                     <div class="border-top pt-3 mt-auto">
-                      <div class="d-flex justify-content-between align-items-center small text-muted mb-3">
+                      <div class="d-flex justify-content-between align-items-center small text-muted">
                         <span><i class="fas fa-layer-group text-success me-1"></i> {{ $v->villageGroup->name ?? 'Groupement' }}</span>
-                        @if($v->chef_village)
-                          <span class="text-wrap text-end" style="word-break: break-word; max-width: 60%;" title="{{ $v->chef_village }}"><i class="fas fa-user-shield text-warning me-1"></i> {{ $v->chef_village }}</span>
+                        @if($vChefFormatted)
+                          <span class="text-wrap text-end" style="word-break: break-word; max-width: 60%;" title="{{ $vChefFormatted }}"><i class="fas fa-user-shield text-warning me-1"></i> {{ $vChefFormatted }}</span>
                         @endif
                       </div>
-                      <a href="{{ route('village.show', $v->id . '-' . Str::slug($v->name)) }}" class="btn btn-sm btn-outline-success w-100 rounded-pill font-semibold">
-                        Voir la fiche complète <i class="fas fa-arrow-right ms-1"></i>
-                      </a>
                     </div>
                   </div>
                 </div>

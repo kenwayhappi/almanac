@@ -178,9 +178,13 @@
               </div>
             </div>
 
-            <div class="col-md-12">
-              <label class="form-label small fw-bold text-uppercase text-muted">Photo de la Localité</label>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-uppercase text-muted">Photo de Couverture</label>
               <input type="file" name="village_image" class="form-control py-2" accept="image/*">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-uppercase text-muted">Photos Carrousel (Max 4)</label>
+              <input type="file" name="carousel_images[]" class="form-control py-2" accept="image/*" multiple>
             </div>
             <div class="col-12">
               <label class="form-label small fw-bold text-uppercase text-muted">Description / Présentation</label>
@@ -202,7 +206,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><h5 class="modal-title fw-bold font-serif"><i class="fas fa-pen text-warning me-2"></i> Éditer la Localité</h5>
+        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-pen text-warning me-2"></i> Éditer la Localité</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form id="formEditVillage" method="POST" enctype="multipart/form-data">
@@ -218,20 +222,20 @@
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label small fw-bold text-uppercase text-muted">Nom de la Localité</label>
+              <label class="form-label small fw-bold text-uppercase text-muted">Nom de la Localité <span class="text-danger">*</span></label>
               <input type="text" id="edit_name" name="name" class="form-control py-2" required>
             </div>
             <div class="col-md-6">
-              <label class="form-label small fw-bold text-uppercase text-muted">Groupement</label>
-              <select id="edit_groupement_id" name="village_group_id" class="form-select py-2" required>
+              <label class="form-label small fw-bold text-uppercase text-muted">Groupement / Canton <span class="text-danger">*</span></label>
+              <select id="edit_village_group_id" name="village_group_id" class="form-select py-2" required>
                 @foreach($allGroupements as $g)
                   <option value="{{ $g->id }}">{{ $g->name }}</option>
                 @endforeach
               </select>
             </div>
             <div class="col-md-6">
-              <label class="form-label small fw-bold text-uppercase text-muted">Population</label>
-              <input type="number" id="edit_pop" name="population" class="form-control py-2">
+              <label class="form-label small fw-bold text-uppercase text-muted">Population estimée</label>
+              <input type="number" id="edit_population" name="population" class="form-control py-2">
             </div>
 
             <!-- Wrapper for Edit Chef fields -->
@@ -246,9 +250,13 @@
               </div>
             </div>
 
-            <div class="col-md-12">
-              <label class="form-label small fw-bold text-uppercase text-muted">Remplacer Photo Localité</label>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-uppercase text-muted">Remplacer Photo Couverture</label>
               <input type="file" name="village_image" class="form-control py-2" accept="image/*">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-uppercase text-muted">Ajouter Photos Carrousel (Max 4)</label>
+              <input type="file" name="carousel_images[]" class="form-control py-2" accept="image/*" multiple>
             </div>
             <div class="col-12">
               <label class="form-label small fw-bold text-uppercase text-muted">Description</label>
