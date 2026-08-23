@@ -344,45 +344,62 @@ class VillageDashboardController extends Controller
         Log::info('Search Request Parameters', $request->all());
 
         $countries = Country::all();
-        $allGroupements = VillageGroup::select('id', 'name')->get();
         $villages = collect([]);
         $groupements = collect([]);
         $searchType = $request->input('searchType', 'villages');
         $keyword = $request->input('name') ?: $request->input('search');
 
-        $div1 = $request->input('division1');
-        $div2 = $request->input('division2');
-        $arrond = $request->input('arrondissement');
-        $groupementId = $request->input('division3');
+        $paysId = $request->input('pays');
+        $div1 = $request->input('division1'); // Région
+        $div2 = $request->input('division2'); // Département
+        $arrond = $request->input('arrondissement'); // Arrondissement
+        $groupementId = $request->input('division3') ?: $request->input('groupement_id'); // Groupement
+        $villageId = $request->input('village_id'); // Village spécifique
 
         // Requête pour les villages
         $villageQuery = Village::query()->with('villageGroup');
 
         if (!empty($keyword)) {
-            $villageQuery->where('name', 'like', '%' . $keyword . '%');
+            $villageQuery->where(function($q) use ($keyword) {
+                $q->where('name', 'like', '%' . $keyword . '%')
+                  ->orWhere('chef_village', 'like', '%' . $keyword . '%')
+                  ->orWhere('description', 'like', '%' . $keyword . '%');
+            });
         }
 
-        if ($groupementId) {
+        if ($villageId) {
+            $villageQuery->where('id', $villageId);
+        } elseif ($groupementId) {
             $villageQuery->where('village_group_id', $groupementId);
-        } else if ($arrond) {
+        } elseif ($arrond) {
             $villageQuery->whereHas('villageGroup', function ($q) use ($arrond) {
                 $q->where('parent_id', $arrond);
             });
-        } else if ($div2) {
+        } elseif ($div2) {
             $villageQuery->whereHas('villageGroup.parent', function ($q) use ($div2) {
                 $q->where('id', $div2)->orWhere('parent_id', $div2);
             });
-        } else if ($div1) {
+        } elseif ($div1) {
             $villageQuery->whereHas('villageGroup.parent', function ($q) use ($div1) {
                 $q->where('id', $div1)
                   ->orWhere('parent_id', $div1)
                   ->orWhereHas('parent', function($q2) use ($div1) {
-                      $q2->where('parent_id', $div1);
+                      $q2->where('id', $div1)->orWhere('parent_id', $div1);
+                  });
+            });
+        } elseif ($paysId) {
+            $villageQuery->whereHas('villageGroup.parent', function ($q) use ($paysId) {
+                $q->where('country_id', $paysId)
+                  ->orWhereHas('parent', function($q2) use ($paysId) {
+                      $q2->where('country_id', $paysId)
+                         ->orWhereHas('parent', function($q3) use ($paysId) {
+                             $q3->where('country_id', $paysId);
+                         });
                   });
             });
         }
 
-        $villages = $villageQuery->paginate(4, ['*'], 'villages_page')->withQueryString();
+        $villages = $villageQuery->paginate(6, ['*'], 'villages_page')->withQueryString();
 
         // Requête pour les groupements
         $groupementQuery = VillageGroup::query()->withCount('villages');
@@ -397,23 +414,33 @@ class VillageDashboardController extends Controller
 
         if ($groupementId) {
             $groupementQuery->where('id', $groupementId);
-        } else if ($arrond) {
+        } elseif ($arrond) {
             $groupementQuery->where('parent_id', $arrond);
-        } else if ($div2) {
+        } elseif ($div2) {
             $groupementQuery->whereHas('parent', function ($q) use ($div2) {
                 $q->where('id', $div2)->orWhere('parent_id', $div2);
             });
-        } else if ($div1) {
+        } elseif ($div1) {
             $groupementQuery->whereHas('parent', function ($q) use ($div1) {
                 $q->where('id', $div1)
                   ->orWhere('parent_id', $div1)
                   ->orWhereHas('parent', function($q2) use ($div1) {
-                      $q2->where('parent_id', $div1);
+                      $q2->where('id', $div1)->orWhere('parent_id', $div1);
+                  });
+            });
+        } elseif ($paysId) {
+            $groupementQuery->whereHas('parent', function ($q) use ($paysId) {
+                $q->where('country_id', $paysId)
+                  ->orWhereHas('parent', function($q2) use ($paysId) {
+                      $q2->where('country_id', $paysId)
+                         ->orWhereHas('parent', function($q3) use ($paysId) {
+                             $q3->where('country_id', $paysId);
+                         });
                   });
             });
         }
 
-        $groupements = $groupementQuery->paginate(4, ['*'], 'groupements_page')->withQueryString();
+        $groupements = $groupementQuery->paginate(6, ['*'], 'groupements_page')->withQueryString();
 
         $advertisements = Advertisement::where('position', 'rechercher')
             ->whereIn('type', ['video', 'photo', 'pdf', 'text'])
@@ -431,7 +458,6 @@ class VillageDashboardController extends Controller
             'villages',
             'groupements',
             'countries',
-            'allGroupements',
             'advertisements',
             'initialAds',
             'searchType',

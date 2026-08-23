@@ -51,6 +51,7 @@ Route::post('/publicite/{id}/track-view', [App\Http\Controllers\Api\Advertisemen
 Route::get('/api/divisions/country/{countryId}', [App\Http\Controllers\Api\DivisionController::class, 'getRegionsByCountry'])->name('api.divisions.country');
 Route::get('/api/divisions/parent/{parentId}', [App\Http\Controllers\Api\DivisionController::class, 'getChildrenByParent'])->name('api.divisions.parent');
 Route::get('/api/divisions/groupements/{divisionId}', [App\Http\Controllers\Api\DivisionController::class, 'getGroupementsByDivision'])->name('api.divisions.groupements');
+Route::get('/api/divisions/villages', [App\Http\Controllers\Api\DivisionController::class, 'getVillagesByGroupOrDivision'])->name('api.divisions.villages');
 
 // Routes publiques Fiches (Page Unique Monopage)
 Route::prefix('village')->group(function () {

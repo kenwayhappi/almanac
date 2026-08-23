@@ -69,4 +69,28 @@ class DivisionController extends Controller
             'groupements' => $groupements
         ]);
     }
+
+    /**
+     * Get Villages under a Groupement or Division
+     */
+    public function getVillagesByGroupOrDivision(Request $request)
+    {
+        $groupId = $request->input('village_group_id');
+        $divisionId = $request->input('division_id');
+
+        $query = \App\Models\Village::query()->select('id', 'name', 'village_group_id')->orderBy('name', 'asc');
+
+        if ($groupId) {
+            $query->where('village_group_id', $groupId);
+        } elseif ($divisionId) {
+            $query->whereHas('villageGroup', function ($q) use ($divisionId) {
+                $q->where('parent_id', $divisionId);
+            });
+        }
+
+        return response()->json([
+            'success' => true,
+            'villages' => $query->get()
+        ]);
+    }
 }

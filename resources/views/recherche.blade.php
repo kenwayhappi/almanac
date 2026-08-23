@@ -3,6 +3,34 @@
 @section('title', 'Moteur de Recherche - Almanac')
 
 @section('content')
+<style>
+  .search-result-card {
+    cursor: pointer !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease !important;
+    border: 1px solid rgba(22, 163, 74, 0.15) !important;
+    position: relative;
+    overflow: hidden;
+  }
+  .search-result-card:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: 0 16px 32px rgba(22, 163, 74, 0.18), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    border-color: rgba(22, 163, 74, 0.6) !important;
+  }
+  .search-result-card .card-img-wrapper img {
+    transition: transform 0.4s ease;
+  }
+  .search-result-card:hover .card-img-wrapper img {
+    transform: scale(1.08);
+  }
+  .search-result-card .hover-action-btn {
+    transition: all 0.25s ease;
+  }
+  .search-result-card:hover .hover-action-btn {
+    background-color: var(--bs-success, #16a34a) !important;
+    color: #fff !important;
+    transform: scale(1.05);
+  }
+</style>
 <div class="container pt-2 pb-4 py-md-4">
   <!-- Search Hero Header -->
   <div class="custom-card p-3 p-md-5 mb-3 mb-md-4 text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(22, 163, 74, 0.08), rgba(15, 23, 42, 0.03)); border-color: rgba(22, 163, 74, 0.2);">
@@ -82,23 +110,10 @@
           </div>
 
           <!-- Division 3: Arrondissement (AJAX Cascade) -->
-          <div class="mb-3" id="arrondissementContainer" style="display:none;">
+          <div class="mb-4" id="arrondissementContainer" style="display:none;">
             <label for="arrondissementSelect" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-city me-1"></i> Arrondissement</label>
             <select class="form-select" id="arrondissementSelect" name="arrondissement">
               <option value="">Tous les arrondissements</option>
-            </select>
-          </div>
-
-          <!-- Groupement de Rattachement Filter -->
-          <div class="mb-4">
-            <label for="groupementSelect" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-layer-group me-1"></i> Groupement / Canton</label>
-            <select class="form-select" id="groupementSelect" name="division3">
-              <option value="">Tous les groupements</option>
-              @if(isset($allGroupements))
-                @foreach($allGroupements as $g)
-                  <option value="{{ $g->id }}" {{ request('division3') == $g->id ? 'selected' : '' }}>{{ $g->name }}</option>
-                @endforeach
-              @endif
             </select>
           </div>
 
@@ -205,8 +220,8 @@
                 $vChefFormatted = \App\Helpers\FormatHelper::formatChefName($v->chef_village);
               @endphp
               <div class="col-md-6 col-xl-4">
-                <div class="custom-card h-100 d-flex flex-column overflow-hidden cursor-pointer" onclick="window.location.href='{{ $vUrl }}'" style="transition: transform .2s ease, box-shadow .2s ease;">
-                  <div class="position-relative" style="height: 180px; background-color: #1e293b;">
+                <div class="custom-card search-result-card h-100 d-flex flex-column" onclick="window.location.href='{{ $vUrl }}'">
+                  <div class="position-relative card-img-wrapper overflow-hidden" style="height: 180px; background-color: #1e293b;">
                     @if($v->village_image)
                       <img src="{{ Storage::url($v->village_image) }}" alt="{{ $vCleanName }}" class="w-100 h-100" style="object-fit: cover;">
                     @else
@@ -217,6 +232,9 @@
                     @endif
                     <span class="position-absolute top-0 end-0 m-3 badge bg-dark bg-opacity-75 backdrop-blur rounded-pill">
                       <i class="fas fa-users me-1 text-warning"></i> {{ number_format($v->population ?? 0) }} hab.
+                    </span>
+                    <span class="position-absolute bottom-0 start-0 m-2 badge bg-success bg-opacity-90 rounded-pill small">
+                      <i class="fas fa-eye me-1"></i> Découvrir
                     </span>
                   </div>
 
@@ -271,8 +289,11 @@
         @if($groupements->count() > 0)
           <div class="row g-4">
             @foreach($groupements as $g)
+              @php
+                $gUrl = route('groupement.show', $g->id . '-' . Str::slug($g->name));
+              @endphp
               <div class="col-md-6 col-xl-4">
-                <div class="custom-card h-100 p-4 d-flex flex-column">
+                <div class="custom-card search-result-card h-100 p-4 d-flex flex-column" onclick="window.location.href='{{ $gUrl }}'">
                   <div class="d-flex align-items-center gap-3 mb-3">
                     <div class="rounded-circle bg-success bg-opacity-10 text-success p-3 d-flex align-items-center justify-content-center" style="width:50px;height:50px;">
                       <i class="fas fa-layer-group fs-4"></i>
@@ -289,9 +310,9 @@
 
                   <div class="border-top pt-3 mt-auto d-flex justify-content-between align-items-center">
                     <span class="small text-muted"><i class="fas fa-home me-1 text-success"></i> {{ $g->villages_count ?? 0 }} village(s)</span>
-                    <a href="{{ route('groupement.show', $g->id . '-' . Str::slug($g->name)) }}" class="btn btn-sm btn-accent rounded-pill px-3">
-                      Découvrir
-                    </a>
+                    <span class="btn btn-sm btn-accent rounded-pill px-3 hover-action-btn">
+                      Découvrir <i class="fas fa-arrow-right ms-1"></i>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -323,7 +344,12 @@
 
 @section('scripts')
 <script>
-  // Smooth Tab Switcher (Villages / Groupements) without page refresh or jumping
+  const selectedCountry = "{{ request('pays') }}" || $('#paysSelect').val() || '237';
+  const selectedDiv1 = "{{ request('division1') }}";
+  const selectedDiv2 = "{{ request('division2') }}";
+  const selectedDiv3 = "{{ request('arrondissement') }}";
+
+  // Smooth Tab Switcher (Villages / Groupements) without page refresh
   function switchSearchTab(type) {
     document.getElementById('searchTypeInput').value = type;
 
@@ -340,7 +366,7 @@
     }
   }
 
-  // Dynamic AJAX Cascading Dropdowns for Country -> Region (Division 1) -> Department (Division 2) -> Groupement
+  // Dynamic AJAX Cascading Dropdowns: Country -> Region -> Department -> Arrondissement
   $(document).ready(function(){
     $(".ad-top-carousel, .ad-sidebar-carousel").owlCarousel({
       items: 1,
@@ -352,12 +378,7 @@
       dots: true
     });
 
-    const selectedCountry = $('#paysSelect').val() || 237;
-    const selectedDiv1 = "{{ request('division1') }}";
-    const selectedDiv2 = "{{ request('division2') }}";
-    const selectedDiv3 = "{{ request('arrondissement') }}";
-
-    // Auto-load Cameroun regions on load
+    // Auto-load Cameroon divisions on page load
     loadRegions(selectedCountry, selectedDiv1);
 
     $('#paysSelect').on('change', function() {
@@ -366,7 +387,7 @@
         loadRegions(countryId);
       } else {
         $('#regionContainer, #departementContainer, #arrondissementContainer').hide();
-        $('#division1Select, #division2Select, #arrondissementSelect').empty().append('<option value="">Toutes</option>');
+        $('#division1Select, #division2Select, #arrondissementSelect').empty().append('<option value="">Tous</option>');
       }
     });
 
@@ -387,13 +408,6 @@
       } else {
         $('#arrondissementContainer').hide();
         $('#arrondissementSelect').empty().append('<option value="">Tous</option>');
-      }
-    });
-
-    $('#arrondissementSelect').on('change', function() {
-      const divisionId = $(this).val();
-      if (divisionId) {
-        loadGroupements(divisionId);
       }
     });
 
@@ -460,22 +474,6 @@
             $('#arrondissementContainer').slideDown(200);
           } else {
             $('#arrondissementContainer').hide();
-          }
-        }
-      });
-    }
-
-    function loadGroupements(divisionId) {
-      $.ajax({
-        url: '/api/divisions/groupements/' + divisionId,
-        method: 'GET',
-        success: function(res) {
-          if (res.success && res.groupements.length > 0) {
-            let options = '<option value="">Tous les groupements</option>';
-            res.groupements.forEach(function(g) {
-              options += `<option value="${g.id}">${g.name}</option>`;
-            });
-            $('#groupementSelect').html(options);
           }
         }
       });
