@@ -1,4 +1,1 @@
-/* Ensure Tailwind CSS is installed and configured */
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import "tailwindcss";
