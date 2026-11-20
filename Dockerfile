@@ -27,14 +27,28 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy application code
+# Copy composer files first (better Docker layer caching)
+COPY composer.json composer.lock ./
+
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+
+# Copy package files and install Node dependencies
+COPY package.json vite.config.js ./
+
+RUN npm install
+
+# Copy the rest of the application code
 COPY . .
 
-# Install dependencies and build assets
-RUN composer install --no-dev --optimize-autoloader --no-interaction \
-    && npm ci || npm install \
-    && npm run build \
-    && php artisan storage:link || true
+# Re-run composer scripts (package:discover, etc.)
+RUN composer dump-autoload --optimize --no-interaction
+
+# Build frontend assets (Vite + Tailwind)
+RUN npm run build
+
+# Create storage link
+RUN php artisan storage:link || true
 
 # Copy server configs
 COPY docker/nginx.conf /etc/nginx/nginx.conf
@@ -44,11 +58,17 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chmod +x /var/www/html/docker/entrypoint.sh
 
 # Permissions
-RUN mkdir -p storage/framework/views storage/framework/sessions storage/framework/cache/data storage/logs \
+RUN mkdir -p storage/framework/views storage/framework/sessions storage/framework/cache/data storage/logs bootstrap/cache \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-EXPOSE 8080
+# PHP OPcache production settings
+RUN echo 'opcache.enable=1' >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
+    && echo 'opcache.memory_consumption=128' >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
+    && echo 'opcache.max_accelerated_files=10000' >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
+    && echo 'opcache.validate_timestamps=0' >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
+
+EXPOSE 10000
 
 ENTRYPOINT ["/var/www/html/docker/entrypoint.sh"]
 

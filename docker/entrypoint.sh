@@ -1,9 +1,9 @@
 #!/bin/sh
 set -e
 
-# Substitute PORT into nginx configuration if set by Render
-PORT="${PORT:-8080}"
-sed -i "s/listen 8080;/listen ${PORT};/g" /etc/nginx/nginx.conf
+# Render uses PORT env variable (default 10000)
+PORT="${PORT:-10000}"
+sed -i "s/listen [0-9]*;/listen ${PORT};/g" /etc/nginx/nginx.conf
 
 # Ensure storage directories exist and have permissions
 mkdir -p /var/www/html/storage/framework/views \
@@ -16,9 +16,19 @@ chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Clear cached configs to ensure runtime environment variables are read
-php artisan config:clear || true
-php artisan cache:clear || true
-php artisan route:clear || true
-php artisan view:clear || true
+php artisan config:clear 2>/dev/null || true
+php artisan cache:clear 2>/dev/null || true
+php artisan route:clear 2>/dev/null || true
+php artisan view:clear 2>/dev/null || true
+
+# Cache config and routes for production performance
+php artisan config:cache 2>/dev/null || true
+php artisan route:cache 2>/dev/null || true
+php artisan view:cache 2>/dev/null || true
+
+# Run migrations automatically (safe with --force)
+php artisan migrate --force 2>/dev/null || true
+
+echo "==> Almanach Laravel ready on port ${PORT}"
 
 exec "$@"
