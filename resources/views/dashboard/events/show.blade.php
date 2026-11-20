@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 
 @section('title', $event->name . ' - Cotisations & Détails - Almanac Admin')
 
@@ -6,18 +6,18 @@
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
   <div>
     <div class="d-flex align-items-center gap-2 mb-1">
-      <a href="{{ route('dashboard.events.index') }}" class="btn btn-sm btn-outline-secondary rounded-circle" title="Retour"><i class="fas fa-arrow-left"></i></a>
-      <h2 class="fw-bold font-serif mb-0"><i class="fas fa-calendar-alt text-success me-2"></i> {{ $event->name }}</h2>
+      <a href="{{ route('dashboard.events.index') }}" class="btn btn-sm btn-outline-secondary rounded-circle" title="Retour"><x-icon name="arrow-left" /></a>
+      <h2 class="fw-bold font-serif mb-0"><x-icon name="calendar-alt" class="text-success me-2" /> {{ $event->name }}</h2>
     </div>
     <p class="text-muted small mb-0">Détails de l'événement, suivi des cotisations et exportation du rapport PDF.</p>
   </div>
 
   <div class="d-flex gap-2 flex-wrap">
     <button type="button" class="btn btn-success rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalAddContribution">
-      <i class="fas fa-hand-holding-usd me-1"></i> Ajouter une Cotisation
+      <x-icon name="hand-holding-usd" class="me-1" /> Ajouter une Cotisation
     </button>
     <a href="{{ route('dashboard.events.contributions.pdf', $event->id) }}" class="btn btn-outline-danger rounded-pill px-4" target="_blank">
-      <i class="fas fa-file-pdf me-1"></i> Exporter PDF
+      <x-icon name="file-pdf" class="me-1" /> Exporter PDF
     </a>
   </div>
 </div>
@@ -30,22 +30,22 @@
         @if($event->image)
           <img src="{{ \App\Helpers\CloudinaryHelper::url($event->image) }}" alt="{{ $event->name }}" class="w-100 h-100" style="object-fit:cover;">
         @else
-          <i class="fas fa-calendar-day fs-1"></i>
+          <x-icon name="calendar-day" class="fs-1" />
         @endif
       </div>
     </div>
     <div class="col-md-9 col-lg-10">
       <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
         <span class="badge bg-warning bg-opacity-20 text-dark fw-bold px-3 py-2 text-uppercase">{{ $event->type }}</span>
-        <span class="badge bg-success bg-opacity-20 text-success fw-bold px-3 py-2"><i class="fas fa-map-marker-alt me-1"></i> {{ $event->village->name ?? 'Village non spécifié' }}</span>
+        <span class="badge bg-success bg-opacity-20 text-success fw-bold px-3 py-2"><x-icon name="map-marker-alt" class="me-1" /> {{ $event->village->name ?? 'Village non spécifié' }}</span>
       </div>
       <h3 class="fw-bold font-serif mb-2">{{ $event->name }}</h3>
       <p class="text-muted mb-3">{{ $event->description ?: 'Aucune description spécifique renseignée pour cet événement.' }}</p>
       
       <div class="d-flex flex-wrap gap-4 text-muted small">
-        <div><i class="fas fa-calendar-check text-success me-1"></i> <strong>Début :</strong> {{ $event->start_date ? \Carbon\Carbon::parse($event->start_date)->format('d/m/Y') : '-' }}</div>
-        <div><i class="fas fa-calendar-times text-danger me-1"></i> <strong>Fin :</strong> {{ $event->end_date ? \Carbon\Carbon::parse($event->end_date)->format('d/m/Y') : '-' }}</div>
-        <div><i class="fas fa-coins text-warning me-1"></i> <strong>Total Cotisations :</strong> <span class="fw-bold text-success fs-6">{{ number_format($contributions->sum('amount'), 0, ',', ' ') }} FCFA</span></div>
+        <div><x-icon name="calendar-check" class="text-success me-1" /> <strong>Début :</strong> {{ $event->start_date ? \Carbon\Carbon::parse($event->start_date)->format('d/m/Y') : '-' }}</div>
+        <div><x-icon name="calendar-times" class="text-danger me-1" /> <strong>Fin :</strong> {{ $event->end_date ? \Carbon\Carbon::parse($event->end_date)->format('d/m/Y') : '-' }}</div>
+        <div><x-icon name="coins" class="text-warning me-1" /> <strong>Total Cotisations :</strong> <span class="fw-bold text-success fs-6">{{ number_format($contributions->sum('amount'), 0, ',', ' ') }} FCFA</span></div>
       </div>
     </div>
   </div>
@@ -54,17 +54,17 @@
 <!-- Contributions / Cotisations Table Card -->
 <div class="admin-card">
   <div class="d-flex justify-content-between align-items-center p-3 border-bottom border-secondary border-opacity-10">
-    <h5 class="fw-bold font-serif mb-0"><i class="fas fa-list-alt text-success me-2"></i> Liste des Cotisations & Contributions</h5>
+    <h5 class="fw-bold font-serif mb-0"><x-icon name="list-alt" class="text-success me-2" /> Liste des Cotisations & Contributions</h5>
     <span class="badge bg-primary rounded-pill px-3 py-2">{{ $contributions->total() }} contribution(s)</span>
   </div>
 
   @if($contributions->isEmpty())
     <div class="text-center py-5">
-      <i class="fas fa-hand-holding-usd fs-1 text-muted opacity-50 mb-3"></i>
+      <x-icon name="hand-holding-usd" class="fs-1 text-muted opacity-50 mb-3" />
       <h4 class="fw-bold">Aucune cotisation enregistrée</h4>
       <p class="text-muted mb-3">Cliquez sur le bouton ci-dessus pour ajouter la première cotisation pour cet événement.</p>
       <button type="button" class="btn btn-sm btn-success rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalAddContribution">
-        <i class="fas fa-plus me-1"></i> Ajouter une Cotisation
+        <x-icon name="plus" class="me-1" /> Ajouter une Cotisation
       </button>
     </div>
   @else
@@ -86,9 +86,9 @@
               </td>
               <td>
                 @if($c->contributor_type === 'association')
-                  <span class="badge bg-info bg-opacity-10 text-info fw-bold"><i class="fas fa-users me-1"></i> Association / Élites</span>
+                  <span class="badge bg-info bg-opacity-10 text-info fw-bold"><x-icon name="users" class="me-1" /> Association / Élites</span>
                 @else
-                  <span class="badge bg-secondary bg-opacity-20 text-main fw-bold"><i class="fas fa-user me-1"></i> Personne Physique</span>
+                  <span class="badge bg-secondary bg-opacity-20 text-main fw-bold"><x-icon name="user" class="me-1" /> Personne Physique</span>
                 @endif
               </td>
               <td>
@@ -97,13 +97,13 @@
               <td class="text-end">
                 <div class="d-inline-flex gap-1">
                   <a href="{{ route('dashboard.events.contributions.edit', [$event->id, $c->id]) }}" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 small" title="Éditer">
-                    <i class="fas fa-pen"></i>
+                    <x-icon name="pen" />
                   </a>
                   <form action="{{ route('dashboard.events.contributions.destroy', [$event->id, $c->id]) }}" method="POST" class="d-inline" onsubmit="return confirm('Supprimer cette cotisation ?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 small" title="Supprimer">
-                      <i class="fas fa-trash"></i>
+                      <x-icon name="trash" />
                     </button>
                   </form>
                 </div>
@@ -127,7 +127,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-hand-holding-usd text-success me-2"></i> Nouvelle Cotisation</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="hand-holding-usd" class="text-success me-2" /> Nouvelle Cotisation</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form action="{{ route('dashboard.events.contributions.store', $event->id) }}" method="POST">

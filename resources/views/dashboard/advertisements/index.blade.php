@@ -1,16 +1,16 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 
 @section('title', 'Gestion des Publicités - Almanac Admin')
 
 @section('content')
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
   <div>
-    <h2 class="fw-bold font-serif mb-1"><i class="fas fa-ad text-warning me-2"></i> Régie Publicitaire & Bannières</h2>
+    <h2 class="fw-bold font-serif mb-1"><x-icon name="ad" class="text-warning me-2" /> Régie Publicitaire & Bannières</h2>
     <p class="text-muted small mb-0">Gestion des bannières, vidéos sponsorisées et suivi des impressions uniques.</p>
   </div>
 
   <button type="button" class="btn btn-success rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalCreateAd">
-    <i class="fas fa-plus me-1"></i> Créer une Publicité
+    <x-icon name="plus" class="me-1" /> Créer une Publicité
   </button>
 </div>
 
@@ -19,14 +19,14 @@
   <form action="{{ route('dashboard.advertisements.index') }}" method="GET" class="row g-2 align-items-center">
     <div class="col-md-8 col-lg-9">
       <div class="input-group">
-        <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+        <span class="input-group-text bg-transparent border-end-0"><x-icon name="search" class="text-muted" /></span>
         <input type="text" name="search" class="form-control border-start-0" placeholder="Rechercher une annonce ou un annonceur..." value="{{ request('search') }}">
       </div>
     </div>
     <div class="col-md-4 col-lg-3 d-flex gap-2">
-      <button type="submit" class="btn btn-success flex-grow-1 rounded-pill"><i class="fas fa-search me-1"></i> Rechercher</button>
+      <button type="submit" class="btn btn-success flex-grow-1 rounded-pill"><x-icon name="search" class="me-1" /> Rechercher</button>
       @if(request('search'))
-        <a href="{{ route('dashboard.advertisements.index') }}" class="btn btn-outline-secondary rounded-pill" title="Réinitialiser"><i class="fas fa-undo"></i></a>
+        <a href="{{ route('dashboard.advertisements.index') }}" class="btn btn-outline-secondary rounded-pill" title="Réinitialiser"><x-icon name="undo" /></a>
       @endif
     </div>
   </form>
@@ -35,7 +35,7 @@
 <div class="admin-card">
   @if($advertisements->isEmpty())
     <div class="text-center py-5">
-      <i class="fas fa-ad fs-1 text-muted opacity-50 mb-3"></i>
+      <x-icon name="ad" class="fs-1 text-muted opacity-50 mb-3" />
       <h4 class="fw-bold">Aucune publicité enregistrée</h4>
       <p class="text-muted">Créez votre première annonce sponsorisée.</p>
     </div>
@@ -59,7 +59,7 @@
               <td>
                 <div class="d-flex align-items-center gap-3">
                   <div class="rounded-3 overflow-hidden bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center" style="width:48px;height:48px;">
-                    <i class="fas fa-bullhorn fs-5"></i>
+                    <x-icon name="bullhorn" class="fs-5" />
                   </div>
                   <div>
                     <div class="fw-bold font-serif fs-6">{{ $a->title ?? 'Annonce Sponsorisée' }}</div>
@@ -69,7 +69,7 @@
               </td>
               <td><span class="badge bg-info bg-opacity-10 text-info text-uppercase font-monospace">{{ $a->type }}</span></td>
               <td><span class="badge bg-dark bg-opacity-50 text-white">{{ $a->position ?? 'accueil' }}</span></td>
-              <td class="fw-bold text-success"><i class="fas fa-eye me-1"></i> {{ number_format($a->views ?? 0) }}</td>
+              <td class="fw-bold text-success"><x-icon name="eye" class="me-1" /> {{ number_format($a->views ?? 0) }}</td>
               <td>
                 <div class="small fw-semibold">{{ $a->owner_name ?? 'Non défini' }}</div>
                 <small class="text-muted">{{ $a->owner_contact ?? '-' }}</small>
@@ -77,16 +77,16 @@
               <td class="text-end">
                 <div class="btn-group">
                   <button type="button" class="btn btn-sm btn-outline-info rounded-start-pill px-3" onclick="openShowAd({{ json_encode($a) }})">
-                    <i class="fas fa-eye me-1"></i> Voir
+                    <x-icon name="eye" class="me-1" /> Voir
                   </button>
                   <button type="button" class="btn btn-sm btn-outline-warning px-3" onclick="openEditAd({{ json_encode($a) }})">
-                    <i class="fas fa-pen me-1"></i> Éditer
+                    <x-icon name="pen" class="me-1" /> Éditer
                   </button>
                   <form action="{{ route('dashboard.advertisements.destroy', $a->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Confirmer la suppression de la publicité ?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-outline-danger rounded-end-pill px-3">
-                      <i class="fas fa-trash"></i>
+                      <x-icon name="trash" />
                     </button>
                   </form>
                 </div>
@@ -110,7 +110,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-ad text-warning me-2"></i> Nouvelle Publicité Sponsorisée</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="ad" class="text-warning me-2" /> Nouvelle Publicité Sponsorisée</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form action="{{ route('dashboard.advertisements.store') }}" method="POST" enctype="multipart/form-data">
@@ -140,7 +140,7 @@
             <div class="col-md-6">
               <label class="form-label small fw-bold text-uppercase text-muted">Fichier Média</label>
               <input type="file" name="file" class="form-control py-2">
-              <small class="text-muted d-block mt-1"><i class="fas fa-info-circle text-info me-1"></i> Max 12 Mo (MP4, JPG, PNG, PDF). Vidéos courtes recommandées.</small>
+              <small class="text-muted d-block mt-1"><x-icon name="info-circle" class="text-info me-1" /> Max 12 Mo (MP4, JPG, PNG, PDF). Vidéos courtes recommandées.</small>
             </div>
             <div class="col-md-6">
               <label class="form-label small fw-bold text-uppercase text-muted">Nom du Client / Propriétaire</label>
@@ -174,7 +174,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-pen text-warning me-2"></i> Éditer la Publicité</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="pen" class="text-warning me-2" /> Éditer la Publicité</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form id="formEditAd" method="POST" enctype="multipart/form-data">
@@ -205,7 +205,7 @@
             <div class="col-md-6">
               <label class="form-label small fw-bold text-uppercase text-muted">Remplacer Fichier</label>
               <input type="file" name="file" class="form-control py-2">
-              <small class="text-muted d-block mt-1"><i class="fas fa-info-circle text-info me-1"></i> Max 12 Mo (MP4, JPG, PNG, PDF).</small>
+              <small class="text-muted d-block mt-1"><x-icon name="info-circle" class="text-info me-1" /> Max 12 Mo (MP4, JPG, PNG, PDF).</small>
             </div>
             <div class="col-md-6">
               <label class="form-label small fw-bold text-uppercase text-muted">Nom du Client</label>
@@ -235,7 +235,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-ad text-info me-2"></i> Détails de la Publicité</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="ad" class="text-info me-2" /> Détails de la Publicité</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body py-4 text-center">
@@ -269,7 +269,7 @@
     $('form').on('submit', function() {
       const btn = $(this).find('button[type="submit"]');
       if (btn.length) {
-        btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Traitement en cours...');
+        btn.prop('disabled', true).html('<x-icon name="spinner" class="animate-spin me-2" />Traitement en cours...');
       }
     });
   });

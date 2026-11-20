@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Moteur de Recherche - Almanac')
 
@@ -37,7 +37,7 @@
     <div class="row justify-content-center">
       <div class="col-lg-8">
         <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-bold mb-3">
-          <i class="fas fa-search me-1"></i> Explorer l'Almanac
+          <x-icon name="search" class="me-1" /> Explorer l'Almanac
         </span>
         <h1 class="font-serif fw-bold display-5 mb-3">Rechercher un Village ou un Groupement</h1>
         <p class="text-muted lead fs-6">
@@ -52,39 +52,39 @@
     <div class="col-lg-4 col-xl-3">
       <div class="custom-card p-4 sticky-lg-top" style="top: 90px; z-index: 10;">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="fw-bold mb-0"><i class="fas fa-filter text-success me-2"></i> Filtres</h5>
+          <h5 class="fw-bold mb-0"><x-icon name="filter" class="text-success me-2" /> Filtres</h5>
           <a href="{{ route('recherche') }}" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 text-decoration-none" title="Réinitialiser tous les filtres">
-            <i class="fas fa-undo me-1"></i> Effacer
+            <x-icon name="undo" class="me-1" /> Effacer
           </a>
         </div>
 
         <form action="{{ route('recherche') }}" method="GET" id="searchFilterForm">
           <!-- Type selector (Compact & Elegant on Desktop) -->
           <div class="mb-3">
-            <label class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-list me-1"></i> Type de recherche</label>
+            <label class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><x-icon name="list" class="me-1" /> Type de recherche</label>
             <input type="hidden" name="searchType" id="searchTypeInput" value="{{ $searchType ?? 'villages' }}">
             <div class="btn-group btn-group-sm w-100" role="group">
               <button type="button" class="btn btn-sm btn-outline-success rounded-start-pill py-1 px-3 fw-bold {{ ($searchType ?? 'villages') === 'villages' ? 'active' : '' }}" id="tabBtnVillages" onclick="switchSearchTab('villages')">
-                <i class="fas fa-tree me-1"></i> Villages
+                <x-icon name="tree" class="me-1" /> Villages
               </button>
               <button type="button" class="btn btn-sm btn-outline-success rounded-end-pill py-1 px-3 fw-bold {{ ($searchType ?? '') === 'groupements' ? 'active' : '' }}" id="tabBtnGroupements" onclick="switchSearchTab('groupements')">
-                <i class="fas fa-layer-group me-1"></i> Groupements
+                <x-icon name="layer-group" class="me-1" /> Groupements
               </button>
             </div>
           </div>
 
           <!-- Keyword Search -->
           <div class="mb-3">
-            <label for="nameInput" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-font me-1"></i> Nom / Mot-clé</label>
+            <label for="nameInput" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><x-icon name="font" class="me-1" /> Nom / Mot-clé</label>
             <div class="input-group">
-              <span class="input-group-text bg-body border-end-0"><i class="fas fa-search text-muted"></i></span>
+              <span class="input-group-text bg-body border-end-0"><x-icon name="search" class="text-muted" /></span>
               <input type="text" class="form-control border-start-0" id="nameInput" name="name" value="{{ request('name') ?? request('search') }}" placeholder="Ex: Yaoundé, Bandjoun...">
             </div>
           </div>
 
           <!-- Country Filter (Cascade Trigger) -->
           <div class="mb-3">
-            <label for="paysSelect" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-globe me-1"></i> Pays</label>
+            <label for="paysSelect" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><x-icon name="globe" class="me-1" /> Pays</label>
             <select class="form-select" id="paysSelect" name="pays">
               <option value="">Tous les pays</option>
               @foreach($countries as $c)
@@ -95,7 +95,7 @@
 
           <!-- Division 1: Région (AJAX Cascade) -->
           <div class="mb-3" id="regionContainer" style="{{ request('pays') ? 'display:block;' : 'display:none;' }}">
-            <label for="division1Select" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-map-marked-alt me-1"></i> Région</label>
+            <label for="division1Select" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><x-icon name="map-marked-alt" class="me-1" /> Région</label>
             <select class="form-select" id="division1Select" name="division1">
               <option value="">Toutes les régions</option>
             </select>
@@ -103,7 +103,7 @@
 
           <!-- Division 2: Département (AJAX Cascade) -->
           <div class="mb-3" id="departementContainer" style="display:none;">
-            <label for="division2Select" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-map-pin me-1"></i> Département</label>
+            <label for="division2Select" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><x-icon name="map-pin" class="me-1" /> Département</label>
             <select class="form-select" id="division2Select" name="division2">
               <option value="">Tous les départements</option>
             </select>
@@ -111,7 +111,7 @@
 
           <!-- Division 3: Arrondissement (AJAX Cascade) -->
           <div class="mb-4" id="arrondissementContainer" style="display:none;">
-            <label for="arrondissementSelect" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><i class="fas fa-city me-1"></i> Arrondissement</label>
+            <label for="arrondissementSelect" class="form-label small fw-bold text-uppercase text-success text-center d-block mb-2"><x-icon name="city" class="me-1" /> Arrondissement</label>
             <select class="form-select" id="arrondissementSelect" name="arrondissement">
               <option value="">Tous les arrondissements</option>
             </select>
@@ -119,10 +119,10 @@
 
           <div class="d-grid gap-2">
             <button type="submit" class="btn btn-accent py-2">
-              <i class="fas fa-search me-1"></i> Rechercher
+              <x-icon name="search" class="me-1" /> Rechercher
             </button>
             <a href="{{ route('recherche') }}" class="btn btn-outline-secondary rounded-pill py-2 text-center">
-              <i class="fas fa-rotate-left me-1"></i> Réinitialiser
+              <x-icon name="rotate-left" class="me-1" /> Réinitialiser
             </a>
           </div>
         </form>
@@ -132,7 +132,7 @@
       @if(isset($initialAds) && $initialAds->count() > 0)
       <div class="custom-card p-3 mt-4">
         <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
-          <span class="small fw-bold text-uppercase text-success"><i class="fas fa-ad me-1"></i> Partenaires</span>
+          <span class="small fw-bold text-uppercase text-success"><x-icon name="ad" class="me-1" /> Partenaires</span>
           <span class="badge bg-secondary bg-opacity-10 text-secondary">Sponsorisé</span>
         </div>
         <div class="owl-carousel owl-theme ad-sidebar-carousel">
@@ -140,14 +140,14 @@
             <div class="item text-center cursor-pointer" onclick="viewAdvertisement({{ $ad->id }}, '{{ addslashes($ad->title ?? 'Annonce') }}', '{{ $ad->type }}', '{{ $ad->file_url }}', '{{ addslashes($ad->content ?? '') }}')">
               <div class="position-relative overflow-hidden rounded-3 mb-2" style="max-height:180px; background:#000;">
                 @if($ad->type === 'photo')
-                  <img src="{{ $ad->file_url }}" alt="{{ $ad->title }}" class="img-fluid w-100" style="height:180px; object-fit:cover;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'d-flex flex-column align-items-center justify-content-center h-100 py-5 bg-secondary bg-opacity-20 text-muted\'><i class=\'fas fa-image fs-2 text-warning mb-1\'></i><span class=\'small\'>Annonce Photo</span></div>';">
+                  <img src="{{ $ad->file_url }}" alt="{{ $ad->title }}" class="img-fluid w-100" style="height:180px; object-fit:cover;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'d-flex flex-column align-items-center justify-content-center h-100 py-5 bg-secondary bg-opacity-20 text-muted\'><x-icon name=\'image\' class=\'fs-2 text-warning mb-1\' /><span class=\'small\'>Annonce Photo</span></div>';">
                 @elseif($ad->type === 'video')
                   <div class="d-flex align-items-center justify-content-center h-100 py-5 bg-dark text-white">
-                    <i class="fas fa-play-circle fs-1 text-success"></i>
+                    <x-icon name="play-circle" class="fs-1 text-success" />
                   </div>
                 @else
                   <div class="p-4 bg-success bg-opacity-10 text-start">
-                    <i class="fas fa-bullhorn fs-3 text-success mb-2"></i>
+                    <x-icon name="bullhorn" class="fs-3 text-success mb-2" />
                     <p class="small text-truncate mb-0">{{ $ad->content }}</p>
                   </div>
                 @endif
@@ -167,27 +167,27 @@
       @if(isset($initialAds) && $initialAds->count() > 0)
       <div class="custom-card p-3 mb-4 border border-warning border-opacity-20 shadow-sm" style="background: linear-gradient(135deg, rgba(254, 240, 138, 0.15), rgba(22, 163, 74, 0.05));">
         <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
-          <span class="badge bg-warning text-dark fw-bold px-3 py-1 rounded-pill"><i class="fas fa-star me-1"></i> Espace Sponsorisé</span>
-          <small class="text-muted"><i class="fas fa-info-circle me-1"></i> Cliquez pour consulter l'annonce</small>
+          <span class="badge bg-warning text-dark fw-bold px-3 py-1 rounded-pill"><x-icon name="star" class="me-1" /> Espace Sponsorisé</span>
+          <small class="text-muted"><x-icon name="info-circle" class="me-1" /> Cliquez pour consulter l'annonce</small>
         </div>
         <div class="owl-carousel owl-theme ad-top-carousel">
           @foreach($initialAds as $ad)
             <div class="item text-center cursor-pointer p-2" onclick="viewAdvertisement({{ $ad->id }}, '{{ addslashes($ad->title ?? 'Annonce') }}', '{{ $ad->type }}', '{{ $ad->file_url }}', '{{ addslashes($ad->content ?? '') }}')">
               <div class="position-relative overflow-hidden rounded-3 mb-2 shadow-sm" style="height: 200px; background:#000;">
                 @if($ad->type === 'photo')
-                  <img src="{{ $ad->file_url }}" alt="{{ $ad->title }}" class="w-100 h-100" style="object-fit: cover;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'d-flex flex-column align-items-center justify-content-center h-100 bg-secondary bg-opacity-20 text-muted\'><i class=\'fas fa-image fs-1 mb-1 text-warning\'></i><span class=\'small fw-bold\'>Annonce Photo</span></div>';">
+                  <img src="{{ $ad->file_url }}" alt="{{ $ad->title }}" class="w-100 h-100" style="object-fit: cover;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'d-flex flex-column align-items-center justify-content-center h-100 bg-secondary bg-opacity-20 text-muted\'><x-icon name=\'image\' class=\'fs-1 mb-1 text-warning\' /><span class=\'small fw-bold\'>Annonce Photo</span></div>';">
                 @elseif($ad->type === 'video')
                   <div class="d-flex align-items-center justify-content-center h-100 bg-dark text-white">
-                    <i class="fas fa-play-circle fs-1 text-success"></i>
+                    <x-icon name="play-circle" class="fs-1 text-success" />
                   </div>
                 @elseif($ad->type === 'pdf')
                   <div class="d-flex flex-column align-items-center justify-content-center h-100 bg-danger bg-opacity-10 text-danger p-3">
-                    <i class="fas fa-file-pdf fs-1 mb-2"></i>
+                    <x-icon name="file-pdf" class="fs-1 mb-2" />
                     <span class="small fw-bold">Document PDF Sponsorisé</span>
                   </div>
                 @else
                   <div class="p-4 bg-success bg-opacity-10 text-start h-100">
-                    <i class="fas fa-bullhorn fs-2 text-success mb-2"></i>
+                    <x-icon name="bullhorn" class="fs-2 text-success mb-2" />
                     <p class="small text-truncate mb-0">{{ $ad->content }}</p>
                   </div>
                 @endif
@@ -226,15 +226,15 @@
                       <img src="{{ Storage::url($v->village_image) }}" alt="{{ $vCleanName }}" class="w-100 h-100" style="object-fit: cover;">
                     @else
                       <div class="d-flex flex-column align-items-center justify-content-center h-100 text-white opacity-50">
-                        <i class="fas fa-tree fs-1 mb-2"></i>
+                        <x-icon name="tree" class="fs-1 mb-2" />
                         <span class="small">Almanac</span>
                       </div>
                     @endif
                     <span class="position-absolute top-0 end-0 m-3 badge bg-dark bg-opacity-75 backdrop-blur rounded-pill">
-                      <i class="fas fa-users me-1 text-warning"></i> {{ number_format($v->population ?? 0) }} hab.
+                      <x-icon name="users" class="me-1 text-warning" /> {{ number_format($v->population ?? 0) }} hab.
                     </span>
                     <span class="position-absolute bottom-0 start-0 m-2 badge bg-success bg-opacity-90 rounded-pill small">
-                      <i class="fas fa-eye me-1"></i> Découvrir
+                      <x-icon name="eye" class="me-1" /> Découvrir
                     </span>
                   </div>
 
@@ -246,9 +246,9 @@
 
                     <div class="border-top pt-3 mt-auto">
                       <div class="d-flex justify-content-between align-items-center small text-muted">
-                        <span><i class="fas fa-layer-group text-success me-1"></i> {{ $v->villageGroup->name ?? 'Groupement' }}</span>
+                        <span><x-icon name="layer-group" class="text-success me-1" /> {{ $v->villageGroup->name ?? 'Groupement' }}</span>
                         @if($vChefFormatted)
-                          <span class="text-wrap text-end" style="word-break: break-word; max-width: 60%;" title="{{ $vChefFormatted }}"><i class="fas fa-user-shield text-warning me-1"></i> {{ $vChefFormatted }}</span>
+                          <span class="text-wrap text-end" style="word-break: break-word; max-width: 60%;" title="{{ $vChefFormatted }}"><x-icon name="user-shield" class="text-warning me-1" /> {{ $vChefFormatted }}</span>
                         @endif
                       </div>
                     </div>
@@ -270,7 +270,7 @@
           @endif
         @else
           <div class="custom-card p-5 text-center my-4">
-            <i class="fas fa-search-location fs-1 text-muted opacity-50 mb-3"></i>
+            <x-icon name="search-location" class="fs-1 text-muted opacity-50 mb-3" />
             <h4 class="fw-bold">Aucun village trouvé</h4>
             <p class="text-muted">Essayez d'ajuster votre recherche ou vos filtres.</p>
           </div>
@@ -296,7 +296,7 @@
                 <div class="custom-card search-result-card h-100 p-4 d-flex flex-column" onclick="window.location.href='{{ $gUrl }}'">
                   <div class="d-flex align-items-center gap-3 mb-3">
                     <div class="rounded-circle bg-success bg-opacity-10 text-success p-3 d-flex align-items-center justify-content-center" style="width:50px;height:50px;">
-                      <i class="fas fa-layer-group fs-4"></i>
+                      <x-icon name="layer-group" class="fs-4" />
                     </div>
                     <div>
                       <h5 class="fw-bold font-serif mb-0">{{ $g->name }}</h5>
@@ -309,9 +309,9 @@
                   </p>
 
                   <div class="border-top pt-3 mt-auto d-flex justify-content-between align-items-center">
-                    <span class="small text-muted"><i class="fas fa-home me-1 text-success"></i> {{ $g->villages_count ?? 0 }} village(s)</span>
+                    <span class="small text-muted"><x-icon name="home" class="me-1 text-success" /> {{ $g->villages_count ?? 0 }} village(s)</span>
                     <span class="btn btn-sm btn-accent rounded-pill px-3 hover-action-btn">
-                      Découvrir <i class="fas fa-arrow-right ms-1"></i>
+                      Découvrir <x-icon name="arrow-right" class="ms-1" />
                     </span>
                   </div>
                 </div>
@@ -331,7 +331,7 @@
           @endif
         @else
           <div class="custom-card p-5 text-center my-4">
-            <i class="fas fa-layer-group fs-1 text-muted opacity-50 mb-3"></i>
+            <x-icon name="layer-group" class="fs-1 text-muted opacity-50 mb-3" />
             <h4 class="fw-bold">Aucun groupement trouvé</h4>
             <p class="text-muted">Essayez d'ajuster votre recherche.</p>
           </div>

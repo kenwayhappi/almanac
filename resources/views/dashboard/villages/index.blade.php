@@ -1,16 +1,16 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 
 @section('title', 'Villages & Quartiers du Cameroun - Almanac Admin')
 
 @section('content')
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
   <div>
-    <h2 class="fw-bold font-serif mb-1"><i class="fas fa-map-marker-alt text-success me-2"></i> Villages & Quartiers du Cameroun</h2>
+    <h2 class="fw-bold font-serif mb-1"><x-icon name="map-marker-alt" class="text-success me-2" /> Villages & Quartiers du Cameroun</h2>
     <p class="text-muted small mb-0">Répertoire officiel et fiches patrimoniales des localités.</p>
   </div>
 
   <button type="button" class="btn btn-success rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalCreateVillage">
-    <i class="fas fa-plus me-1"></i> Ajouter une Localité
+    <x-icon name="plus" class="me-1" /> Ajouter une Localité
   </button>
 </div>
 
@@ -19,14 +19,14 @@
   <form action="{{ route('dashboard.villages.index') }}" method="GET" class="row g-2 align-items-center">
     <div class="col-md-8 col-lg-9">
       <div class="input-group">
-        <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+        <span class="input-group-text bg-transparent border-end-0"><x-icon name="search" class="text-muted" /></span>
         <input type="text" name="search" class="form-control border-start-0" placeholder="Rechercher par nom de village ou quartier..." value="{{ request('search') }}">
       </div>
     </div>
     <div class="col-md-4 col-lg-3 d-flex gap-2">
-      <button type="submit" class="btn btn-success flex-grow-1 rounded-pill"><i class="fas fa-search me-1"></i> Rechercher</button>
+      <button type="submit" class="btn btn-success flex-grow-1 rounded-pill"><x-icon name="search" class="me-1" /> Rechercher</button>
       @if(request('search'))
-        <a href="{{ route('dashboard.villages.index') }}" class="btn btn-outline-secondary rounded-pill" title="Réinitialiser"><i class="fas fa-undo"></i></a>
+        <a href="{{ route('dashboard.villages.index') }}" class="btn btn-outline-secondary rounded-pill" title="Réinitialiser"><x-icon name="undo" /></a>
       @endif
     </div>
   </form>
@@ -35,7 +35,7 @@
 <div class="admin-card">
   @if($villages->isEmpty())
     <div class="text-center py-5">
-      <i class="fas fa-map-marker-alt fs-1 text-muted opacity-50 mb-3"></i>
+      <x-icon name="map-marker-alt" class="fs-1 text-muted opacity-50 mb-3" />
       <h4 class="fw-bold">Aucune localité trouvée</h4>
       <p class="text-muted">Commencez par ajouter un premier village ou quartier au répertoire.</p>
     </div>
@@ -65,7 +65,11 @@
                     @if($vImg)
                       <img src="{{ $vImg }}" alt="{{ $v->name }}" class="w-100 h-100" style="object-fit:cover;">
                     @else
-                      <i class="fas {{ $isVillage ? 'fa-tree text-success' : 'fa-city text-info' }}"></i>
+                      @if($isVillage)
+                        <x-icon name="tree" class="text-success" />
+                      @else
+                        <x-icon name="city" class="text-info" />
+                      @endif
                     @endif
                   </div>
                   <div>
@@ -76,20 +80,20 @@
               </td>
               <td>
                 @if($isVillage)
-                  <span class="badge bg-success bg-opacity-10 text-success fw-bold"><i class="fas fa-tree me-1"></i> Village</span>
+                  <span class="badge bg-success bg-opacity-10 text-success fw-bold"><x-icon name="tree" class="me-1" /> Village</span>
                 @else
-                  <span class="badge bg-info bg-opacity-10 text-info fw-bold"><i class="fas fa-city me-1"></i> Quartier</span>
+                  <span class="badge bg-info bg-opacity-10 text-info fw-bold"><x-icon name="city" class="me-1" /> Quartier</span>
                 @endif
               </td>
               <td>
                 @if($isVillage)
                   @if($v->chef_village)
-                    <span class="badge bg-warning bg-opacity-10 text-dark text-wrap text-start" style="white-space: normal; max-width: 200px;"><i class="fas fa-crown me-1 text-warning"></i> {{ $v->chef_village }}</span>
+                    <span class="badge bg-warning bg-opacity-10 text-dark text-wrap text-start" style="white-space: normal; max-width: 200px;"><x-icon name="crown" class="me-1 text-warning" /> {{ $v->chef_village }}</span>
                   @else
                     <span class="text-muted small">Non renseigné</span>
                   @endif
                 @else
-                  <span class="badge bg-secondary bg-opacity-10 text-muted" title="Prend par défaut le chef du groupement"><i class="fas fa-shield-alt me-1"></i> Chef du Canton</span>
+                  <span class="badge bg-secondary bg-opacity-10 text-muted" title="Prend par défaut le chef du groupement"><x-icon name="shield-alt" class="me-1" /> Chef du Canton</span>
                 @endif
               </td>
               <td>
@@ -101,16 +105,16 @@
               <td class="text-end">
                 <div class="d-inline-flex gap-1">
                   <button type="button" class="btn btn-sm btn-outline-info rounded-circle" style="width:34px;height:34px;padding:0;" title="Voir" onclick="openShowVillage({{ json_encode($v) }})">
-                    <i class="fas fa-eye"></i>
+                    <x-icon name="eye" />
                   </button>
                   <button type="button" class="btn btn-sm btn-outline-warning rounded-circle" style="width:34px;height:34px;padding:0;" title="Éditer" onclick="openEditVillage({{ json_encode($v) }})">
-                    <i class="fas fa-pen"></i>
+                    <x-icon name="pen" />
                   </button>
                   <form action="{{ route('dashboard.villages.destroy', $v->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Confirmer la suppression ?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" style="width:34px;height:34px;padding:0;" title="Supprimer">
-                      <i class="fas fa-trash"></i>
+                      <x-icon name="trash" />
                     </button>
                   </form>
                 </div>
@@ -134,7 +138,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-plus-circle text-success me-2"></i> Ajouter un Village ou Quartier</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="plus-circle" class="text-success me-2" /> Ajouter un Village ou Quartier</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form action="{{ route('dashboard.villages.store') }}" method="POST" enctype="multipart/form-data">
@@ -206,7 +210,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-pen text-warning me-2"></i> Éditer la Localité</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="pen" class="text-warning me-2" /> Éditer la Localité</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form id="formEditVillage" method="POST" enctype="multipart/form-data">
@@ -278,7 +282,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-info-circle text-info me-2"></i> Détails de la Localité</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="info-circle" class="text-info me-2" /> Détails de la Localité</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body py-4 text-center">
@@ -348,10 +352,10 @@
     const isVillage = (v.is_village !== undefined && v.is_village !== null) ? v.is_village : 1;
     
     if (isVillage == 1) {
-      $('#show_type_badge').attr('class', 'badge bg-success bg-opacity-10 text-success fw-bold').html('<i class="fas fa-tree me-1"></i> Village');
+      $('#show_type_badge').attr('class', 'badge bg-success bg-opacity-10 text-success fw-bold').html('<x-icon name="tree" class="me-1" /> Village');
       $('#show_chef').text(v.chef_village || 'Non renseigné');
     } else {
-      $('#show_type_badge').attr('class', 'badge bg-info bg-opacity-10 text-info fw-bold').html('<i class="fas fa-city me-1"></i> Quartier');
+      $('#show_type_badge').attr('class', 'badge bg-info bg-opacity-10 text-info fw-bold').html('<x-icon name="city" class="me-1" /> Quartier');
       $('#show_chef').text('Prend le chef du Canton (' + (v.village_group ? (v.village_group.chef_groupement || 'Chef du canton') : 'Chef du canton') + ')');
     }
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr" data-theme="light">
 <head>
   <meta charset="UTF-8">
@@ -23,8 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 
-  <!-- Icons & Bootstrap -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
@@ -478,13 +477,13 @@
   <div class="top-bar">
     <div class="container d-flex justify-content-between align-items-center">
       <div>
-        <i class="fas fa-globe-africa me-2 text-success"></i>
+        <x-icon name="globe-africa" class="me-2 text-success" />
         <span>Almanac - Plateforme Culturelle & Atlas Démographique</span>
       </div>
       <div class="d-none d-md-flex align-items-center gap-3">
-        <a href="mailto:contact@almanac.cm"><i class="fas fa-envelope me-1"></i> contact@almanac.cm</a>
+        <a href="mailto:contact@almanac.cm"><x-icon name="envelope" class="me-1" /> contact@almanac.cm</a>
         <span>|</span>
-        <a href="{{ route('login') }}"><i class="fas fa-lock me-1"></i> Espace Admin</a>
+        <a href="{{ route('login') }}"><x-icon name="lock" class="me-1" /> Espace Admin</a>
       </div>
     </div>
   </div>
@@ -500,18 +499,18 @@
       <div class="d-flex align-items-center gap-2 order-lg-last">
         <!-- Theme Toggle -->
         <button type="button" class="theme-toggle-btn" id="themeToggleBtn" title="Changer de thème (Clair/Sombre)">
-          <i class="fas fa-moon" id="themeIcon"></i>
+          <x-icon name="moon" id="themeIcon" />
         </button>
 
         <!-- Search CTA -->
         <a href="{{ route('recherche') }}" class="btn btn-accent d-none d-sm-inline-flex align-items-center gap-2">
-          <i class="fas fa-search"></i>
+          <x-icon name="search" />
           <span>Explorer</span>
         </a>
 
         <!-- Mobile Toggler -->
         <button class="navbar-toggler border-0 shadow-none text-main" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
-          <i class="fas fa-bars fs-4"></i>
+          <x-icon name="bars" class="fs-4" />
         </button>
       </div>
 
@@ -546,11 +545,11 @@
     </div>
     <div class="offcanvas-body">
       <div class="d-flex flex-column gap-3">
-        <a class="nav-link-custom py-2 border-bottom" href="{{ route('accueil') }}"><i class="fas fa-home me-2"></i> Accueil</a>
-        <a class="nav-link-custom py-2 border-bottom" href="{{ route('recherche') }}"><i class="fas fa-search me-2"></i> Recherche & Filtres</a>
-        <a class="nav-link-custom py-2 border-bottom" href="{{ route('a-propos') }}"><i class="fas fa-info-circle me-2"></i> À Propos</a>
-        <a class="nav-link-custom py-2 border-bottom" href="{{ route('contact') }}"><i class="fas fa-envelope me-2"></i> Contact</a>
-        <a class="btn btn-accent w-100 mt-3 py-2" href="{{ route('login') }}"><i class="fas fa-sign-in-alt me-2"></i> Espace d'Administration</a>
+        <a class="nav-link-custom py-2 border-bottom" href="{{ route('accueil') }}"><x-icon name="home" class="me-2" /> Accueil</a>
+        <a class="nav-link-custom py-2 border-bottom" href="{{ route('recherche') }}"><x-icon name="search" class="me-2" /> Recherche & Filtres</a>
+        <a class="nav-link-custom py-2 border-bottom" href="{{ route('a-propos') }}"><x-icon name="info-circle" class="me-2" /> À Propos</a>
+        <a class="nav-link-custom py-2 border-bottom" href="{{ route('contact') }}"><x-icon name="envelope" class="me-2" /> Contact</a>
+        <a class="btn btn-accent w-100 mt-3 py-2" href="{{ route('login') }}"><x-icon name="sign-in-alt" class="me-2" /> Espace d'Administration</a>
       </div>
     </div>
   </div>
@@ -572,7 +571,7 @@
           <!-- Dynamic media content injected via JS -->
         </div>
         <div class="modal-footer border-top border-secondary border-opacity-10 py-2 px-4 justify-content-between">
-          <small class="text-muted"><i class="fas fa-eye me-1"></i> Impression enregistrée de manière unique</small>
+          <small class="text-muted"><x-icon name="eye" class="me-1" /> Impression enregistrée de manière unique</small>
           <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Fermer</button>
         </div>
       </div>
@@ -592,10 +591,10 @@
             La bible numérique d'inventaire, de préservation et de découverte du patrimoine culturel, historique et démographique des villages et groupements.
           </p>
           <div class="d-flex gap-2">
-            <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:36px;height:36px;"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:36px;height:36px;"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:36px;height:36px;"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:36px;height:36px;"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:36px;height:36px;"><x-icon name="facebook-f" /></a>
+            <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:36px;height:36px;"><x-icon name="twitter" /></a>
+            <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:36px;height:36px;"><x-icon name="instagram" /></a>
+            <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width:36px;height:36px;"><x-icon name="linkedin-in" /></a>
           </div>
         </div>
 
@@ -621,9 +620,9 @@
         <div class="col-lg-3 col-md-6">
           <h5>Contact</h5>
           <ul class="list-unstyled d-flex flex-column gap-2 small">
-            <li><i class="fas fa-map-marker-alt text-success me-2"></i> Yaoundé, Cameroun</li>
-            <li><i class="fas fa-envelope text-success me-2"></i> contact@almanach.cm</li>
-            <li><i class="fas fa-phone-alt text-success me-2"></i> +237 699 99 99 99</li>
+            <li><x-icon name="map-marker-alt" class="text-success me-2" /> Yaoundé, Cameroun</li>
+            <li><x-icon name="envelope" class="text-success me-2" /> contact@almanach.cm</li>
+            <li><x-icon name="phone-alt" class="text-success me-2" /> +237 699 99 99 99</li>
           </ul>
         </div>
       </div>
@@ -636,7 +635,7 @@
 
   <!-- Floating Back-to-Top Button (Appears on Scroll) -->
   <button id="btnBackToTop" class="btn btn-success rounded-circle shadow-lg position-fixed bottom-0 end-0 m-4 p-0 d-none align-items-center justify-content-center" style="z-index: 1080; width: 46px; height: 46px; transition: all 0.3s ease;" title="Haut de page">
-    <i class="fas fa-arrow-up fs-6"></i>
+    <x-icon name="arrow-up" class="fs-6" />
   </button>
 
   <!-- Scripts -->
@@ -662,7 +661,9 @@
       function updateThemeIcon(theme) {
         const icon = document.getElementById('themeIcon');
         if (icon) {
-          icon.className = theme === 'dark' ? 'fas fa-sun text-warning' : 'fas fa-moon';
+          icon.outerHTML = theme === 'dark' 
+            ? '<svg id="themeIcon" class="svg-icon text-warning" style="width:1em;height:1em;vertical-align:-0.125em;display:inline-block;fill:currentColor;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>'
+            : '<svg id="themeIcon" class="svg-icon" style="width:1em;height:1em;vertical-align:-0.125em;display:inline-block;fill:currentColor;" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
         }
       }
     })();
@@ -693,7 +694,7 @@
         if (fileUrl && fileUrl !== 'null' && fileUrl !== 'undefined') {
           bodyHtml = `
             <div class="ad-media-container text-center bg-black rounded p-2 overflow-hidden">
-              <video controls autoplay playsinline class="w-100 rounded" style="max-height: 65vh; object-fit: contain;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'p-4 text-center text-muted bg-body-tertiary rounded\'><i class=\'fas fa-exclamation-triangle fs-1 text-warning mb-2 d-block\'></i><p class=\'mb-0\'>Impossible de charger la vidéo promotionnelle.</p></div>';">
+              <video controls autoplay playsinline class="w-100 rounded" style="max-height: 65vh; object-fit: contain;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'p-4 text-center text-muted bg-body-tertiary rounded\'><x-icon name=\'exclamation-triangle\' class=\'fs-1 text-warning mb-2 d-block\' /><p class=\'mb-0\'>Impossible de charger la vidéo promotionnelle.</p></div>';">
                 <source src="${fileUrl}" type="video/mp4">
                 <source src="${fileUrl}" type="video/webm">
                 <source src="${fileUrl}" type="video/quicktime">
@@ -701,16 +702,16 @@
               </video>
             </div>`;
         } else {
-          bodyHtml = `<div class="p-4 text-center text-muted bg-body-tertiary rounded"><i class="fas fa-video-slash fs-1 text-warning mb-2 d-block"></i><p class="mb-0">Vidéo non disponible.</p></div>`;
+          bodyHtml = `<div class="p-4 text-center text-muted bg-body-tertiary rounded"><x-icon name="video-slash" class="fs-1 text-warning mb-2 d-block" /><p class="mb-0">Vidéo non disponible.</p></div>`;
         }
       } else if (type === 'photo') {
         if (fileUrl && fileUrl !== 'null' && fileUrl !== 'undefined') {
           bodyHtml = `
             <div class="ad-media-container text-center">
-              <img src="${fileUrl}" alt="${title || 'Publicité'}" class="img-fluid rounded" style="max-height: 65vh; object-fit: contain;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'p-4 text-center text-muted bg-body-tertiary rounded\'><i class=\'fas fa-image fs-1 text-warning mb-2 d-block\'></i><p class=\'mb-0\'>Impossible de charger l image promotionnelle.</p></div>';">
+              <img src="${fileUrl}" alt="${title || 'Publicité'}" class="img-fluid rounded" style="max-height: 65vh; object-fit: contain;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'p-4 text-center text-muted bg-body-tertiary rounded\'><x-icon name=\'image\' class=\'fs-1 text-warning mb-2 d-block\' /><p class=\'mb-0\'>Impossible de charger l image promotionnelle.</p></div>';">
             </div>`;
         } else {
-          bodyHtml = `<div class="p-4 text-center text-muted bg-body-tertiary rounded"><i class="fas fa-image fs-1 text-warning mb-2 d-block"></i><p class="mb-0">Image non disponible.</p></div>`;
+          bodyHtml = `<div class="p-4 text-center text-muted bg-body-tertiary rounded"><x-icon name="image" class="fs-1 text-warning mb-2 d-block" /><p class="mb-0">Image non disponible.</p></div>`;
         }
       } else if (type === 'pdf') {
         bodyHtml = `
@@ -719,7 +720,7 @@
           </div>
           <div class="text-center">
             <a href="${fileUrl}" target="_blank" class="btn btn-sm btn-success rounded-pill px-4">
-              <i class="fas fa-download me-1"></i> Télécharger le PDF
+              <x-icon name="download" class="me-1" /> Télécharger le PDF
             </a>
           </div>`;
       } else if (type === 'text') {

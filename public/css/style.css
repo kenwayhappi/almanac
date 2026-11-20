@@ -242,3 +242,21 @@
   .search-form .btn-search:hover {
     background-color: #ffc107;
   }
+
+  /* Clean SVG icons utilities */
+  .svg-icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }

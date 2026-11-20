@@ -1,16 +1,16 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 
 @section('title', 'Autorités Administratives - Almanac Admin')
 
 @section('content')
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
   <div>
-    <h2 class="fw-bold font-serif mb-1"><i class="fas fa-user-shield text-success me-2"></i> Autorités Administratives</h2>
+    <h2 class="fw-bold font-serif mb-1"><x-icon name="user-shield" class="text-success me-2" /> Autorités Administratives</h2>
     <p class="text-muted small mb-0">Gestion des autorités (Sous-préfets, Maires, Représentants) rattachées aux cantons.</p>
   </div>
 
   <button type="button" class="btn btn-success rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalCreatePersonnaliteAdmin">
-    <i class="fas fa-plus me-1"></i> Ajouter une Autorité
+    <x-icon name="plus" class="me-1" /> Ajouter une Autorité
   </button>
 </div>
 
@@ -19,14 +19,14 @@
   <form action="{{ route('dashboard.personnalites_administratives.index') }}" method="GET" class="row g-2 align-items-center">
     <div class="col-md-8 col-lg-9">
       <div class="input-group">
-        <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+        <span class="input-group-text bg-transparent border-end-0"><x-icon name="search" class="text-muted" /></span>
         <input type="text" name="search" class="form-control border-start-0" placeholder="Rechercher une autorité par nom, prénom ou rôle..." value="{{ request('search') }}">
       </div>
     </div>
     <div class="col-md-4 col-lg-3 d-flex gap-2">
-      <button type="submit" class="btn btn-success flex-grow-1 rounded-pill"><i class="fas fa-search me-1"></i> Rechercher</button>
+      <button type="submit" class="btn btn-success flex-grow-1 rounded-pill"><x-icon name="search" class="me-1" /> Rechercher</button>
       @if(request('search'))
-        <a href="{{ route('dashboard.personnalites_administratives.index') }}" class="btn btn-outline-secondary rounded-pill" title="Réinitialiser"><i class="fas fa-undo"></i></a>
+        <a href="{{ route('dashboard.personnalites_administratives.index') }}" class="btn btn-outline-secondary rounded-pill" title="Réinitialiser"><x-icon name="undo" /></a>
       @endif
     </div>
   </form>
@@ -35,7 +35,7 @@
 <div class="admin-card">
   @if($personnalites->isEmpty())
     <div class="text-center py-5">
-      <i class="fas fa-user-shield fs-1 text-muted opacity-50 mb-3"></i>
+      <x-icon name="user-shield" class="fs-1 text-muted opacity-50 mb-3" />
       <h4 class="fw-bold">Aucune autorité administrative trouvée</h4>
       <p class="text-muted">Commencez par ajouter une première autorité administrative.</p>
     </div>
@@ -59,7 +59,7 @@
                     @if($p->photo)
                       <img src="{{ \App\Helpers\CloudinaryHelper::url($p->photo) }}" alt="{{ $p->nom }}" class="w-100 h-100" style="object-fit:cover;">
                     @else
-                      <i class="fas fa-user-shield fs-5"></i>
+                      <x-icon name="user-shield" class="fs-5" />
                     @endif
                   </div>
                   <div>
@@ -72,16 +72,16 @@
               <td class="text-end">
                 <div class="d-inline-flex gap-1">
                   <button type="button" class="btn btn-sm btn-outline-info rounded-pill px-2 py-1 small" onclick="openShowPersonnaliteAdmin({{ json_encode($p) }})" title="Voir les détails">
-                    <i class="fas fa-eye me-1"></i> Voir
+                    <x-icon name="eye" class="me-1" /> Voir
                   </button>
                   <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 small" onclick="openEditPersonnaliteAdmin({{ json_encode($p) }})" title="Éditer">
-                    <i class="fas fa-pen"></i>
+                    <x-icon name="pen" />
                   </button>
                   <form action="{{ route('dashboard.personnalites_administratives.destroy', $p->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Confirmer la suppression ?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 small" title="Supprimer">
-                      <i class="fas fa-trash"></i>
+                      <x-icon name="trash" />
                     </button>
                   </form>
                 </div>
@@ -105,7 +105,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-user-shield text-success me-2"></i> Nouvelle Autorité Administrative</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="user-shield" class="text-success me-2" /> Nouvelle Autorité Administrative</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form action="{{ route('dashboard.personnalites_administratives.store') }}" method="POST" enctype="multipart/form-data">
@@ -157,7 +157,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-pen text-warning me-2"></i> Éditer l'Autorité</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="pen" class="text-warning me-2" /> Éditer l'Autorité</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form id="formEditPersonnaliteAdmin" method="POST" enctype="multipart/form-data">
@@ -209,7 +209,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-user-shield text-info me-2"></i> Fiche d'Autorité</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="user-shield" class="text-info me-2" /> Fiche d'Autorité</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body py-4 text-center">

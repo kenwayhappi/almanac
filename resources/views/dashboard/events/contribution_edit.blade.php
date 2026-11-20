@@ -1,8 +1,8 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 
 @section('content')
 <div class="container py-5 mt-4">
-    <h1 class="mb-4 fw-bold text-primary"><i class="fas fa-edit me-2"></i> Modifier la Contribution</h1>
+    <h1 class="mb-4 fw-bold text-primary"><x-icon name="edit" class="me-2" /> Modifier la Contribution</h1>
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -59,10 +59,10 @@
             </div>
             <div class="col-12 d-flex justify-content-between mt-4">
                 <a href="{{ route('dashboard.events.show', $event->id) }}" class="btn btn-outline-secondary rounded-pill px-4">
-                    <i class="fas fa-arrow-left me-2"></i> Annuler
+                    <x-icon name="arrow-left" class="me-2" /> Annuler
                 </a>
                 <button type="submit" class="btn btn-primary rounded-pill px-4">
-                    <i class="fas fa-save me-2"></i> Mettre à jour
+                    <x-icon name="save" class="me-2" /> Mettre à jour
                 </button>
             </div>
         </form>

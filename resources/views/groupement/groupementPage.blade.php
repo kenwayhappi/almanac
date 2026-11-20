@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Groupement '.$group['name'].' - Almanac')
 
@@ -32,7 +32,7 @@
       <!-- Details Left -->
       <div class="col-lg-7 col-md-7">
         <span class="badge bg-warning text-dark font-bold px-3 py-2 rounded-pill mb-3">
-          <i class="fas fa-layer-group me-1"></i> Canton / Groupement
+          <x-icon name="layer-group" class="me-1" /> Canton / Groupement
         </span>
         <h1 class="font-serif fw-bold display-4 text-white mb-2">{{ $cleanCantonName }}</h1>
         <p class="lead opacity-90 fs-6 mb-4">
@@ -41,7 +41,7 @@
 
         <div class="d-flex flex-wrap gap-3 align-items-center">
           <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold fs-6">
-            <i class="fas fa-home me-1 text-success"></i> {{ count($vList) }} {{ Str::plural('Village', count($vList)) }} Rattaché{{ count($vList) > 1 ? 's' : '' }}
+            <x-icon name="home" class="me-1 text-success" /> {{ count($vList) }} {{ Str::plural('Village', count($vList)) }} Rattaché{{ count($vList) > 1 ? 's' : '' }}
           </span>
         </div>
       </div>
@@ -55,11 +55,11 @@
               <img src="{{ $chefImg }}" alt="{{ $chefNameFormatted }}" class="w-100 h-100" style="object-fit: cover;">
             @else
               <div class="w-100 h-100 bg-warning bg-opacity-20 d-flex align-items-center justify-content-center text-warning">
-                <i class="fas fa-user-shield fs-1"></i>
+                <x-icon name="user-shield" class="fs-1" />
               </div>
             @endif
           </div>
-          <span class="badge bg-warning text-dark fw-bold mb-2 px-3 py-1"><i class="fas fa-crown me-1"></i> Chef de Groupement</span>
+          <span class="badge bg-warning text-dark fw-bold mb-2 px-3 py-1"><x-icon name="crown" class="me-1" /> Chef de Groupement</span>
           <h5 class="fw-bold font-serif text-white mb-1 text-center lh-sm" style="word-break: break-word; font-size: 1.05rem;">{{ $chefNameFormatted }}</h5>
           <small class="text-white opacity-75 d-block fs-xs">Cliquez pour agrandir la photo</small>
         </div>
@@ -73,17 +73,17 @@
     <ul class="nav nav-pills nav-fill flex-column flex-sm-row gap-2" id="groupementTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link text-main font-semibold active py-3 w-100" id="gtab-villages" data-bs-toggle="pill" data-bs-target="#gcontent-villages" type="button" role="tab">
-          <i class="fas fa-tree me-2 text-success"></i> Villages du Groupement ({{ count($vList) }})
+          <x-icon name="tree" class="me-2 text-success" /> Villages du Groupement ({{ count($vList) }})
         </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link text-main font-semibold py-3 w-100" id="gtab-pas" data-bs-toggle="pill" data-bs-target="#gcontent-pas" type="button" role="tab">
-          <i class="fas fa-user-shield me-2 text-warning"></i> Personnalités Administratives ({{ count($pasList) }})
+          <x-icon name="user-shield" class="me-2 text-warning" /> Personnalités Administratives ({{ count($pasList) }})
         </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link text-main font-semibold py-3 w-100" id="gtab-histoire" data-bs-toggle="pill" data-bs-target="#gcontent-histoire" type="button" role="tab">
-          <i class="fas fa-book-open me-2 text-primary"></i> Histoire & Patrimoine
+          <x-icon name="book-open" class="me-2 text-primary" /> Histoire & Patrimoine
         </button>
       </li>
     </ul>
@@ -98,7 +98,7 @@
         <!-- Groupement Carousel Gallery (Left Side) -->
         <div class="col-lg-5 col-xl-4">
           <div class="custom-card p-4 h-100">
-            <h4 class="font-serif fw-bold mb-3"><i class="fas fa-images text-success me-2"></i> Galerie du Canton</h4>
+            <h4 class="font-serif fw-bold mb-3"><x-icon name="images" class="text-success me-2" /> Galerie du Canton</h4>
             <hr class="opacity-10 mb-4">
 
             @if(count($cUrls) > 0)
@@ -121,7 +121,7 @@
               </div>
             @else
               <div class="bg-dark bg-opacity-50 text-white rounded-3 p-5 text-center d-flex flex-column align-items-center justify-content-center" style="min-height: 250px;">
-                <i class="fas fa-layer-group fs-1 text-success mb-3 opacity-75"></i>
+                <x-icon name="layer-group" class="fs-1 text-success mb-3 opacity-75" />
                 <h6 class="fw-bold mb-1">Canton {{ $cleanCantonName }}</h6>
                 <p class="small text-muted mb-0">Photos d'illustration du canton.</p>
               </div>
@@ -132,12 +132,12 @@
         <!-- Villages Grid (Right Side) -->
         <div class="col-lg-7 col-xl-8">
           <div class="custom-card p-4 p-md-5 h-100">
-            <h3 class="font-serif fw-bold mb-3"><i class="fas fa-tree text-success me-2"></i> Villages & Localités Rattachés</h3>
+            <h3 class="font-serif fw-bold mb-3"><x-icon name="tree" class="text-success me-2" /> Villages & Localités Rattachés</h3>
             <hr class="opacity-10 mb-4">
 
             @if(count($vList) === 0)
               <div class="text-center py-4">
-                <i class="fas fa-home fs-2 text-muted opacity-50 mb-2"></i>
+                <x-icon name="home" class="fs-2 text-muted opacity-50 mb-2" />
                 <p class="text-muted small mb-0">Aucun village encore rattaché à ce groupement.</p>
               </div>
             @else
@@ -153,7 +153,7 @@
                     <div class="card h-100 border-0 custom-card p-3 shadow-sm">
                       <div class="d-flex align-items-center gap-3">
                         <div class="rounded-circle overflow-hidden bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; flex-shrink: 0;">
-                          <i class="fas fa-home fs-5"></i>
+                          <x-icon name="home" class="fs-5" />
                         </div>
                         <div class="flex-grow-1 overflow-hidden">
                           <h6 class="fw-bold font-serif mb-1 text-truncate">{{ $vCleanName }}</h6>
@@ -162,7 +162,7 @@
                       </div>
                       <div class="mt-3 pt-2 border-top border-secondary border-opacity-10 text-end">
                         <a href="{{ route('village.show', $vId . '-' . Str::slug($vRawName)) }}" class="btn btn-sm btn-outline-success rounded-pill px-3 py-1 small">
-                          Visiter la fiche <i class="fas fa-arrow-right ms-1"></i>
+                          Visiter la fiche <x-icon name="arrow-right" class="ms-1" />
                         </a>
                       </div>
                     </div>
@@ -180,12 +180,12 @@
       <div class="custom-card p-4 p-md-5">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
           <div>
-            <h3 class="font-serif fw-bold mb-1"><i class="fas fa-user-shield text-warning me-2"></i> Autorités Administratives du Canton</h3>
+            <h3 class="font-serif fw-bold mb-1"><x-icon name="user-shield" class="text-warning me-2" /> Autorités Administratives du Canton</h3>
             <p class="text-muted small mb-0">Représentants administratifs, autorités de l'État et responsables locaux rattachés au canton {{ $group['name'] }}.</p>
           </div>
           @if(count($pasList) > 0)
           <div class="input-group" style="max-width: 260px;">
-            <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+            <span class="input-group-text bg-transparent border-end-0"><x-icon name="search" class="text-muted" /></span>
             <input type="text" id="searchPA" class="form-control border-start-0 ps-0" placeholder="Rechercher par nom…" oninput="filterPA()">
           </div>
           @endif
@@ -193,7 +193,7 @@
 
         @if(count($pasList) === 0)
           <div class="text-center py-5">
-            <i class="fas fa-user-shield fs-1 text-muted opacity-50 mb-3"></i>
+            <x-icon name="user-shield" class="fs-1 text-muted opacity-50 mb-3" />
             <h5 class="fw-bold">Aucune autorité administrative répertoriée</h5>
             <p class="text-muted small">Le répertoire des autorités administratives de ce canton sera prochainement mis à jour.</p>
           </div>
@@ -215,7 +215,7 @@
                       <img src="{{ $paPhotoUrl }}" alt="{{ $paNom }}" class="w-100 h-100" style="object-fit: cover;">
                     @else
                       <div class="w-100 h-100 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center">
-                        <i class="fas fa-user-shield fs-2"></i>
+                        <x-icon name="user-shield" class="fs-2" />
                       </div>
                     @endif
                   </div>
@@ -224,7 +224,7 @@
                   <p class="text-muted small mb-0">{{ Str::limit($paBio ?? 'Autorité rattachée au canton.', 100) }}</p>
                   @if($paBio && strlen($paBio) > 60)
                   <div class="mt-3 pt-2 border-top border-secondary border-opacity-10">
-                    <small class="text-warning fw-semibold"><i class="fas fa-eye me-1"></i> Voir le profil complet</small>
+                    <small class="text-warning fw-semibold"><x-icon name="eye" class="me-1" /> Voir le profil complet</small>
                   </div>
                   @endif
                 </div>
@@ -232,7 +232,7 @@
             @endforeach
           </div>
           <div id="paEmpty" class="text-center py-5 d-none">
-            <i class="fas fa-search fs-1 text-muted opacity-50 mb-3"></i>
+            <x-icon name="search" class="fs-1 text-muted opacity-50 mb-3" />
             <p class="text-muted">Aucune personnalité ne correspond à votre recherche.</p>
           </div>
         @endif
@@ -242,7 +242,7 @@
     <!-- 3. HISTOIRE & PATRIMOINE -->
     <div class="tab-pane fade" id="gcontent-histoire" role="tabpanel">
       <div class="custom-card p-4 p-md-5">
-        <h3 class="font-serif fw-bold mb-3"><i class="fas fa-book-open text-primary me-2"></i> Histoire & Origines du Canton</h3>
+        <h3 class="font-serif fw-bold mb-3"><x-icon name="book-open" class="text-primary me-2" /> Histoire & Origines du Canton</h3>
         <hr class="opacity-10 mb-4">
 
         <div class="fs-6 text-main mb-4">
@@ -273,7 +273,7 @@
       </div>
       <!-- Corps -->
       <div class="modal-body p-4 p-md-5">
-        <h6 class="fw-bold text-uppercase text-muted small mb-2"><i class="fas fa-scroll me-1"></i> Biographie</h6>
+        <h6 class="fw-bold text-uppercase text-muted small mb-2"><x-icon name="scroll" class="me-1" /> Biographie</h6>
         <p id="paBiographie" class="text-main mb-0 lh-lg">—</p>
       </div>
     </div>
@@ -310,7 +310,7 @@ function openPAModal(id) {
   const photoEl = document.getElementById('paPhoto');
   photoEl.innerHTML = pa.photo
     ? `<img src="${pa.photo}" class="w-100 h-100" style="object-fit:cover;" alt="${pa.nom}">`
-    : `<i class="fas fa-user-shield fs-2 text-warning"></i>`;
+    : `<x-icon name="user-shield" class="fs-2 text-warning" />`;
 
   document.getElementById('modalPALabel').textContent = pa.nom;
   document.getElementById('paRole').textContent = pa.role;
@@ -345,7 +345,7 @@ function filterPA() {
           <img src="{{ $chefImg }}" alt="{{ $chefNameFormatted }}" class="img-fluid rounded-4 shadow-lg" style="max-height: 75vh; object-fit: contain;">
         @else
           <div class="p-5 bg-secondary bg-opacity-20 rounded-4">
-            <i class="fas fa-user-shield fs-1 text-warning mb-2"></i>
+            <x-icon name="user-shield" class="fs-1 text-warning mb-2" />
             <p class="mb-0 text-muted">Photo non disponible en haute définition.</p>
           </div>
         @endif

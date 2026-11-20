@@ -1,16 +1,16 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 
 @section('title', 'Événements du Cameroun - Almanac Admin')
 
 @section('content')
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
   <div>
-    <h2 class="fw-bold font-serif mb-1"><i class="fas fa-calendar-alt text-success me-2"></i> Événements & Célébrations</h2>
+    <h2 class="fw-bold font-serif mb-1"><x-icon name="calendar-alt" class="text-success me-2" /> Événements & Célébrations</h2>
     <p class="text-muted small mb-0">Gestion des festivals, cérémonies traditionnelles et rencontres du Cameroun.</p>
   </div>
 
   <button type="button" class="btn btn-success rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalCreateEvent">
-    <i class="fas fa-plus me-1"></i> Ajouter un Événement
+    <x-icon name="plus" class="me-1" /> Ajouter un Événement
   </button>
 </div>
 
@@ -19,14 +19,14 @@
   <form action="{{ route('dashboard.events.index') }}" method="GET" class="row g-2 align-items-center">
     <div class="col-md-8 col-lg-9">
       <div class="input-group">
-        <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+        <span class="input-group-text bg-transparent border-end-0"><x-icon name="search" class="text-muted" /></span>
         <input type="text" name="search" class="form-control border-start-0" placeholder="Rechercher un événement par nom..." value="{{ request('search') }}">
       </div>
     </div>
     <div class="col-md-4 col-lg-3 d-flex gap-2">
-      <button type="submit" class="btn btn-success flex-grow-1 rounded-pill"><i class="fas fa-search me-1"></i> Rechercher</button>
+      <button type="submit" class="btn btn-success flex-grow-1 rounded-pill"><x-icon name="search" class="me-1" /> Rechercher</button>
       @if(request('search'))
-        <a href="{{ route('dashboard.events.index') }}" class="btn btn-outline-secondary rounded-pill" title="Réinitialiser"><i class="fas fa-undo"></i></a>
+        <a href="{{ route('dashboard.events.index') }}" class="btn btn-outline-secondary rounded-pill" title="Réinitialiser"><x-icon name="undo" /></a>
       @endif
     </div>
   </form>
@@ -35,7 +35,7 @@
 <div class="admin-card">
   @if($events->isEmpty())
     <div class="text-center py-5">
-      <i class="fas fa-calendar-alt fs-1 text-muted opacity-50 mb-3"></i>
+      <x-icon name="calendar-alt" class="fs-1 text-muted opacity-50 mb-3" />
       <h4 class="fw-bold">Aucun événement répertorié</h4>
       <p class="text-muted">Commencez par ajouter un événement pour un village.</p>
     </div>
@@ -60,7 +60,7 @@
                     @if($ev->image)
                       <img src="{{ \App\Helpers\CloudinaryHelper::url($ev->image) }}" alt="{{ $ev->name }}" class="w-100 h-100" style="object-fit:cover;">
                     @else
-                      <i class="fas fa-calendar-day fs-5"></i>
+                      <x-icon name="calendar-day" class="fs-5" />
                     @endif
                   </div>
                   <div>
@@ -78,16 +78,16 @@
               <td class="text-end">
                 <div class="d-inline-flex gap-1">
                   <a href="{{ route('dashboard.events.show', $ev->id) }}" class="btn btn-sm btn-outline-info rounded-pill px-2 py-1 small" title="Voir les cotisations et détails">
-                    <i class="fas fa-eye me-1"></i> Voir & Cotisations
+                    <x-icon name="eye" class="me-1" /> Voir & Cotisations
                   </a>
                   <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 small" onclick="openEditEvent({{ json_encode($ev) }})" title="Éditer">
-                    <i class="fas fa-pen"></i>
+                    <x-icon name="pen" />
                   </button>
                   <form action="{{ route('dashboard.events.destroy', $ev->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Supprimer cet événement ?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 small" title="Supprimer">
-                      <i class="fas fa-trash"></i>
+                      <x-icon name="trash" />
                     </button>
                   </form>
                 </div>
@@ -111,7 +111,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-calendar-plus text-success me-2"></i> Nouvel Événement</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="calendar-plus" class="text-success me-2" /> Nouvel Événement</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form action="{{ route('dashboard.events.store') }}" method="POST" enctype="multipart/form-data">
@@ -173,7 +173,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-pen text-warning me-2"></i> Éditer l'Événement</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="pen" class="text-warning me-2" /> Éditer l'Événement</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form id="formEditEvent" method="POST" enctype="multipart/form-data">
@@ -235,7 +235,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-calendar-day text-info me-2"></i> Détails de l'Événement</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="calendar-day" class="text-info me-2" /> Détails de l'Événement</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body py-4 text-center">

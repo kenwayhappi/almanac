@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Contact & Assistance - Almanac')
 
@@ -7,7 +7,7 @@
   <div class="row justify-content-center text-center mb-5">
     <div class="col-lg-8">
       <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-bold mb-3">
-        <i class="fas fa-envelope me-1"></i> Restons en Contact
+        <x-icon name="envelope" class="me-1" /> Restons en Contact
       </span>
       <h1 class="font-serif fw-bold display-5 mb-3">Nous Contacter</h1>
       <p class="text-muted lead fs-6">
@@ -25,7 +25,7 @@
 
           <div class="d-flex align-items-start gap-3 mb-4">
             <div class="rounded-circle bg-success bg-opacity-10 text-success p-3">
-              <i class="fas fa-map-marker-alt fs-4"></i>
+              <x-icon name="map-marker-alt" class="fs-4" />
             </div>
             <div>
               <h6 class="fw-bold mb-1">Siège Social</h6>
@@ -35,7 +35,7 @@
 
           <div class="d-flex align-items-start gap-3 mb-4">
             <div class="rounded-circle bg-success bg-opacity-10 text-success p-3">
-              <i class="fas fa-phone-alt fs-4"></i>
+              <x-icon name="phone-alt" class="fs-4" />
             </div>
             <div>
               <h6 class="fw-bold mb-1">Téléphone & WhatsApp</h6>
@@ -45,7 +45,7 @@
 
           <div class="d-flex align-items-start gap-3 mb-4">
             <div class="rounded-circle bg-success bg-opacity-10 text-success p-3">
-              <i class="fas fa-envelope fs-4"></i>
+              <x-icon name="envelope" class="fs-4" />
             </div>
             <div>
               <h6 class="fw-bold mb-1">Adresse Email</h6>
@@ -55,7 +55,7 @@
         </div>
 
         <div class="border-top pt-3 mt-4">
-          <small class="text-muted"><i class="fas fa-clock text-success me-1"></i> Horaires : Lundi - Vendredi (8h00 - 18h00)</small>
+          <small class="text-muted"><x-icon name="clock" class="text-success me-1" /> Horaires : Lundi - Vendredi (8h00 - 18h00)</small>
         </div>
       </div>
     </div>
@@ -66,7 +66,7 @@
         <h4 class="font-serif fw-bold mb-4">Envoyez-nous un Message</h4>
 
         <div id="formAlert" class="alert alert-success d-none mb-4" role="alert">
-          <i class="fas fa-check-circle me-2"></i> Votre message a été transmis avec succès. Merci !
+          <x-icon name="check-circle" class="me-2" /> Votre message a été transmis avec succès. Merci !
         </div>
 
         <form id="contactForm" onsubmit="event.preventDefault(); document.getElementById('formAlert').classList.remove('d-none'); this.reset();">
@@ -103,7 +103,7 @@
           </div>
 
           <button type="submit" class="btn btn-accent px-5 py-3 rounded-pill fw-bold">
-            <i class="fas fa-paper-plane me-2"></i> Envoyer le Message
+            <x-icon name="paper-plane" class="me-2" /> Envoyer le Message
           </button>
         </form>
       </div>

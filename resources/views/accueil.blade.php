@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Almanach - L\'Encyclopédie Numérique des Villages & Groupements')
 
@@ -9,7 +9,7 @@
     <div class="row align-items-center g-5">
       <div class="col-lg-7">
         <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-bold mb-3">
-          <i class="fas fa-landmark me-1"></i> Patrimoine & Culture Africaine
+          <x-icon name="landmark" class="me-1" /> Patrimoine & Culture Africaine
         </span>
         <h1 class="font-serif fw-extrabold mb-4" style="line-height: 1.25; font-size: calc(1.35rem + 1.2vw);">
           Découvrez la Richesse Historique et Démographique de nos <span class="text-success">Villages</span>.
@@ -22,11 +22,11 @@
         <div class="custom-card p-2 mb-4 shadow-lg border-0">
           <form action="{{ route('recherche') }}" method="GET" class="d-flex flex-column flex-sm-row gap-2">
             <div class="input-group">
-              <span class="input-group-text bg-transparent border-0"><i class="fas fa-search text-success fs-5"></i></span>
+              <span class="input-group-text bg-transparent border-0"><x-icon name="search" class="text-success fs-5" /></span>
               <input type="text" name="name" class="form-control border-0 shadow-none bg-transparent" placeholder="Rechercher un village, canton, chefferie..." required>
             </div>
             <button type="submit" class="btn btn-accent px-4 py-3 text-nowrap rounded-pill">
-              <i class="fas fa-search me-2"></i> Explorer
+              <x-icon name="search" class="me-2" /> Explorer
             </button>
           </form>
         </div>
@@ -65,10 +65,10 @@
   <div class="container">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
       <div>
-        <span class="badge bg-warning bg-opacity-10 text-warning px-3 py-1 rounded-pill fw-bold mb-2"><i class="fas fa-star me-1"></i> Espace Sponsorisé</span>
+        <span class="badge bg-warning bg-opacity-10 text-warning px-3 py-1 rounded-pill fw-bold mb-2"><x-icon name="star" class="me-1" /> Espace Sponsorisé</span>
         <h3 class="font-serif fw-bold mb-0">Publicités & Annonces à la Une</h3>
       </div>
-      <small class="text-muted mt-2 mt-md-0"><i class="fas fa-info-circle me-1"></i> Cliquez sur une annonce pour consulter la version grand format</small>
+      <small class="text-muted mt-2 mt-md-0"><x-icon name="info-circle" class="me-1" /> Cliquez sur une annonce pour consulter la version grand format</small>
     </div>
 
     <div class="owl-carousel owl-theme home-ad-carousel">
@@ -77,14 +77,14 @@
           <div class="custom-card h-100 p-3 overflow-hidden cursor-pointer" onclick="viewAdvertisement({{ $ad->id }}, '{{ addslashes($ad->title ?? 'Publicité') }}', '{{ $ad->type }}', '{{ $ad->file_url }}', '{{ addslashes($ad->content ?? '') }}')">
             <div class="position-relative rounded-3 overflow-hidden mb-3" style="height: 200px; background:#000;">
               @if($ad->type === 'photo')
-                <img src="{{ $ad->file_url }}" alt="{{ $ad->title }}" class="w-100 h-100" style="object-fit: cover;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'d-flex flex-column align-items-center justify-content-center h-100 bg-secondary bg-opacity-20 text-muted\'><i class=\'fas fa-image fs-1 mb-1 text-warning\'></i><span class=\'small fw-bold\'>Annonce Photo</span></div>';">
+                <img src="{{ $ad->file_url }}" alt="{{ $ad->title }}" class="w-100 h-100" style="object-fit: cover;" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\'d-flex flex-column align-items-center justify-content-center h-100 bg-secondary bg-opacity-20 text-muted\'><x-icon name=\'image\' class=\'fs-1 mb-1 text-warning\' /><span class=\'small fw-bold\'>Annonce Photo</span></div>';">
               @elseif($ad->type === 'video')
                 <div class="d-flex align-items-center justify-content-center h-100 bg-dark text-white">
-                  <i class="fas fa-play-circle fs-1 text-success"></i>
+                  <x-icon name="play-circle" class="fs-1 text-success" />
                 </div>
               @else
                 <div class="p-4 bg-success bg-opacity-10 text-start h-100">
-                  <i class="fas fa-bullhorn fs-2 text-success mb-2"></i>
+                  <x-icon name="bullhorn" class="fs-2 text-success mb-2" />
                   <p class="small text-truncate mb-0">{{ $ad->content }}</p>
                 </div>
               @endif
@@ -113,7 +113,7 @@
     @foreach($groupementsByCountry as $countryName => $groupements)
       <div class="mb-5">
         <div class="d-flex align-items-center gap-3 mb-4">
-          <h4 class="font-serif fw-bold mb-0"><i class="fas fa-flag text-success me-2"></i> {{ $countryName }}</h4>
+          <h4 class="font-serif fw-bold mb-0"><x-icon name="flag" class="text-success me-2" /> {{ $countryName }}</h4>
           <hr class="flex-grow-1 opacity-10">
         </div>
 
@@ -123,7 +123,7 @@
               <div class="custom-card h-100 p-4 d-flex flex-column">
                 <div class="d-flex align-items-center gap-3 mb-3">
                   <div class="rounded-circle bg-success bg-opacity-10 text-success p-3">
-                    <i class="fas fa-layer-group fs-4"></i>
+                    <x-icon name="layer-group" class="fs-4" />
                   </div>
                   <div>
                     <h5 class="fw-bold font-serif mb-0">{{ $g->name }}</h5>
@@ -135,7 +135,7 @@
                 </p>
                 <div class="border-top pt-3 mt-auto d-flex justify-content-between align-items-center">
                   <a href="{{ route('groupement.show', $g->id . '-' . Str::slug($g->name)) }}" class="btn btn-sm btn-outline-success rounded-pill px-3">
-                    Explorer le groupement <i class="fas fa-arrow-right ms-1"></i>
+                    Explorer le groupement <x-icon name="arrow-right" class="ms-1" />
                   </a>
                 </div>
               </div>
@@ -159,7 +159,7 @@
             Vous souhaitez documenter l'histoire de votre localité, inscrire vos notables ou faire la promotion d'artisans locaux ?
           </p>
           <a href="{{ route('contact') }}" class="btn btn-light text-dark font-bold rounded-pill px-5 py-3 fs-6 shadow">
-            <i class="fas fa-paper-plane me-2"></i> Nous Contacter
+            <x-icon name="paper-plane" class="me-2" /> Nous Contacter
           </a>
         </div>
       </div>

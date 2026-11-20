@@ -1,16 +1,16 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 
 @section('title', 'Cameroun & Divisions Administratives - Admin')
 
 @section('content')
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
   <div>
-    <h2 class="fw-bold font-serif mb-1"><i class="fas fa-globe text-success me-2"></i> Cameroun & Découpages Administratifs</h2>
+    <h2 class="fw-bold font-serif mb-1"><x-icon name="globe" class="text-success me-2" /> Cameroun & Découpages Administratifs</h2>
     <p class="text-muted small mb-0">Gestion du territoire national du Cameroun (+237) et de ses découpages (Régions, Départements, Arrondissements).</p>
   </div>
   <div>
     <button type="button" class="btn btn-success rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalCreateCountry">
-      <i class="fas fa-plus-circle me-1"></i> Ajouter un Pays / Territoire
+      <x-icon name="plus-circle" class="me-1" /> Ajouter un Pays / Territoire
     </button>
   </div>
 </div>
@@ -18,11 +18,11 @@
 <div class="admin-card mb-4">
   @if($countries->isEmpty())
     <div class="text-center py-5">
-      <i class="fas fa-globe fs-1 text-muted opacity-50 mb-3"></i>
+      <x-icon name="globe" class="fs-1 text-muted opacity-50 mb-3" />
       <h4 class="fw-bold">Aucun pays répertorié</h4>
       <p class="text-muted small mb-3">Ajoutez le territoire national du Cameroun pour commencer la structuration.</p>
       <button type="button" class="btn btn-success rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalCreateCountry">
-        <i class="fas fa-plus me-1"></i> Créer le Pays
+        <x-icon name="plus" class="me-1" /> Créer le Pays
       </button>
     </div>
   @else
@@ -49,7 +49,7 @@
                   $types = $country->administrativeDivisionTypes->pluck('name')->toArray();
                 @endphp
                 @if(count($types) > 0)
-                  <span class="badge bg-success bg-opacity-10 text-success me-1"><i class="fas fa-sitemap me-1"></i> {{ implode(' ➔ ', $types) }}</span>
+                  <span class="badge bg-success bg-opacity-10 text-success me-1"><x-icon name="sitemap" class="me-1" /> {{ implode(' ➔ ', $types) }}</span>
                 @else
                   <span class="text-muted small">Aucun type configuré</span>
                 @endif
@@ -58,16 +58,16 @@
               <td class="text-end">
                 <div class="d-inline-flex gap-1">
                   <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-2 py-1 small" onclick="openTreeCountry({{ json_encode($country) }})" title="Gérer l'arborescence et les divisions">
-                    <i class="fas fa-sitemap me-1"></i> Divisions
+                    <x-icon name="sitemap" class="me-1" /> Divisions
                   </button>
                   <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-2 py-1 small" onclick="openEditCountry({{ json_encode($country) }})" title="Modifier le Pays">
-                    <i class="fas fa-edit"></i>
+                    <x-icon name="edit" />
                   </button>
                   <form action="{{ route('dashboard.pays.destroy', $country->id) }}" method="POST" class="d-inline" onsubmit="return confirmDoubleDelete('{{ addslashes($country->name) }}');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 small" title="Supprimer le Pays">
-                      <i class="fas fa-trash"></i>
+                      <x-icon name="trash" />
                     </button>
                   </form>
                 </div>
@@ -93,7 +93,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content admin-card border-0 shadow-lg">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-globe text-success me-2"></i> Ajouter un NOUVEAU Pays / Territoire</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="globe" class="text-success me-2" /> Ajouter un NOUVEAU Pays / Territoire</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form action="{{ route('dashboard.pays.store') }}" method="POST">
@@ -115,7 +115,7 @@
           </div>
 
           <div class="mt-4 pt-3 border-top border-secondary border-opacity-10">
-            <h6 class="fw-bold font-serif mb-2"><i class="fas fa-layer-group text-warning me-2"></i> Niveaux d'Arborescence Administrative</h6>
+            <h6 class="fw-bold font-serif mb-2"><x-icon name="layer-group" class="text-warning me-2" /> Niveaux d'Arborescence Administrative</h6>
             <p class="text-muted small mb-3">Définissez les niveaux hiérarchiques du pays (dans l'ordre de la plus grande à la plus petite division).</p>
 
             <div class="row g-2 mb-2">
@@ -133,7 +133,7 @@
         </div>
         <div class="modal-footer border-top border-secondary border-opacity-10">
           <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Annuler</button>
-          <button type="submit" class="btn btn-success rounded-pill px-5"><i class="fas fa-check me-1"></i> Créer le Pays</button>
+          <button type="submit" class="btn btn-success rounded-pill px-5"><x-icon name="check" class="me-1" /> Créer le Pays</button>
         </div>
       </form>
     </div>
@@ -147,7 +147,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content admin-card border-0 shadow-lg">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-edit text-warning me-2"></i> Modifier le Pays / Territoire</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="edit" class="text-warning me-2" /> Modifier le Pays / Territoire</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form id="formEditCountry" method="POST">
@@ -174,7 +174,7 @@
         </div>
         <div class="modal-footer border-top border-secondary border-opacity-10">
           <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Annuler</button>
-          <button type="submit" class="btn btn-warning text-dark fw-bold rounded-pill px-5"><i class="fas fa-save me-1"></i> Enregistrer</button>
+          <button type="submit" class="btn btn-warning text-dark fw-bold rounded-pill px-5"><x-icon name="save" class="me-1" /> Enregistrer</button>
         </div>
       </form>
     </div>
@@ -189,7 +189,7 @@
     <div class="modal-content admin-card border-0 shadow-lg">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
         <div>
-          <h5 class="modal-title fw-bold font-serif mb-0"><i class="fas fa-sitemap text-success me-2"></i> <span id="treeCountryTitle">Cameroun</span> — Arborescence des Divisions</h5>
+          <h5 class="modal-title fw-bold font-serif mb-0"><x-icon name="sitemap" class="text-success me-2" /> <span id="treeCountryTitle">Cameroun</span> — Arborescence des Divisions</h5>
           <small class="text-muted">Ajoutez, modifiez ou supprimez les Régions, Départements et Arrondissements.</small>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -198,11 +198,11 @@
         <!-- Action Bar -->
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 p-3 bg-body-tertiary rounded-3">
           <div class="input-group" style="max-width: 320px;">
-            <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+            <span class="input-group-text bg-transparent border-end-0"><x-icon name="search" class="text-muted" /></span>
             <input type="text" id="searchDivisionInput" class="form-control border-start-0 ps-0" placeholder="Rechercher une division…" oninput="filterDivisionsTree()">
           </div>
           <button type="button" class="btn btn-success btn-sm rounded-pill px-4 fw-bold" onclick="openCreateDivisionModal()">
-            <i class="fas fa-plus-circle me-1"></i> Ajouter une Division
+            <x-icon name="plus-circle" class="me-1" /> Ajouter une Division
           </button>
         </div>
 
@@ -222,7 +222,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content admin-card border-0 shadow-lg">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-plus-circle text-success me-2"></i> Ajouter une Division Administrative</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="plus-circle" class="text-success me-2" /> Ajouter une Division Administrative</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form action="{{ route('dashboard.pays.divisions.store') }}" method="POST">
@@ -249,7 +249,7 @@
         </div>
         <div class="modal-footer border-top border-secondary border-opacity-10">
           <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Annuler</button>
-          <button type="submit" class="btn btn-success rounded-pill px-5"><i class="fas fa-check me-1"></i> Ajouter</button>
+          <button type="submit" class="btn btn-success rounded-pill px-5"><x-icon name="check" class="me-1" /> Ajouter</button>
         </div>
       </form>
     </div>
@@ -263,7 +263,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content admin-card border-0 shadow-lg">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-edit text-warning me-2"></i> Modifier la Division</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="edit" class="text-warning me-2" /> Modifier la Division</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form id="formEditDivision" method="POST">
@@ -290,7 +290,7 @@
         </div>
         <div class="modal-footer border-top border-secondary border-opacity-10">
           <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Annuler</button>
-          <button type="submit" class="btn btn-warning text-dark fw-bold rounded-pill px-5"><i class="fas fa-save me-1"></i> Enregistrer</button>
+          <button type="submit" class="btn btn-warning text-dark fw-bold rounded-pill px-5"><x-icon name="save" class="me-1" /> Enregistrer</button>
         </div>
       </form>
     </div>
@@ -310,7 +310,7 @@ function openEditCountry(c) {
   document.getElementById('editCountryCode').value = c.code;
 
   const container = document.getElementById('editTypesContainer');
-  container.innerHTML = '<h6 class="fw-bold font-serif mb-2"><i class="fas fa-layer-group text-warning me-2"></i> Types de Divisions</h6>';
+  container.innerHTML = '<h6 class="fw-bold font-serif mb-2"><x-icon name="layer-group" class="text-warning me-2" /> Types de Divisions</h6>';
 
   if (c.administrative_division_types && c.administrative_division_types.length > 0) {
     let row = '<div class="row g-2 mb-2">';
@@ -343,7 +343,7 @@ function renderDivisionsTree(filterText = '') {
 
   if (!currentCountryData || !currentCountryData.administrative_divisions || currentCountryData.administrative_divisions.length === 0) {
     container.innerHTML = `<div class="text-center py-4 text-muted">
-      <i class="fas fa-folder-open fs-2 mb-2 opacity-50"></i>
+      <x-icon name="folder-open" class="fs-2 mb-2 opacity-50" />
       <p class="mb-0">Aucune division administrative enregistrée pour ce pays.</p>
     </div>`;
     return;
@@ -380,12 +380,12 @@ function renderDivisionsTree(filterText = '') {
           hasVisibleGrandChild = true;
           grandChildHtml += `
             <div class="d-flex align-items-center justify-content-between p-2 rounded border border-secondary border-opacity-10 mb-1 ms-4 bg-body-tertiary">
-              <span class="small fw-semibold"><i class="fas fa-map-marker-alt text-info me-1"></i> ${gc.name}</span>
+              <span class="small fw-semibold"><x-icon name="map-marker-alt" class="text-info me-1" /> ${gc.name}</span>
               <div class="d-inline-flex gap-1">
-                <button type="button" class="btn btn-xs btn-outline-warning py-0 px-2 small" onclick="openEditDivisionModal(${gc.id}, '${gc.name.replace(/'/g, "\\'")}', ${gc.type_id}, ${gc.parent_id})"><i class="fas fa-edit"></i></button>
+                <button type="button" class="btn btn-xs btn-outline-warning py-0 px-2 small" onclick="openEditDivisionModal(${gc.id}, '${gc.name.replace(/'/g, "\\'")}', ${gc.type_id}, ${gc.parent_id})"><x-icon name="edit" /></button>
                 <form action="/dashboard/pays/divisions/${gc.id}" method="POST" class="d-inline" onsubmit="return confirm('Supprimer la division ${gc.name.replace(/'/g, "\\'")} ?');">
                   @csrf @method('DELETE')
-                  <button type="submit" class="btn btn-xs btn-outline-danger py-0 px-2 small"><i class="fas fa-trash"></i></button>
+                  <button type="submit" class="btn btn-xs btn-outline-danger py-0 px-2 small"><x-icon name="trash" /></button>
                 </form>
               </div>
             </div>`;
@@ -397,13 +397,13 @@ function renderDivisionsTree(filterText = '') {
         childHtml += `
           <div class="p-2 border border-secondary border-opacity-10 rounded mb-2 ms-3 bg-card">
             <div class="d-flex align-items-center justify-content-between">
-              <span class="fw-bold text-main small"><i class="fas fa-building text-warning me-1"></i> ${child.name}</span>
+              <span class="fw-bold text-main small"><x-icon name="building" class="text-warning me-1" /> ${child.name}</span>
               <div class="d-inline-flex gap-1">
-                <button type="button" class="btn btn-xs btn-outline-success py-0 px-2 small" onclick="openCreateDivisionModal(${child.id}, 3)"><i class="fas fa-plus me-1"></i> Sous-division</button>
-                <button type="button" class="btn btn-xs btn-outline-warning py-0 px-2 small" onclick="openEditDivisionModal(${child.id}, '${child.name.replace(/'/g, "\\'")}', ${child.type_id}, ${child.parent_id})"><i class="fas fa-edit"></i></button>
+                <button type="button" class="btn btn-xs btn-outline-success py-0 px-2 small" onclick="openCreateDivisionModal(${child.id}, 3)"><x-icon name="plus" class="me-1" /> Sous-division</button>
+                <button type="button" class="btn btn-xs btn-outline-warning py-0 px-2 small" onclick="openEditDivisionModal(${child.id}, '${child.name.replace(/'/g, "\\'")}', ${child.type_id}, ${child.parent_id})"><x-icon name="edit" /></button>
                 <form action="/dashboard/pays/divisions/${child.id}" method="POST" class="d-inline" onsubmit="return confirm('Supprimer le département ${child.name.replace(/'/g, "\\'")} ?');">
                   @csrf @method('DELETE')
-                  <button type="submit" class="btn btn-xs btn-outline-danger py-0 px-2 small"><i class="fas fa-trash"></i></button>
+                  <button type="submit" class="btn btn-xs btn-outline-danger py-0 px-2 small"><x-icon name="trash" /></button>
                 </form>
               </div>
             </div>
@@ -422,11 +422,11 @@ function renderDivisionsTree(filterText = '') {
               <strong class="fs-6 font-serif">${root.name}</strong>
             </div>
             <div class="d-inline-flex gap-2">
-              <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3" onclick="openCreateDivisionModal(${root.id}, 2)"><i class="fas fa-plus me-1"></i> Ajouter Département</button>
-              <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-3" onclick="openEditDivisionModal(${root.id}, '${root.name.replace(/'/g, "\\'")}', ${root.type_id}, null)"><i class="fas fa-edit me-1"></i> Modifier</button>
+              <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3" onclick="openCreateDivisionModal(${root.id}, 2)"><x-icon name="plus" class="me-1" /> Ajouter Département</button>
+              <button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-3" onclick="openEditDivisionModal(${root.id}, '${root.name.replace(/'/g, "\\'")}', ${root.type_id}, null)"><x-icon name="edit" class="me-1" /> Modifier</button>
               <form action="/dashboard/pays/divisions/${root.id}" method="POST" class="d-inline" onsubmit="return confirm('Supprimer la région ${root.name.replace(/'/g, "\\'")} et ses sous-divisions ?');">
                 @csrf @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3"><i class="fas fa-trash"></i></button>
+                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3"><x-icon name="trash" /></button>
               </form>
             </div>
           </div>

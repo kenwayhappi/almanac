@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'Village '.$village->name.' - Almanac')
 
@@ -30,11 +30,11 @@
       <div class="col-lg-7 col-md-7">
         @if($village->villageGroup)
           <a href="{{ route('groupement.show', $village->villageGroup->id . '-' . Str::slug($village->villageGroup->name)) }}" class="badge bg-warning text-dark font-bold px-3 py-2 rounded-pill mb-3 text-decoration-none" title="Visiter la fiche du {{ $cleanCantonName }}">
-            <i class="fas fa-layer-group me-1"></i> {{ $cleanCantonName }}
+            <x-icon name="layer-group" class="me-1" /> {{ $cleanCantonName }}
           </a>
         @else
           <span class="badge bg-warning text-dark font-bold px-3 py-2 rounded-pill mb-3">
-            <i class="fas fa-layer-group me-1"></i> Groupement
+            <x-icon name="layer-group" class="me-1" /> Groupement
           </span>
         @endif
         <h1 class="font-serif fw-bold display-4 text-white mb-2">{{ FormatHelper::cleanVillageName($village->name) }}</h1>
@@ -44,7 +44,7 @@
 
         <div class="d-flex flex-wrap gap-3 align-items-center">
           <span class="badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill fw-bold fs-6">
-            <i class="fas fa-users me-1 text-success"></i> {{ number_format($village->population ?? 0) }} Habitants
+            <x-icon name="users" class="me-1 text-success" /> {{ number_format($village->population ?? 0) }} Habitants
           </span>
         </div>
       </div>
@@ -58,11 +58,11 @@
               <img src="{{ $cPhoto }}" alt="{{ $cNameFormatted }}" class="w-100 h-100" style="object-fit: cover;">
             @else
               <div class="w-100 h-100 bg-warning bg-opacity-20 d-flex align-items-center justify-content-center text-warning">
-                <i class="fas fa-user-shield fs-1"></i>
+                <x-icon name="user-shield" class="fs-1" />
               </div>
             @endif
           </div>
-          <span class="badge bg-warning text-dark fw-bold mb-2 px-3 py-1"><i class="fas fa-crown me-1"></i> {{ $chefRoleBadge }}</span>
+          <span class="badge bg-warning text-dark fw-bold mb-2 px-3 py-1"><x-icon name="crown" class="me-1" /> {{ $chefRoleBadge }}</span>
           <h5 class="fw-bold font-serif text-white mb-1 text-center lh-sm" style="word-break: break-word; font-size: 1.05rem;">{{ $cNameFormatted }}</h5>
           <small class="text-white opacity-75 d-block fs-xs">Cliquez pour agrandir la photo</small>
         </div>
@@ -76,27 +76,27 @@
     <ul class="nav nav-pills nav-fill flex-column flex-sm-row gap-2" id="villageTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link text-main font-semibold active py-3 w-100" id="tab-overview" data-bs-toggle="pill" data-bs-target="#content-overview" type="button" role="tab">
-          <i class="fas fa-home me-2 text-success"></i> Vue d'ensemble
+          <x-icon name="home" class="me-2 text-success" /> Vue d'ensemble
         </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link text-main font-semibold py-3 w-100" id="tab-decouvrir" data-bs-toggle="pill" data-bs-target="#content-decouvrir" type="button" role="tab">
-          <i class="fas fa-compass me-2 text-success"></i> Découvrir ({{ $village->activities->count() }})
+          <x-icon name="compass" class="me-2 text-success" /> Découvrir ({{ $village->activities->count() }})
         </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link text-main font-semibold py-3 w-100" id="tab-personalities" data-bs-toggle="pill" data-bs-target="#content-personalities" type="button" role="tab">
-          <i class="fas fa-user-tie me-2 text-warning"></i> Personnalités ({{ $village->personalities->count() }})
+          <x-icon name="user-tie" class="me-2 text-warning" /> Personnalités ({{ $village->personalities->count() }})
         </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link text-main font-semibold py-3 w-100" id="tab-pros" data-bs-toggle="pill" data-bs-target="#content-pros" type="button" role="tab">
-          <i class="fas fa-briefcase me-2 text-info"></i> Artisans & Pros ({{ $village->professionals->count() }})
+          <x-icon name="briefcase" class="me-2 text-info" /> Artisans & Pros ({{ $village->professionals->count() }})
         </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link text-main font-semibold py-3 w-100" id="tab-history" data-bs-toggle="pill" data-bs-target="#content-history" type="button" role="tab">
-          <i class="fas fa-book-open me-2 text-primary"></i> Histoire & Événements
+          <x-icon name="book-open" class="me-2 text-primary" /> Histoire & Événements
         </button>
       </li>
     </ul>
@@ -111,7 +111,7 @@
         <!-- Village Carousel Gallery (Left Side) -->
         <div class="col-lg-5 col-xl-5">
           <div class="custom-card p-4 h-100">
-            <h4 class="font-serif fw-bold mb-3"><i class="fas fa-images text-success me-2"></i> Galerie du Village</h4>
+            <h4 class="font-serif fw-bold mb-3"><x-icon name="images" class="text-success me-2" /> Galerie du Village</h4>
             <hr class="opacity-10 mb-4">
 
             @php $cUrls = $village->carousel_image_urls; @endphp
@@ -135,7 +135,7 @@
               </div>
             @else
               <div class="bg-dark bg-opacity-50 text-white rounded-3 p-5 text-center d-flex flex-column align-items-center justify-content-center" style="min-height: 250px;">
-                <i class="fas fa-mountain fs-1 text-success mb-3 opacity-75"></i>
+                <x-icon name="mountain" class="fs-1 text-success mb-3 opacity-75" />
                 <h6 class="fw-bold mb-1">Patrimoine & Paysages</h6>
                 <p class="small text-muted mb-0">Photos d'illustration du village {{ FormatHelper::cleanVillageName($village->name) }}.</p>
               </div>
@@ -146,7 +146,7 @@
         <!-- Presentation (Right Side) -->
         <div class="col-lg-7 col-xl-7">
           <div class="custom-card p-4 p-md-5 h-100">
-            <h3 class="font-serif fw-bold mb-3"><i class="fas fa-scroll text-success me-2"></i> Présentation du Village</h3>
+            <h3 class="font-serif fw-bold mb-3"><x-icon name="scroll" class="text-success me-2" /> Présentation du Village</h3>
             <hr class="opacity-10 mb-4">
 
             <div class="fs-6 text-main mb-4">
@@ -158,13 +158,13 @@
                 $gGroupChefFormatted = FormatHelper::formatChefName($village->villageGroup->chef_groupement);
               @endphp
               <div class="p-4 bg-success bg-opacity-10 rounded-3 border border-success border-opacity-20 mt-4">
-                <h5 class="fw-bold font-serif text-success mb-2"><i class="fas fa-layer-group me-2"></i> Rattachement Cantonal</h5>
+                <h5 class="fw-bold font-serif text-success mb-2"><x-icon name="layer-group" class="me-2" /> Rattachement Cantonal</h5>
                 <p class="small text-main mb-3">
                   Rattaché au <a href="{{ route('groupement.show', $village->villageGroup->id . '-' . Str::slug($village->villageGroup->name)) }}" class="fw-bold text-success text-decoration-underline">{{ $cleanCantonName }}</a>
                   @if($gGroupChefFormatted) ({{ $gGroupChefFormatted }}) @endif.
                 </p>
                 <a href="{{ route('groupement.show', $village->villageGroup->id . '-' . Str::slug($village->villageGroup->name)) }}" class="btn btn-sm btn-outline-success rounded-pill px-4 py-2 fw-bold">
-                  Voir le {{ $cleanCantonName }} <i class="fas fa-arrow-right ms-1"></i>
+                  Voir le {{ $cleanCantonName }} <x-icon name="arrow-right" class="ms-1" />
                 </a>
               </div>
             @endif
@@ -178,12 +178,12 @@
       <div class="custom-card p-4 p-md-5">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
           <div>
-            <h3 class="font-serif fw-bold mb-1"><i class="fas fa-compass text-success me-2"></i> Activités, Artisanats & Attraits</h3>
+            <h3 class="font-serif fw-bold mb-1"><x-icon name="compass" class="text-success me-2" /> Activités, Artisanats & Attraits</h3>
             <p class="text-muted small mb-0">Découvrez les activités économiques, culturelles et touristiques du village {{ $village->name }}.</p>
           </div>
           @if(!$village->activities->isEmpty())
           <div class="input-group" style="max-width: 280px;">
-            <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+            <span class="input-group-text bg-transparent border-end-0"><x-icon name="search" class="text-muted" /></span>
             <input type="text" id="searchActivite" class="form-control border-start-0 ps-0" placeholder="Rechercher une activité…" oninput="filterActivites()">
           </div>
           @endif
@@ -191,7 +191,7 @@
 
         @if($village->activities->isEmpty())
           <div class="text-center py-5">
-            <i class="fas fa-hiking fs-1 text-muted opacity-50 mb-3"></i>
+            <x-icon name="hiking" class="fs-1 text-muted opacity-50 mb-3" />
             <h5 class="fw-bold">Aucune activité enregistrée</h5>
             <p class="text-muted small">Les activités culturelles et économiques de ce village seront bientôt répertoriées.</p>
           </div>
@@ -205,7 +205,7 @@
                     <img src="{{ $aImg }}" alt="{{ $act->name }}" style="height: 180px; object-fit: cover;" class="w-100">
                   @else
                     <div class="bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center" style="height:180px;">
-                      <i class="fas fa-hiking fs-1"></i>
+                      <x-icon name="hiking" class="fs-1" />
                     </div>
                   @endif
                   <div class="card-body p-4">
@@ -214,14 +214,14 @@
                     <p class="text-muted small mb-0">{{ Str::limit($act->description ?? '-', 100) }}</p>
                   </div>
                   <div class="card-footer bg-transparent border-top border-secondary border-opacity-10 py-2 px-4">
-                    <small class="text-success fw-semibold"><i class="fas fa-eye me-1"></i> Voir les détails</small>
+                    <small class="text-success fw-semibold"><x-icon name="eye" class="me-1" /> Voir les détails</small>
                   </div>
                 </div>
               </div>
             @endforeach
           </div>
           <div id="activitesEmpty" class="text-center py-5 d-none">
-            <i class="fas fa-search fs-1 text-muted opacity-50 mb-3"></i>
+            <x-icon name="search" class="fs-1 text-muted opacity-50 mb-3" />
             <p class="text-muted">Aucune activité ne correspond à votre recherche.</p>
           </div>
         @endif
@@ -233,14 +233,14 @@
       <div class="custom-card p-4 p-md-5">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
           <div>
-            <h3 class="font-serif fw-bold mb-1"><i class="fas fa-user-tie text-warning me-2"></i> Notables & Figures Marquantes</h3>
+            <h3 class="font-serif fw-bold mb-1"><x-icon name="user-tie" class="text-warning me-2" /> Notables & Figures Marquantes</h3>
             <p class="text-muted small mb-0">Portraits des personnalités, élites et grands noms issus du village {{ $village->name }}.</p>
           </div>
           @if(!$village->personalities->isEmpty())
           <div class="d-flex gap-2 flex-wrap">
             <!-- Recherche -->
             <div class="input-group" style="max-width: 220px;">
-              <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+              <span class="input-group-text bg-transparent border-end-0"><x-icon name="search" class="text-muted" /></span>
               <input type="text" id="searchPersonnalite" class="form-control border-start-0 ps-0" placeholder="Rechercher…" oninput="filterPersonnalites()">
             </div>
             <!-- Filtre statut -->
@@ -256,7 +256,7 @@
 
         @if($village->personalities->isEmpty())
           <div class="text-center py-5">
-            <i class="fas fa-user-tie fs-1 text-muted opacity-50 mb-3"></i>
+            <x-icon name="user-tie" class="fs-1 text-muted opacity-50 mb-3" />
             <h5 class="fw-bold">Aucune personnalité répertoriée</h5>
             <p class="text-muted small">Le répertoire des notables et élites de ce village est en cours de constitution.</p>
           </div>
@@ -271,7 +271,7 @@
                       <img src="{{ $pImg }}" alt="{{ $p->name }}" class="w-100 h-100" style="object-fit: cover;">
                     @else
                       <div class="w-100 h-100 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center">
-                        <i class="fas fa-user fs-2"></i>
+                        <x-icon name="user" class="fs-2" />
                       </div>
                     @endif
                   </div>
@@ -279,17 +279,17 @@
                   <span class="badge bg-warning bg-opacity-10 text-dark fw-bold mb-2 px-3 py-1">{{ $p->statut ?? 'Notable' }}</span>
                   <p class="text-muted small mb-2">{{ Str::limit($p->description ?? 'Figure marquante du village.', 90) }}</p>
                   @if($p->contact)
-                    <small class="text-success fw-semibold"><i class="fas fa-phone me-1"></i> {{ $p->contact }}</small>
+                    <small class="text-success fw-semibold"><x-icon name="phone" class="me-1" /> {{ $p->contact }}</small>
                   @endif
                   <div class="mt-3 pt-2 border-top border-secondary border-opacity-10">
-                    <small class="text-warning fw-semibold"><i class="fas fa-eye me-1"></i> Voir le profil complet</small>
+                    <small class="text-warning fw-semibold"><x-icon name="eye" class="me-1" /> Voir le profil complet</small>
                   </div>
                 </div>
               </div>
             @endforeach
           </div>
           <div id="personnalitesEmpty" class="text-center py-5 d-none">
-            <i class="fas fa-search fs-1 text-muted opacity-50 mb-3"></i>
+            <x-icon name="search" class="fs-1 text-muted opacity-50 mb-3" />
             <p class="text-muted">Aucune personnalité ne correspond à votre recherche.</p>
           </div>
         @endif
@@ -301,12 +301,12 @@
       <div class="custom-card p-4 p-md-5">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
           <div>
-            <h3 class="font-serif fw-bold mb-1"><i class="fas fa-briefcase text-info me-2"></i> Artisans & Professionnels Locaux</h3>
+            <h3 class="font-serif fw-bold mb-1"><x-icon name="briefcase" class="text-info me-2" /> Artisans & Professionnels Locaux</h3>
             <p class="text-muted small mb-0">Répertoire des métiers, ateliers et services disponibles dans le village.</p>
           </div>
           @if(!$village->professionals->isEmpty())
           <div class="input-group" style="max-width: 260px;">
-            <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+            <span class="input-group-text bg-transparent border-end-0"><x-icon name="search" class="text-muted" /></span>
             <input type="text" id="searchPro" class="form-control border-start-0 ps-0" placeholder="Nom ou profession…" oninput="filterPros()">
           </div>
           @endif
@@ -314,7 +314,7 @@
 
         @if($village->professionals->isEmpty())
           <div class="text-center py-5">
-            <i class="fas fa-briefcase fs-1 text-muted opacity-50 mb-3"></i>
+            <x-icon name="briefcase" class="fs-1 text-muted opacity-50 mb-3" />
             <h5 class="fw-bold">Aucun artisan enregistré</h5>
             <p class="text-muted small">Les artisans et professionnels du village seront prochainement ajoutés.</p>
           </div>
@@ -329,7 +329,7 @@
                       @if($proImg)
                         <img src="{{ $proImg }}" alt="{{ $pro->name }}" class="w-100 h-100" style="object-fit: cover;">
                       @else
-                        <i class="fas fa-tools fs-3 text-info"></i>
+                        <x-icon name="tools" class="fs-3 text-info" />
                       @endif
                     </div>
                     <div>
@@ -340,18 +340,18 @@
                   <p class="text-muted small mb-3">{{ Str::limit($pro->description ?? 'Service professionnel local.', 100) }}</p>
                   @if($pro->contact)
                     <div class="pt-2 border-top border-secondary border-opacity-10 small text-success font-monospace fw-bold">
-                      <i class="fas fa-phone me-1"></i> {{ $pro->contact }}
+                      <x-icon name="phone" class="me-1" /> {{ $pro->contact }}
                     </div>
                   @endif
                   <div class="mt-2 pt-2 border-top border-secondary border-opacity-10">
-                    <small class="text-info fw-semibold"><i class="fas fa-eye me-1"></i> Voir le profil complet</small>
+                    <small class="text-info fw-semibold"><x-icon name="eye" class="me-1" /> Voir le profil complet</small>
                   </div>
                 </div>
               </div>
             @endforeach
           </div>
           <div id="prosEmpty" class="text-center py-5 d-none">
-            <i class="fas fa-search fs-1 text-muted opacity-50 mb-3"></i>
+            <x-icon name="search" class="fs-1 text-muted opacity-50 mb-3" />
             <p class="text-muted">Aucun artisan ne correspond à votre recherche.</p>
           </div>
         @endif
@@ -361,7 +361,7 @@
     <!-- 5. HISTOIRE & ÉVÉNEMENTS -->
     <div class="tab-pane fade" id="content-history" role="tabpanel">
       <div class="custom-card p-4 p-md-5 mb-4">
-        <h3 class="font-serif fw-bold mb-3"><i class="fas fa-history text-primary me-2"></i> Histoire, Origines & Dynasties</h3>
+        <h3 class="font-serif fw-bold mb-3"><x-icon name="history" class="text-primary me-2" /> Histoire, Origines & Dynasties</h3>
         <hr class="opacity-10 mb-4">
 
         <div class="fs-6 text-main mb-4">
@@ -370,7 +370,7 @@
 
         @if($village->historical_dynasty)
           <div class="p-4 bg-primary bg-opacity-10 rounded-3 border border-primary border-opacity-20 mt-4">
-            <h5 class="fw-bold font-serif text-primary mb-2"><i class="fas fa-sitemap me-2"></i> Dynastie & Généalogie Royale</h5>
+            <h5 class="fw-bold font-serif text-primary mb-2"><x-icon name="sitemap" class="me-2" /> Dynastie & Généalogie Royale</h5>
             <p class="small text-main mb-0">{{ $village->historical_dynasty }}</p>
           </div>
         @endif
@@ -378,7 +378,7 @@
 
       <!-- Événements du village -->
       <div class="custom-card p-4 p-md-5">
-        <h4 class="font-serif fw-bold mb-3"><i class="fas fa-calendar-alt text-success me-2"></i> Événements & Festivals du Village</h4>
+        <h4 class="font-serif fw-bold mb-3"><x-icon name="calendar-alt" class="text-success me-2" /> Événements & Festivals du Village</h4>
 
         @if($village->events->isEmpty())
           <p class="text-muted small mb-0">Aucun festival ou événement programmé pour le moment.</p>
@@ -392,7 +392,7 @@
                     @if($evImg)
                       <img src="{{ $evImg }}" alt="{{ $ev->name }}" class="w-100 h-100" style="object-fit: cover;">
                     @else
-                      <i class="fas fa-calendar-day fs-3"></i>
+                      <x-icon name="calendar-day" class="fs-3" />
                     @endif
                   </div>
                   <div>
@@ -432,13 +432,13 @@
       <div class="modal-body p-4 p-md-5">
         <div class="row g-4">
           <div class="col-md-7">
-            <h6 class="fw-bold text-uppercase text-muted small mb-2"><i class="fas fa-info-circle me-1"></i> Description</h6>
+            <h6 class="fw-bold text-uppercase text-muted small mb-2"><x-icon name="info-circle" class="me-1" /> Description</h6>
             <p id="mpDescription" class="text-main mb-4">—</p>
           </div>
           <div class="col-md-5">
             <div id="mpContactWrap" class="d-none">
-              <h6 class="fw-bold text-uppercase text-muted small mb-2"><i class="fas fa-address-book me-1"></i> Contact</h6>
-              <a id="mpContact" href="#" class="btn btn-outline-success btn-sm rounded-pill px-3"><i class="fas fa-phone me-1"></i> <span></span></a>
+              <h6 class="fw-bold text-uppercase text-muted small mb-2"><x-icon name="address-book" class="me-1" /> Contact</h6>
+              <a id="mpContact" href="#" class="btn btn-outline-success btn-sm rounded-pill px-3"><x-icon name="phone" class="me-1" /> <span></span></a>
             </div>
           </div>
         </div>
@@ -466,19 +466,19 @@
       <div class="modal-body p-4 p-md-5">
         <div class="row g-4">
           <div class="col-md-7">
-            <h6 class="fw-bold text-uppercase text-muted small mb-2"><i class="fas fa-info-circle me-1"></i> Description</h6>
+            <h6 class="fw-bold text-uppercase text-muted small mb-2"><x-icon name="info-circle" class="me-1" /> Description</h6>
             <p id="proDescription" class="text-main mb-4">—</p>
           </div>
           <div class="col-md-5">
             <div id="proContactWrap" class="d-none">
-              <h6 class="fw-bold text-uppercase text-muted small mb-2"><i class="fas fa-phone me-1"></i> Contact</h6>
-              <a id="proContact" href="#" class="btn btn-outline-info btn-sm rounded-pill px-3"><i class="fas fa-phone me-1"></i> <span></span></a>
+              <h6 class="fw-bold text-uppercase text-muted small mb-2"><x-icon name="phone" class="me-1" /> Contact</h6>
+              <a id="proContact" href="#" class="btn btn-outline-info btn-sm rounded-pill px-3"><x-icon name="phone" class="me-1" /> <span></span></a>
             </div>
             <div id="proWhatsappWrap" class="d-none mt-3">
-              <a id="proWhatsapp" href="#" target="_blank" class="btn btn-success btn-sm rounded-pill px-3"><i class="fab fa-whatsapp me-1"></i> WhatsApp</a>
+              <a id="proWhatsapp" href="#" target="_blank" class="btn btn-success btn-sm rounded-pill px-3"><x-icon name="whatsapp" class="me-1" /> WhatsApp</a>
             </div>
             <div id="proEmailWrap" class="d-none mt-3">
-              <a id="proEmail" href="#" class="btn btn-outline-secondary btn-sm rounded-pill px-3"><i class="fas fa-envelope me-1"></i> <span></span></a>
+              <a id="proEmail" href="#" class="btn btn-outline-secondary btn-sm rounded-pill px-3"><x-icon name="envelope" class="me-1" /> <span></span></a>
             </div>
           </div>
         </div>
@@ -504,7 +504,7 @@
         <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body p-4 p-md-5">
-        <h6 class="fw-bold text-uppercase text-muted small mb-2"><i class="fas fa-info-circle me-1"></i> Description</h6>
+        <h6 class="fw-bold text-uppercase text-muted small mb-2"><x-icon name="info-circle" class="me-1" /> Description</h6>
         <p id="actDescription" class="text-main mb-0">—</p>
       </div>
     </div>
@@ -562,7 +562,7 @@ function openPersonnaliteModal(id) {
   const photoEl = document.getElementById('mpPhoto');
   photoEl.innerHTML = p.image
     ? `<img src="${p.image}" class="w-100 h-100" style="object-fit:cover;" alt="${p.name}">`
-    : `<div class="w-100 h-100 d-flex align-items-center justify-content-center text-warning" style="background:rgba(234,179,8,.1);"><i class="fas fa-user fs-2"></i></div>`;
+    : `<div class="w-100 h-100 d-flex align-items-center justify-content-center text-warning" style="background:rgba(234,179,8,.1);"><x-icon name="user" class="fs-2" /></div>`;
 
   document.getElementById('modalPersonnaliteLabel').textContent = p.name;
   document.getElementById('mpStatut').textContent = p.statut;
@@ -589,7 +589,7 @@ function openProModal(id) {
   const photoEl = document.getElementById('proPhoto');
   photoEl.innerHTML = p.image
     ? `<img src="${p.image}" class="w-100 h-100" style="object-fit:cover;" alt="${p.name}">`
-    : `<i class="fas fa-tools fs-2 text-info"></i>`;
+    : `<x-icon name="tools" class="fs-2 text-info" />`;
 
   document.getElementById('modalProLabel').textContent = p.name;
   document.getElementById('proProfession').textContent = p.profession;
@@ -629,7 +629,7 @@ function openActiviteModal(id) {
   const photoEl = document.getElementById('actPhoto');
   photoEl.innerHTML = a.image
     ? `<img src="${a.image}" class="w-100 h-100" style="object-fit:cover;" alt="${a.name}">`
-    : `<i class="fas fa-hiking fs-2 text-success"></i>`;
+    : `<x-icon name="hiking" class="fs-2 text-success" />`;
 
   document.getElementById('modalActiviteLabel').textContent = a.name;
   document.getElementById('actType').textContent = a.type;
@@ -693,7 +693,7 @@ function filterActivites() {
           <img src="{{ $cPhoto }}" alt="{{ $cNameFormatted }}" class="img-fluid rounded-4 shadow-lg" style="max-height: 75vh; object-fit: contain;">
         @else
           <div class="p-5 bg-secondary bg-opacity-20 rounded-4">
-            <i class="fas fa-user-shield fs-1 text-warning mb-2"></i>
+            <x-icon name="user-shield" class="fs-1 text-warning mb-2" />
             <p class="mb-0 text-muted">Photo non disponible en haute définition.</p>
           </div>
         @endif

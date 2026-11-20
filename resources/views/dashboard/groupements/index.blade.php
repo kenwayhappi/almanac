@@ -1,16 +1,16 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 
 @section('title', 'Groupements du Cameroun - Almanac Admin')
 
 @section('content')
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
   <div>
-    <h2 class="fw-bold font-serif mb-1"><i class="fas fa-layer-group text-success me-2"></i> Groupements & Cantons</h2>
+    <h2 class="fw-bold font-serif mb-1"><x-icon name="layer-group" class="text-success me-2" /> Groupements & Cantons</h2>
     <p class="text-muted small mb-0">Gestion des cantons traditionnels regroupant les villages du Cameroun.</p>
   </div>
 
   <button type="button" class="btn btn-success rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalCreateGroupement">
-    <i class="fas fa-plus me-1"></i> Nouveau Groupement
+    <x-icon name="plus" class="me-1" /> Nouveau Groupement
   </button>
 </div>
 
@@ -19,14 +19,14 @@
   <form action="{{ route('dashboard.groupements.index') }}" method="GET" class="row g-2 align-items-center">
     <div class="col-md-8 col-lg-9">
       <div class="input-group">
-        <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+        <span class="input-group-text bg-transparent border-end-0"><x-icon name="search" class="text-muted" /></span>
         <input type="text" name="search" class="form-control border-start-0" placeholder="Rechercher par nom de groupement ou chef de canton..." value="{{ request('search') }}">
       </div>
     </div>
     <div class="col-md-4 col-lg-3 d-flex gap-2">
-      <button type="submit" class="btn btn-success flex-grow-1 rounded-pill"><i class="fas fa-search me-1"></i> Rechercher</button>
+      <button type="submit" class="btn btn-success flex-grow-1 rounded-pill"><x-icon name="search" class="me-1" /> Rechercher</button>
       @if(request('search'))
-        <a href="{{ route('dashboard.groupements.index') }}" class="btn btn-outline-secondary rounded-pill" title="Réinitialiser"><i class="fas fa-undo"></i></a>
+        <a href="{{ route('dashboard.groupements.index') }}" class="btn btn-outline-secondary rounded-pill" title="Réinitialiser"><x-icon name="undo" /></a>
       @endif
     </div>
   </form>
@@ -35,7 +35,7 @@
 <div class="admin-card">
   @if(count($groupements ?? []) === 0)
     <div class="text-center py-5">
-      <i class="fas fa-layer-group fs-1 text-muted opacity-50 mb-3"></i>
+      <x-icon name="layer-group" class="fs-1 text-muted opacity-50 mb-3" />
       <h4 class="fw-bold">Aucun groupement trouvé</h4>
       <p class="text-muted">Commencez par enregistrer un premier canton/groupement.</p>
     </div>
@@ -61,7 +61,7 @@
                     @if(isset($g->image) && $g->image)
                       <img src="{{ $g->image }}" alt="{{ $g->name }}" class="w-100 h-100" style="object-fit:cover;">
                     @else
-                      <i class="fas fa-layer-group text-success"></i>
+                      <x-icon name="layer-group" class="text-success" />
                     @endif
                   </div>
                   <div>
@@ -72,7 +72,7 @@
               </td>
               <td>
                 @if(isset($g->chef_groupement) && $g->chef_groupement)
-                  <span class="badge bg-warning bg-opacity-10 text-dark text-wrap text-start" style="white-space: normal; max-width: 200px;"><i class="fas fa-crown me-1 text-warning"></i> {{ $g->chef_groupement }}</span>
+                  <span class="badge bg-warning bg-opacity-10 text-dark text-wrap text-start" style="white-space: normal; max-width: 200px;"><x-icon name="crown" class="me-1 text-warning" /> {{ $g->chef_groupement }}</span>
                 @else
                   <span class="text-muted small">Non spécifié</span>
                 @endif
@@ -86,16 +86,16 @@
               <td class="text-end">
                 <div class="d-inline-flex gap-1">
                   <button type="button" class="btn btn-sm btn-outline-info rounded-circle" style="width:34px;height:34px;padding:0;" title="Voir" onclick="openShowGroupement({{ json_encode($g) }})">
-                    <i class="fas fa-eye"></i>
+                    <x-icon name="eye" />
                   </button>
                   <button type="button" class="btn btn-sm btn-outline-warning rounded-circle" style="width:34px;height:34px;padding:0;" title="Éditer" onclick="openEditGroupement({{ json_encode($g) }})">
-                    <i class="fas fa-pen"></i>
+                    <x-icon name="pen" />
                   </button>
                   <form action="{{ route('dashboard.groupements.destroy', $g->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Supprimer ce groupement ?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" style="width:34px;height:34px;padding:0;" title="Supprimer">
-                      <i class="fas fa-trash"></i>
+                      <x-icon name="trash" />
                     </button>
                   </form>
                 </div>
@@ -119,7 +119,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-plus-circle text-success me-2"></i> Nouveau Groupement</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="plus-circle" class="text-success me-2" /> Nouveau Groupement</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form action="{{ route('dashboard.groupements.store') }}" method="POST" enctype="multipart/form-data">
@@ -193,7 +193,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-pen text-warning me-2"></i> Éditer le Groupement</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="pen" class="text-warning me-2" /> Éditer le Groupement</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form id="formEditGroupement" method="POST" enctype="multipart/form-data">
@@ -268,7 +268,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-layer-group text-info me-2"></i> Fiche du Groupement</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="layer-group" class="text-info me-2" /> Fiche du Groupement</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body py-4 text-center">

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr" data-theme="dark">
 <head>
   <meta charset="UTF-8">
@@ -6,11 +6,10 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title', 'Almanac Admin - Administration')</title>
 
-  <!-- Fonts & Icons -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Bootstrap 5 CSS & Chart.js -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -424,7 +423,7 @@
   <header class="admin-navbar">
     <div class="d-flex align-items-center gap-3">
       <button class="btn p-0 d-lg-none text-main fs-4" id="sidebarToggleBtn" aria-label="Toggle Navigation">
-        <i class="fas fa-bars"></i>
+        <x-icon name="bars" />
       </button>
       <a href="{{ route('dashboard.index') }}" class="d-flex align-items-center text-decoration-none">
         <img src="{{ asset('images/logofinal.png') }}" alt="Almanach Logo" style="height:52px;">
@@ -433,25 +432,25 @@
 
     <div class="d-flex align-items-center gap-3">
       <a href="{{ route('accueil') }}" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill d-none d-sm-inline-flex align-items-center gap-1">
-        <i class="fas fa-external-link-alt"></i> Voir le site
+        <x-icon name="external-link-alt" /> Voir le site
       </a>
 
       <!-- Theme Switcher -->
       <button type="button" class="theme-toggle-btn" id="adminThemeToggleBtn" title="Changer de thème">
-        <i class="fas fa-sun text-warning" id="adminThemeIcon"></i>
+        <x-icon name="sun" class="text-warning" id="adminThemeIcon" />
       </button>
 
       <!-- User Menu -->
       <div class="dropdown">
         <button class="btn btn-outline-secondary rounded-pill dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
-          <i class="fas fa-user-circle fs-5 text-success"></i>
+          <x-icon name="user-circle" class="fs-5 text-success" />
           <span class="fw-semibold small d-none d-sm-inline">{{ Auth::user()->name ?? 'Administrateur' }}</span>
         </button>
         <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
           <li><span class="dropdown-header">Compte Admin</span></li>
           <li>
             <a class="dropdown-item d-flex align-items-center gap-2" href="{{ route('dashboard.profile.show') }}">
-              <i class="fas fa-user-cog text-success"></i> Mon Profil
+              <x-icon name="user-cog" class="text-success" /> Mon Profil
             </a>
           </li>
           <li><hr class="dropdown-divider"></li>
@@ -459,7 +458,7 @@
             <form action="{{ route('logout') }}" method="POST">
               @csrf
               <button type="submit" class="dropdown-item text-danger d-flex align-items-center gap-2">
-                <i class="fas fa-sign-out-alt"></i> Déconnexion
+                <x-icon name="sign-out-alt" /> Déconnexion
               </button>
             </form>
           </li>
@@ -473,52 +472,52 @@
 
   <!-- Sidebar -->
   <aside class="admin-sidebar" id="adminSidebar">
-    <div class="sidebar-section-title mt-0"><i class="fas fa-compass me-1"></i> Général</div>
+    <div class="sidebar-section-title mt-0"><x-icon name="compass" class="me-1" /> Général</div>
     <a href="{{ route('dashboard.index') }}" class="sidebar-link {{ request()->routeIs('dashboard.index') ? 'active' : '' }}">
-      <i class="fas fa-chart-pie"></i> Vue d'ensemble
+      <x-icon name="chart-pie" /> Vue d'ensemble
     </a>
     <a href="{{ route('dashboard.profile.show') }}" class="sidebar-link {{ request()->routeIs('dashboard.profile.*') ? 'active' : '' }}">
-      <i class="fas fa-user-cog"></i> Mon Profil
+      <x-icon name="user-cog" /> Mon Profil
     </a>
 
-    <div class="sidebar-section-title"><i class="fas fa-map-marked-alt me-1"></i> Territoires du Cameroun</div>
+    <div class="sidebar-section-title"><x-icon name="map-marked-alt" class="me-1" /> Territoires du Cameroun</div>
     <a href="{{ route('dashboard.pays.index') }}" class="sidebar-link {{ request()->routeIs('dashboard.pays.*') ? 'active' : '' }}">
-      <i class="fas fa-globe"></i> Cameroun & Divisions
+      <x-icon name="globe" /> Cameroun & Divisions
     </a>
     <a href="{{ route('dashboard.groupements.index') }}" class="sidebar-link {{ request()->routeIs('dashboard.groupements.*') ? 'active' : '' }}">
-      <i class="fas fa-layer-group"></i> Groupements / Cantons
+      <x-icon name="layer-group" /> Groupements / Cantons
     </a>
     <a href="{{ route('dashboard.villages.index') }}" class="sidebar-link {{ request()->routeIs('dashboard.villages.*') ? 'active' : '' }}">
-      <i class="fas fa-tree"></i> Villages du Cameroun
+      <x-icon name="tree" /> Villages du Cameroun
     </a>
 
-    <div class="sidebar-section-title"><i class="fas fa-users me-1"></i> Acteurs & Patrimoine</div>
+    <div class="sidebar-section-title"><x-icon name="users" class="me-1" /> Acteurs & Patrimoine</div>
     <a href="{{ route('dashboard.activites.index') }}" class="sidebar-link {{ request()->routeIs('dashboard.activites.*') ? 'active' : '' }}">
-      <i class="fas fa-hiking"></i> Activités
+      <x-icon name="hiking" /> Activités
     </a>
     <a href="{{ route('dashboard.events.index') }}" class="sidebar-link {{ request()->routeIs('dashboard.events.*') ? 'active' : '' }}">
-      <i class="fas fa-calendar-alt"></i> Événements
+      <x-icon name="calendar-alt" /> Événements
     </a>
     <a href="{{ route('dashboard.personnalite.index') }}" class="sidebar-link {{ request()->routeIs('dashboard.personnalite.*') ? 'active' : '' }}">
-      <i class="fas fa-user-tie"></i> Notables & Élites
+      <x-icon name="user-tie" /> Notables & Élites
     </a>
     <a href="{{ route('dashboard.personnalites_administratives.index') }}" class="sidebar-link {{ request()->routeIs('dashboard.personnalites_administratives.*') ? 'active' : '' }}">
-      <i class="fas fa-user-shield"></i> Autorités Admin
+      <x-icon name="user-shield" /> Autorités Admin
     </a>
     <a href="{{ route('dashboard.professional.index') }}" class="sidebar-link {{ request()->routeIs('dashboard.professional.*') ? 'active' : '' }}">
-      <i class="fas fa-briefcase"></i> Artisans & Pros
+      <x-icon name="briefcase" /> Artisans & Pros
     </a>
 
-    <div class="sidebar-section-title"><i class="fas fa-bullhorn me-1"></i> Marketing</div>
+    <div class="sidebar-section-title"><x-icon name="bullhorn" class="me-1" /> Marketing</div>
     <a href="{{ route('dashboard.advertisements.index') }}" class="sidebar-link {{ request()->routeIs('dashboard.advertisements.*') ? 'active' : '' }}">
-      <i class="fas fa-ad"></i> Régie Publicitaire
+      <x-icon name="ad" /> Régie Publicitaire
     </a>
 
-    <div class="sidebar-section-title"><i class="fas fa-lock me-1"></i> Session</div>
+    <div class="sidebar-section-title"><x-icon name="lock" class="me-1" /> Session</div>
     <form action="{{ route('logout') }}" method="POST" class="mt-2">
       @csrf
       <button type="submit" class="sidebar-link text-danger border-0 bg-transparent w-100 text-start">
-        <i class="fas fa-power-off"></i> Déconnexion
+        <x-icon name="power-off" /> Déconnexion
       </button>
     </form>
   </aside>
@@ -528,14 +527,14 @@
     <!-- Success & Error Alert Messages -->
     @if(session('success'))
       <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm border-0 mb-4" role="alert">
-        <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+        <x-icon name="check-circle" class="me-2" /> {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
       </div>
     @endif
 
     @if(session('error'))
       <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm border-0 mb-4" role="alert">
-        <i class="fas fa-exclamation-triangle me-2"></i> {{ session('error') }}
+        <x-icon name="exclamation-triangle" class="me-2" /> {{ session('error') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
       </div>
     @endif
@@ -545,7 +544,7 @@
 
   <!-- Floating Back-to-Top Button for Admin -->
   <button id="adminBtnBackToTop" class="btn btn-success rounded-circle shadow-lg position-fixed bottom-0 end-0 m-4 p-0 d-none align-items-center justify-content-center" style="z-index: 1080; width: 46px; height: 46px; transition: all 0.3s ease;" title="Haut de page">
-    <i class="fas fa-arrow-up fs-6"></i>
+    <x-icon name="arrow-up" class="fs-6" />
   </button>
 
   <!-- Scripts -->
@@ -570,7 +569,9 @@
       function updateAdminThemeIcon(theme) {
         const icon = document.getElementById('adminThemeIcon');
         if (icon) {
-          icon.className = theme === 'dark' ? 'fas fa-sun text-warning' : 'fas fa-moon text-dark';
+          icon.outerHTML = theme === 'dark' 
+            ? '<svg id="adminThemeIcon" class="svg-icon text-warning" style="width:1em;height:1em;vertical-align:-0.125em;display:inline-block;fill:currentColor;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>'
+            : '<svg id="adminThemeIcon" class="svg-icon text-muted" style="width:1em;height:1em;vertical-align:-0.125em;display:inline-block;fill:currentColor;" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
         }
       }
     })();

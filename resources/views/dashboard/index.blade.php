@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 
 @section('title', 'Tableau de Bord Admin - Almanac')
 
@@ -12,10 +12,10 @@
 
   <div class="d-flex gap-2">
     <a href="{{ route('dashboard.villages.create') }}" class="btn btn-sm btn-success rounded-pill px-3">
-      <i class="fas fa-plus me-1"></i> Nouveau Village
+      <x-icon name="plus" class="me-1" /> Nouveau Village
     </a>
     <a href="{{ route('dashboard.advertisements.create') }}" class="btn btn-sm btn-outline-success rounded-pill px-3">
-      <i class="fas fa-ad me-1"></i> Nouvelle Pub
+      <x-icon name="ad" class="me-1" /> Nouvelle Pub
     </a>
   </div>
 </div>
@@ -25,7 +25,7 @@
   <div class="col-sm-6 col-xl-3">
     <div class="kpi-card">
       <div class="kpi-icon bg-success bg-opacity-10 text-success">
-        <i class="fas fa-tree"></i>
+        <x-icon name="tree" />
       </div>
       <div>
         <h3 class="fw-bold mb-0">{{ number_format($villageCount ?? 0) }}</h3>
@@ -37,7 +37,7 @@
   <div class="col-sm-6 col-xl-3">
     <div class="kpi-card">
       <div class="kpi-icon bg-primary bg-opacity-10 text-primary">
-        <i class="fas fa-layer-group"></i>
+        <x-icon name="layer-group" />
       </div>
       <div>
         <h3 class="fw-bold mb-0">{{ number_format($groupementCount ?? 0) }}</h3>
@@ -49,7 +49,7 @@
   <div class="col-sm-6 col-xl-3">
     <div class="kpi-card">
       <div class="kpi-icon bg-warning bg-opacity-10 text-warning">
-        <i class="fas fa-ad"></i>
+        <x-icon name="ad" />
       </div>
       <div>
         <h3 class="fw-bold mb-0">{{ number_format($advertisementCount ?? 0) }}</h3>
@@ -61,7 +61,7 @@
   <div class="col-sm-6 col-xl-3">
     <div class="kpi-card">
       <div class="kpi-icon bg-info bg-opacity-10 text-info">
-        <i class="fas fa-eye"></i>
+        <x-icon name="eye" />
       </div>
       <div>
         <h3 class="fw-bold mb-0">{{ number_format($totalAdViews ?? 0) }}</h3>
@@ -78,7 +78,7 @@
     <div class="admin-card h-100">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h5 class="fw-bold mb-1"><i class="fas fa-chart-bar text-success me-2"></i> Top Groupements par Nombres de Villages</h5>
+          <h5 class="fw-bold mb-1"><x-icon name="chart-bar" class="text-success me-2" /> Top Groupements par Nombres de Villages</h5>
           <small class="text-muted">Répartition des villages traditionnels par canton</small>
         </div>
         <span class="badge bg-success bg-opacity-10 text-success">Statistiques</span>
@@ -94,7 +94,7 @@
     <div class="admin-card h-100">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h5 class="fw-bold mb-1"><i class="fas fa-chart-pie text-warning me-2"></i> Publicités par Format</h5>
+          <h5 class="fw-bold mb-1"><x-icon name="chart-pie" class="text-warning me-2" /> Publicités par Format</h5>
           <small class="text-muted">Vidéo, Photo, PDF, Texte</small>
         </div>
       </div>
@@ -111,8 +111,8 @@
   <div class="col-lg-6">
     <div class="admin-card">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold mb-0"><i class="fas fa-tree text-success me-2"></i> Derniers Villages</h5>
-        <a href="{{ route('dashboard.villages.index') }}" class="btn btn-sm btn-link text-success text-decoration-none">Tout voir <i class="fas fa-arrow-right"></i></a>
+        <h5 class="fw-bold mb-0"><x-icon name="tree" class="text-success me-2" /> Derniers Villages</h5>
+        <a href="{{ route('dashboard.villages.index') }}" class="btn btn-sm btn-link text-success text-decoration-none">Tout voir <x-icon name="arrow-right" /></a>
       </div>
 
       <div class="table-responsive">
@@ -136,7 +136,7 @@
                 <td>{{ number_format($v->population ?? 0) }} hab.</td>
                 <td class="text-end">
                   <a href="{{ route('dashboard.villages.edit', $v->id) }}" class="btn btn-sm btn-outline-secondary rounded-circle" title="Éditer">
-                    <i class="fas fa-pen"></i>
+                    <x-icon name="pen" />
                   </a>
                 </td>
               </tr>
@@ -153,8 +153,8 @@
   <div class="col-lg-6">
     <div class="admin-card">
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold mb-0"><i class="fas fa-ad text-warning me-2"></i> Dernières Publicités</h5>
-        <a href="{{ route('dashboard.advertisements.index') }}" class="btn btn-sm btn-link text-success text-decoration-none">Tout voir <i class="fas fa-arrow-right"></i></a>
+        <h5 class="fw-bold mb-0"><x-icon name="ad" class="text-warning me-2" /> Dernières Publicités</h5>
+        <a href="{{ route('dashboard.advertisements.index') }}" class="btn btn-sm btn-link text-success text-decoration-none">Tout voir <x-icon name="arrow-right" /></a>
       </div>
 
       <div class="table-responsive">
@@ -174,10 +174,10 @@
                 <td class="fw-bold">{{ Str::limit($ad->title ?? 'Annonce', 20) }}</td>
                 <td><span class="badge bg-info bg-opacity-10 text-info text-uppercase">{{ $ad->type }}</span></td>
                 <td><span class="badge bg-dark bg-opacity-50 text-white">{{ $ad->position }}</span></td>
-                <td class="fw-bold text-success"><i class="fas fa-eye me-1"></i> {{ number_format($ad->views ?? 0) }}</td>
+                <td class="fw-bold text-success"><x-icon name="eye" class="me-1" /> {{ number_format($ad->views ?? 0) }}</td>
                 <td class="text-end">
                   <a href="{{ route('dashboard.advertisements.edit', $ad->id) }}" class="btn btn-sm btn-outline-secondary rounded-circle" title="Éditer">
-                    <i class="fas fa-pen"></i>
+                    <x-icon name="pen" />
                   </a>
                 </td>
               </tr>

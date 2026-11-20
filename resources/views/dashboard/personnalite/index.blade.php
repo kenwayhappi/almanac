@@ -1,16 +1,16 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 
 @section('title', 'Notables & Élites - Almanac Admin')
 
 @section('content')
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
   <div>
-    <h2 class="fw-bold font-serif mb-1"><i class="fas fa-user-tie text-success me-2"></i> Notables, Élites & Personnalités</h2>
+    <h2 class="fw-bold font-serif mb-1"><x-icon name="user-tie" class="text-success me-2" /> Notables, Élites & Personnalités</h2>
     <p class="text-muted small mb-0">Gestion des figures marquantes et personnalités des villages du Cameroun.</p>
   </div>
 
   <button type="button" class="btn btn-success rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalCreatePersonality">
-    <i class="fas fa-plus me-1"></i> Ajouter une Personnalité
+    <x-icon name="plus" class="me-1" /> Ajouter une Personnalité
   </button>
 </div>
 
@@ -19,14 +19,14 @@
   <form action="{{ route('dashboard.personnalite.index') }}" method="GET" class="row g-2 align-items-center">
     <div class="col-md-8 col-lg-9">
       <div class="input-group">
-        <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-search text-muted"></i></span>
+        <span class="input-group-text bg-transparent border-end-0"><x-icon name="search" class="text-muted" /></span>
         <input type="text" name="search" class="form-control border-start-0" placeholder="Rechercher un notable par nom ou statut..." value="{{ request('search') }}">
       </div>
     </div>
     <div class="col-md-4 col-lg-3 d-flex gap-2">
-      <button type="submit" class="btn btn-success flex-grow-1 rounded-pill"><i class="fas fa-search me-1"></i> Rechercher</button>
+      <button type="submit" class="btn btn-success flex-grow-1 rounded-pill"><x-icon name="search" class="me-1" /> Rechercher</button>
       @if(request('search'))
-        <a href="{{ route('dashboard.personnalite.index') }}" class="btn btn-outline-secondary rounded-pill" title="Réinitialiser"><i class="fas fa-undo"></i></a>
+        <a href="{{ route('dashboard.personnalite.index') }}" class="btn btn-outline-secondary rounded-pill" title="Réinitialiser"><x-icon name="undo" /></a>
       @endif
     </div>
   </form>
@@ -35,7 +35,7 @@
 <div class="admin-card">
   @if($personalities->isEmpty())
     <div class="text-center py-5">
-      <i class="fas fa-user-tie fs-1 text-muted opacity-50 mb-3"></i>
+      <x-icon name="user-tie" class="fs-1 text-muted opacity-50 mb-3" />
       <h4 class="fw-bold">Aucune personnalité enregistrée</h4>
       <p class="text-muted">Inscrivez la première personnalité d'un village.</p>
     </div>
@@ -63,7 +63,7 @@
                     @if($pImg)
                       <img src="{{ $pImg }}" alt="{{ $p->name }}" class="w-100 h-100" style="object-fit:cover;">
                     @else
-                      <i class="fas fa-user"></i>
+                      <x-icon name="user" />
                     @endif
                   </div>
                   <div>
@@ -77,16 +77,16 @@
               <td class="text-end">
                 <div class="d-inline-flex gap-1">
                   <button type="button" class="btn btn-sm btn-outline-info rounded-circle" style="width:34px;height:34px;padding:0;" title="Voir" onclick="openShowPersonality({{ json_encode($p) }})">
-                    <i class="fas fa-eye"></i>
+                    <x-icon name="eye" />
                   </button>
                   <button type="button" class="btn btn-sm btn-outline-warning rounded-circle" style="width:34px;height:34px;padding:0;" title="Éditer" onclick="openEditPersonality({{ json_encode($p) }})">
-                    <i class="fas fa-pen"></i>
+                    <x-icon name="pen" />
                   </button>
                   <form action="{{ route('dashboard.personnalite.destroy', $p->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Supprimer cette personnalité ?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-outline-danger rounded-circle" style="width:34px;height:34px;padding:0;" title="Supprimer">
-                      <i class="fas fa-trash"></i>
+                      <x-icon name="trash" />
                     </button>
                   </form>
                 </div>
@@ -110,7 +110,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-plus-circle text-success me-2"></i> Nouvelle Personnalité</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="plus-circle" class="text-success me-2" /> Nouvelle Personnalité</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form action="{{ route('dashboard.personnalite.store') }}" method="POST" enctype="multipart/form-data">
@@ -162,7 +162,7 @@
   <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-pen text-warning me-2"></i> Éditer la Personnalité</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="pen" class="text-warning me-2" /> Éditer la Personnalité</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <form id="formEditPersonality" method="POST" enctype="multipart/form-data">
@@ -214,7 +214,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content admin-card border-0">
       <div class="modal-header border-bottom border-secondary border-opacity-10">
-        <h5 class="modal-title fw-bold font-serif"><i class="fas fa-info-circle text-info me-2"></i> Détails de la Personnalité</h5>
+        <h5 class="modal-title fw-bold font-serif"><x-icon name="info-circle" class="text-info me-2" /> Détails de la Personnalité</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body py-4 text-center">
